@@ -1,0 +1,24 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "node dist/index.js",
+		"build": "tsc",
+		"dev": "nodemon"
+	},
+	"dependencies": {
+		"express": "^4.18.1",
+		"pg": "^8.7.1"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.7.5",
+		"nodemon": "^2.0.12",
+		"typescript": "^4.5.4"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": ""
+}
