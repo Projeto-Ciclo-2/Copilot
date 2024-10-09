@@ -18,12 +18,6 @@ services:
         ports:
             - "5000:5000"
         command: "npm run dev"
-        environment:
-            - PGUSER=postgres
-            - PGHOST=postgres
-            - PGDATABASE=postgres
-            - PGPASSWORD=postgres_password
-            - PGPORT=5432
         restart: always
         networks:
             - copilot-network
