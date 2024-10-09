@@ -1,16 +1,13 @@
-import express from "express";
-import path from "path";
+import express, { Express } from "express";
+import cookieParser from "cookie-parser";
+import { config } from "./config/index";
+import { router } from "./routes/router";
 
-const app = express();
+const app: Express = express();
 
-// Serve the React app
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-app.get("/", (req, res) => {
-	res.send("hello world")
-	// res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
-});
-
-app.listen(5000, () => {
-	console.log("Backend server is running on http://localhost:5000");
-});
+app.use(cookieParser());
+app.use(express.json());
+app.use(router);
+app.listen(config.PORT, () =>
+	console.log(`server running at port ${config.PORT}!`)
+);
