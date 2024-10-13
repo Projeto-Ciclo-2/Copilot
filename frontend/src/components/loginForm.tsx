@@ -3,11 +3,13 @@ import Input from "./input";
 import Btn from "./button";
 import Notification from "./notification/notification";
 import usernameValid from "../validations/username";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [notification, setNotification] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!usernameValid(e.target.value)) {
@@ -21,6 +23,9 @@ const LoginForm: React.FC = () => {
       const handleNotificationCLose = () => {
         setNotification(null);
       };
+      const navigateHome = () => {
+        navigate("/home")
+      }
       const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if(username === '' || password === ''){
@@ -32,6 +37,7 @@ const LoginForm: React.FC = () => {
           const valid = usernameValid(username)
           if(valid){
             console.log(username, password)
+            navigateHome();
           }else{
             setNotification('Nome de usuário e/ou senha incorretos!')
             setTimeout(() => {

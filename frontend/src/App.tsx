@@ -1,9 +1,9 @@
 import React from 'react';
-import AuthPage from './pages/AuthPage';
+import AppRouter from './routes';
 
 function App() {
   return (
-    <AuthPage/>
+    <AppRouter/>
   );
 }
 
