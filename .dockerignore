@@ -1,3 +1,6 @@
 .editorconfig
 links.md
 README.md
+/backend/node_modules
+npm-debug.log
+

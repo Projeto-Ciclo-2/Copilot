@@ -3,6 +3,8 @@
 		// Compiler configs
 		"target": "ES2020",
 		"module": "commonjs",
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
 		"outDir": "./dist",
 		"esModuleInterop": true,
 		"removeComments": true,

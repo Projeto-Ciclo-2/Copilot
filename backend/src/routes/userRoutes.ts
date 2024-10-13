@@ -1,7 +1,12 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import UserController from "../controllers/userController";
 
-export const userRoutes = Router();
+const userController: UserController = new UserController();
+const userRoutes: Router = Router();
 
-userRoutes.get("/", (_req: Request, res: Response) => {
-	res.send("Hello World from userRoutes.ts");
-});
+userRoutes.post("/", userController.createUser.bind(userController));
+userRoutes.get("/:user_id", userController.getUserById.bind(userController));
+userRoutes.put("/:user_id", userController.updateUser.bind(userController));
+userRoutes.delete("/:user_id", userController.deleteUser.bind(userController));
+
+export default userRoutes;

@@ -1,10 +1,6 @@
-import { Pool } from "pg";
-import { config } from "../config";
+import knex from "knex";
+import config from "../../knexfile";
 
-export const dbConnection = new Pool({
-	database: config.DB_DATABASE_NAME,
-	user: config.DB_USER,
-	host: config.DB_HOST,
-	password: config.DB_PASSWORD,
-	port: parseInt(config.DB_PORT),
-});
+const dbConnection = knex(config.development);
+
+export default dbConnection;
