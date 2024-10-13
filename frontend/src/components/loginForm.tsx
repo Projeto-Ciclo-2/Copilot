@@ -48,9 +48,9 @@ const LoginForm: React.FC = () => {
       };
     return (
       <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <h2>Copilot QUIZ</h2>
         <div className="auth-div">
-          <label>Nome de usuário:</label>
+          <label>Usuário:</label>
           <Input type="text" value={username} onChange={handleUsernameChange}/>
         </div>
         <div className="auth-div">

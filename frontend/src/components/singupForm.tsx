@@ -61,7 +61,7 @@ const SignupForm: React.FC = () => {
 	};
 	return (
 		<form onSubmit={handleSubmit}>
-			<h2>Cadastro</h2>
+			<h2>Copilot QUIZ</h2>
 			<div className="auth-div">
 				<label>Nome de usuário:</label>
 				<Input type="text" value={username} onChange={handleUsernameChange} />

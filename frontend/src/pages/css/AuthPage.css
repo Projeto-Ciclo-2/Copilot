@@ -3,14 +3,14 @@
 	height: 100vh;
 	flex-direction: column;
 	justify-content: center;
-	background-image: url('https://img.freepik.com/vetores-gratis/fundo-de-formas-de-hexagono-abstrato-gradiente_23-2149120168.jpg?t=st=1728686049~exp=1728689649~hmac=741e6af2d0c896e49e4e343be29fd5beb0bbfd98b586287c45cf83a9225212bc&w=1380');
+	background-image: url("https://img.freepik.com/vetores-gratis/fundo-de-formas-de-hexagono-abstrato-gradiente_23-2149120168.jpg?t=st=1728686049~exp=1728689649~hmac=741e6af2d0c896e49e4e343be29fd5beb0bbfd98b586287c45cf83a9225212bc&w=1380");
 	background-position: center;
 	background-size: cover;
 	align-items: center;
 	font-size: small;
 }
 .auth-container {
-	width: 80%;
+	width: 90%;
 	border-radius: 10px;
 	background-color: #f9f9f900;
 }
@@ -24,7 +24,7 @@
 }
 .tab-button {
 	background-color: #f1f1f1;
-  width: 45%;
+	width: 45%;
 	border: none;
 	outline: none;
 	padding: 5px;
@@ -62,12 +62,16 @@
 	align-items: center;
 	width: 100%;
 }
+form h2 {
+	color: var(--text-color);
+}
 .auth-div {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 	margin-bottom: 1rem;
 	color: #6f6d6d;
+	font-family: var(--text);
 }
 .auth-div input {
 	border: none;
@@ -85,35 +89,40 @@
 }
 .auth-btn {
 	margin: 1rem;
-	padding: 0.3rem 3rem;
+	padding: 0.5rem 3rem;
 	border-radius: 5px;
 	border: none;
-  cursor: pointer;
-  background: radial-gradient( 100% 100% at 100% 0%, rgb(227, 112, 227) 0%, purple 100% );
-  box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%), 0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%), inset 0px -0.01em 0px rgb(58 65 111 / 50%);
-  color: white;
+	cursor: pointer;
+	background: var(--gradient);
+	box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%),
+		0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%),
+		inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+	color: white;
+	font-family: var(--text);
+  	font-weight: bold;
 }
-.auth-btn:hover{
-  box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%), 0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #a544e6;
-  transform: translateY(-0.1em);
+.auth-btn:hover {
+	box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%),
+		0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #a544e6;
+	transform: translateY(-0.1em);
 }
-.auth-btn:active{
-  box-shadow: inset 0px 0.1em 0.6em #a544e6;
-  transform: translateY(0em);
+.auth-btn:active {
+	box-shadow: inset 0px 0.1em 0.6em #a544e6;
+	transform: translateY(0em);
 }
 @media (min-width: 375px) {
 	.auth-container {
-		width: 70%;
+		width: 80%;
 	}
 }
 @media (min-width: 401px) {
 	.auth-container {
-		width: 60%;
+		width: 70%;
 	}
 }
 @media (min-width: 480px) {
 	.auth-container {
-		width: 50%;
+		width: 55%;
 	}
 }
 @media (min-width: 600px) {
@@ -123,21 +132,36 @@
 }
 @media (min-width: 700px) {
 	.auth-container {
-		width: 35%;
+		width: 40%;
 	}
 }
 @media (min-width: 801px) {
 	.auth-container {
-		width: 30%;
+		width: 35%;
 	}
 }
 @media (min-width: 1024px) {
 	.auth-container {
-		width: 25%;
+		width: 30%;
 	}
 }
 @media (min-width: 1280px) {
 	.auth-container {
+		width: 25%;
+	}
+}
+@media (min-width: 1439px) {
+	.auth-container {
 		width: 20%;
+	}
+}
+@media (min-width: 1679px) {
+	.auth-container {
+		width: 15%;
+	}
+}
+@media (min-width: 2300px) {
+	.auth-container {
+		width: 12%;
 	}
 }
