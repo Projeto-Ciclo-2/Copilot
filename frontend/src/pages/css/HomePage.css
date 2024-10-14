@@ -1,0 +1,234 @@
+#page{
+    height: 100vh;
+}
+#header{
+    display: flex;
+    justify-content: flex-end;
+}
+#profile-btn{
+    background-color: var(--accent);
+    margin: 1rem;
+    width: 9rem;
+    height: 2rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 0.01em 0.01em #32a02866,
+		0px 0.3em 0.7em -0.01em rgba(4, 26, 9, 0.3),
+		inset 0px -0.01em 0px rgba(4, 26, 8, 0.5);
+}
+#profile-btn:hover {
+	box-shadow: 0px 0.1em 0.2em rgba(47, 95, 52, 0.4),
+		0px 0.4em 0.7em -0.1em rgba(68, 179, 57, 0.3), inset 0px -0.1em 0px #2db138;
+	transform: translateY(-0.1em);
+}
+#profile-btn:active {
+	box-shadow: inset 0px 0.1em 0.6em #0fd629;
+	transform: translateY(0em);
+}
+#profile-btn p{
+    margin: 0;
+    font-size: small;
+}
+#user-div{
+    display: flex;
+    align-items: center;
+}
+#avatar{
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 100%;
+    background-color: white;
+    margin: 0 .5rem;
+}
+#arrow{
+    margin-right: .5rem;
+}
+.content{
+    margin: 0 1rem;
+    color: var(--text-color);
+}
+.content h1{
+    font-family: var(--title);
+}
+.content h3{
+    font-family: var(--text);
+    font-weight: 500;
+}
+.content span{
+    color: var(--primary);
+}
+.quiz-btn {
+    margin: 0;
+	padding: 0.5rem 1rem;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	background: var(--gradient);
+	box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%),
+		0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%),
+		inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+        color: white;
+    }
+    .quiz-btn:hover {
+        box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%),
+		0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #a544e6;
+        transform: translateY(-0.1em);
+    }
+    .quiz-btn:active {
+        box-shadow: inset 0px 0.1em 0.6em #a544e6;
+        transform: translateY(0em);
+    }
+    #icon-vr{
+        display: flex;
+        justify-content: center;
+    }
+    .content svg{
+        margin-top: 3rem;
+    }
+    #plus-btn{
+        display: flex;
+        flex-direction: row-reverse;
+        margin-top: 2rem;
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+}
+#plus-btn button{
+    border-radius: 100%;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    font-size: larger;
+    font-weight: bold;
+}
+@media (min-width: 375px) {
+	.content{
+        margin: 0 2rem;
+    }
+    #profile-btn{
+        width: 10rem;
+        margin-right: 1.5rem;
+    }
+    .content svg{
+        margin-top: 4.5rem;
+    }
+}
+@media(min-width: 401px){
+    .content svg{
+        margin-top: 4rem;
+    }
+}
+@media(min-width: 480px){
+    .content svg{
+        width: 90%;
+    }
+}
+@media(min-width: 600px){
+    .content svg{
+        margin-top: 3rem;
+        width: 85%;
+    }
+}
+@media(min-width: 660px){
+    .content{
+        margin: 0 1.5rem;
+    }
+    .content svg{
+        width: 80%;
+    }
+}
+@media(min-width: 700px){
+    .content{
+        margin: 0 2rem;
+    }
+    .content svg{
+        width: 75%;
+    }
+    #plus-btn{
+        right: 3rem;
+    }
+    #plus-btn button{
+        width: 4rem;
+        height: 4rem;
+        font-size:xx-large ;
+    }
+}
+@media(min-width: 750px){
+    #profile-btn{
+        margin-top: 1.5rem;
+    }
+    .content{
+        margin: 0 2.5rem;
+    }
+    .content svg{
+        margin-top: 2em;
+    }
+}
+@media(min-width: 800px){
+    .content{
+        margin: 0 4rem;
+    }
+    .content svg{
+        width: 65%;
+    }
+}
+    @media(min-width: 950px){
+        #profile-btn{
+            margin-right: 3rem;
+        }
+        .content{
+            margin: 0 5rem;
+        }
+        .content svg{
+            width: 60%;
+        }
+    }
+    @media(min-width: 1024px){
+        #profile-btn{
+            margin-right: 3.5rem;
+        }
+        .content{
+            margin: 0 6rem;
+        }
+        .content svg{
+            width: 50%;
+        }
+    }
+    @media(min-width: 1280px){
+        .content{
+            margin: 0 8rem
+        }
+        .content svg{
+            margin: 0;
+            width: 45%;
+        }
+        #plus-btn{
+            right: 4.5rem;
+        }
+    }
+    @media(min-width: 1439px){
+        .content{
+            margin: 0 12rem;
+        }
+    }
+    @media(min-width: 1679px){
+        .content{
+            margin: 0 15rem;
+        }
+        .content svg{
+            width: 40%;
+        }
+    }
+    @media(min-width: 2300px){
+        .content{
+            margin: 0 20rem;
+        }
+        .content svg{
+            width: 35%;
+        }
+        #plus-btn{
+            right: 6rem;
+        }
+    }
