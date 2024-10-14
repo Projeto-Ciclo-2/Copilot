@@ -2,6 +2,8 @@ version: "3.8"
 services:
     postgres:
         image: postgres:latest
+        ports:
+            - "5432:5432"
         environment:
             POSTGRES_USER: copilot
             POSTGRES_PASSWORD: copilotPass123
@@ -9,6 +11,13 @@ services:
         networks:
             - copilot-network
 
+    redis:
+        image: redis:latest
+        ports:
+            - "6379:6379"
+        networks:
+            - copilot-network
+    
     backend:
         build:
             context: ./backend
@@ -21,6 +30,8 @@ services:
         restart: always
         networks:
             - copilot-network
+        volumes:
+            - ./backend:/app 
 
     frontend:
         build:

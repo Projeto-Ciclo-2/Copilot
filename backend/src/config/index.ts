@@ -8,7 +8,8 @@ const dotenvIsConfig =
 	process.env.DB_DATABASE_NAME != null &&
 	process.env.DB_PASSWORD != null &&
 	process.env.DB_PORT != null &&
-	process.env.JWT != null;
+	process.env.JWT != null &&
+	process.env.DB_URL != null;
 
 if (!dotenvIsConfig)
 	console.error(
@@ -22,7 +23,7 @@ export const config = {
 	DB_USER: process.env.DB_USER || "postgres",
 	DB_DATABASE_NAME: process.env.DB_DATABASE_NAME || "db",
 	DB_PASSWORD: process.env.DB_PASSWORD || "1234",
-	DB_PORT: process.env.DB_PORT || "5423",
-
+	DB_PORT: process.env.DB_PORT || "5432",
+	DB_URL: process.env.DB_URL || "",
 	JWT: process.env.JWT || "1234",
 };
