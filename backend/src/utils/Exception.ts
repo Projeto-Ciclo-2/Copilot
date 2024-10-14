@@ -79,3 +79,13 @@ export class UsernameOrPasswordIncorrectException extends Exception {
 		});
 	}
 }
+
+export class ErrorWhileGeneratingQuiz extends Exception {
+	constructor(error: string) {
+		super({
+			name: "ErrorWhileGeneratingQuiz",
+			error: error,
+			statusCode: 500
+		})
+	}
+}
