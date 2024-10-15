@@ -6,7 +6,7 @@
 		"start": "node dist/src/index.js",
 		"build": "tsc",
 		"dev": "nodemon",
-		"migrate": "knex migrate:latest --knexfile src/database/knexfile.ts --cwd ./knex"
+		"migrate": "knex migrate:latest --knexfile knexfile.ts --cwd ./knex"
 	},
 	"dependencies": {
 		"@langchain/core": "^0.3.11",
