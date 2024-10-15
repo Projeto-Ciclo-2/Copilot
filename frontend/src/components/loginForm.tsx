@@ -12,7 +12,7 @@ const LoginForm: React.FC = () => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [notification, setNotification] = useState<string | null>(null);
-	const notificationTime = 50000;
+	const notificationTime = 5000;
 
 	const navigate = useNavigate();
 	const userAPI = new UserAPI();

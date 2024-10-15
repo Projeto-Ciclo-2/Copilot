@@ -5,8 +5,9 @@ import usernameValid from "../validations/username";
 import Notification from "./notification/notification";
 import { UserAPI } from "../api/users";
 import { defaultMessages } from "./notification/defaultMessages";
+import { useNavigate } from "react-router-dom";
 
-const SignupForm = (props: { signUpCallbackFn: () => any }) => {
+const SignupForm = () => {
 	const [fetching, setFetching] = useState(false);
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -14,8 +15,12 @@ const SignupForm = (props: { signUpCallbackFn: () => any }) => {
 	const [notification, setNotification] = useState<string | null>(null);
 
 	const userAPI = new UserAPI();
-	const notificationTime = 50000;
+	const notificationTime = 5000;
 
+	const navigate = useNavigate();
+	const navigateHome = () => {
+		navigate("/home");
+	};
 	const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!usernameValid(e.target.value)) {
 			e.target.value = e.target.value.replace(
@@ -25,7 +30,6 @@ const SignupForm = (props: { signUpCallbackFn: () => any }) => {
 		}
 		setUsername(e.target.value);
 	};
-
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
 	};
@@ -54,14 +58,28 @@ const SignupForm = (props: { signUpCallbackFn: () => any }) => {
 		const result = await userAPI.singIn(username, password);
 		setFetching(false);
 		if (result && result.statusCode && result.statusCode === 201) {
+			setFetching(true);
 			setNotification("Usuário cadastrado com sucesso!");
 			setTimeout(handleNotificationCLose, notificationTime);
 
-			props.signUpCallbackFn();
+			const res = await userAPI.logIn(username, password);
+			if (!res) {
+				setNotification(defaultMessages.SERVER_ERROR);
+				return setTimeout(handleNotificationCLose, notificationTime);
+			}
+
+			if (res.statusCode && res.statusCode === 200) {
+				return navigateHome();
+			}
+			setTimeout(handleNotificationCLose, notificationTime);
+			if (res.message) {
+				return setNotification(res.message);
+			}
+			setNotification(defaultMessages.SERVER_ERROR);
 			return;
 		}
 		setTimeout(handleNotificationCLose, notificationTime);
-		if(result.message) {
+		if (result.message) {
 			return setNotification(result.message);
 		}
 		setNotification(defaultMessages.SERVER_ERROR);
