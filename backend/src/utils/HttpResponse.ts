@@ -10,7 +10,7 @@ export default class HttpResponse {
 		error?: string;
 		message?: string;
 	}) {
-		this.statusCode = httpResponse.status;
+		this.statusCode = httpResponse.status || 500;
 		this.data = httpResponse.data;
 		this.error = httpResponse.error;
 		this.message = httpResponse.message;
