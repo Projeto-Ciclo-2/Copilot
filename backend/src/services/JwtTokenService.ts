@@ -6,10 +6,10 @@ interface IJwt {
 
 export default class JwtTokenService {
 	public static verify(token: string) {
-		return jwt.verify(token, process.env.SECRET_KEY || "");
+		return jwt.verify(token, process.env.JWT || "");
 	}
 
 	public static create(data: IJwt) {
-		return jwt.sign(data, process.env.SECRET_KEY || "");
+		return jwt.sign(data, process.env.JWT || "");
 	}
 }

@@ -1,6 +1,6 @@
 import { IUserEntity } from "../entities/userEntity";
 import UserRepository from "../repositories/userRepository";
-import BcryptService from "../utils/BCryptService";
+import BcryptService from "./BCryptService";
 import { ConflictException, NotFoundException } from "../utils/Exception";
 import { Message } from "../utils/Message";
 
@@ -10,7 +10,7 @@ export class UserService {
 		this.userRepository = new UserRepository();
 	}
 	public async createUser(user: Partial<IUserEntity>) {
-		if (user.name === undefined) {
+		if (!user.name) {
 			throw new Error(Message.NAME_REQUIRED);
 		}
 		const foundUser = await this.userRepository.getUserByName(user.name);
@@ -25,6 +25,10 @@ export class UserService {
 	}
 	public async getUserById(id: string) {
 		return await this.userRepository.getUserById(id);
+	}
+
+	public async getAllUsers() {
+		return await this.userRepository.getAllUsers();
 	}
 
 	public async delete(id: string) {
