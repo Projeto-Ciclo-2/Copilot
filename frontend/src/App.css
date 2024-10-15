@@ -1,16 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Finlandica:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Finlandica:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
-:root{
-  --title:Finlandica;
-  --text: Montserrat;
-  --text-color:#120713;
-  --bkg_1:#e9e6ea;
-  --background: #ede2ee; 
-  --primary:#b644c1;
-  --accent:#67ce3b;
-  --gradient: radial-gradient( 100% 100% at 100% 0%, #f756ff 0%, #b644c1 100% );
-  
+:root {
+	--title: Finlandica;
+	--text: Montserrat;
+	--text-color: #120713;
+	--text-color2: rgba(18, 7, 19, 0.75);
+	--bkg_1: #e9e6ea;
+	--background: #ede2ee;
+	--primary: #b644c1;
+	--accent: #67ce3b;
+	--gradient: radial-gradient(100% 100% at 100% 0%, #f756ff 0%, #b644c1 100%);
 }
-#root{
-  background-color: var(--bkg_1);
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: var(--text);
+}
+#root {
+	background-color: var(--bkg_1);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--bkg_1);
+	width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow-x: hidden;
+}
+
+main {
+	width: 100vw;
+	max-width: 1444px;
 }
