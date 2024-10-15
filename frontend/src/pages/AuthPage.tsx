@@ -3,6 +3,7 @@ import "./css/AuthPage.css";
 import LoginForm from "../components/loginForm";
 import SignupForm from "../components/singupForm";
 import CustomModal from "../components/modal/modal";
+import bkg from "../icons/background.svg";
 
 const AuthPage: React.FC = () => {
 	const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
@@ -17,7 +18,7 @@ const AuthPage: React.FC = () => {
 	};
 
 	return (
-		<div className="page">
+		<div className="page" style={{ backgroundImage: `url(${bkg})` }}>
 			<CustomModal
 				alive={modalInfo.alive}
 				message={modalInfo.message}
