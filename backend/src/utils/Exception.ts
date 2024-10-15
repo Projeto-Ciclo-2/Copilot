@@ -1,4 +1,5 @@
 class Exception extends Error {
+	private statusCode: number;
 	constructor(exception: {
 		name: string;
 		error: string;
@@ -7,6 +8,7 @@ class Exception extends Error {
 		super(exception.error);
 		this.name = exception.name;
 		this.message = exception.error;
+		this.statusCode = exception.statusCode;
 	}
 }
 

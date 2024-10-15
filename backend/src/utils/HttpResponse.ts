@@ -19,13 +19,4 @@ export default class HttpResponse {
 	get status(): number {
 		return this.statusCode;
 	}
-
-	get Body(): object {
-		return {
-			status: this.statusCode,
-			data: this.data,
-			error: this.error,
-			message: this.message,
-		};
-	}
 }

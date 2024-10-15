@@ -16,6 +16,11 @@ export default class UserRepository {
 		return user;
 	}
 
+	public async getAllUsers() {
+		const users = await dbConnection<IUserEntity>("users").select("*");
+		return users;
+	}
+
 	public async getUserByName(name: string) {
 		const user = await dbConnection<IUserEntity>("users")
 			.where({ name })

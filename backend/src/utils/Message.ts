@@ -9,4 +9,5 @@ export const Message = {
 	USER_NOT_FOUND: "Usuário não encontrado",
 	DUPLICATED_NAME: "Nome já utilizado",
 	NAME_REQUIRED: "Nome obrigatório",
+	TOKEN_NOT_PROVIDED: "Token não informado",
 } as const;
