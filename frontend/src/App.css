@@ -9,6 +9,9 @@
 	--background: #ede2ee;
 	--primary: #b644c1;
 	--accent: #67ce3b;
+	--red: #fc5c56;
+	--red-hover: #ed5853;
+	--gray: #5f5e5f;
 	--gradient: radial-gradient(100% 100% at 100% 0%, #f756ff 0%, #b644c1 100%);
 }
 * {
