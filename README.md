@@ -35,3 +35,6 @@ Após baixar e configurar as dependências, o servidor react iniciará no `http:
 <br>
 O servidor backend (api) iniciará no `http://localhost:5000`
 
+## Documentação
+
+entre em /docs para acessar as documentações disponíveis.
