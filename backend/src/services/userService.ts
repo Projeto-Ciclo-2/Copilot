@@ -37,7 +37,7 @@ export class UserService {
 		if (!foundUser) {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
-		return await this.userRepository.delete(foundUser.id);
+		return await this.userRepository.delete(id);
 	}
 	public async update(id: string, user: Partial<IUserEntity>) {
 		const foundUser = await this.userRepository.getUserById(id);
@@ -48,6 +48,6 @@ export class UserService {
 
 		user.password = await BcryptService.hash(String(user.password));
 
-		return await this.userRepository.update(foundUser.id, user);
+		return await this.userRepository.update(id, user);
 	}
 }
