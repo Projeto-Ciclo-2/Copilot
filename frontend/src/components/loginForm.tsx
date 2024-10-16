@@ -57,7 +57,7 @@ const LoginForm: React.FC = () => {
           <label>Senha:</label>
           <Input type="password" value={password} onChange={handlePasswordChange} />
         </div>
-        <Btn type="submit" className="auth-btn" text="Entrar" />
+        <Btn type="submit" className="auth-btn" icon={null} text="Entrar" />
         {notification && (
         <Notification
           message={notification}

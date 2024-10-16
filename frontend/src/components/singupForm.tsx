@@ -82,7 +82,7 @@ const SignupForm: React.FC = () => {
 					onChange={handlePasswordCheckerChange}
 				/>
 			</div>
-			<Btn type="submit" className="auth-btn" text="Cadastrar" />
+			<Btn type="submit" icon={null} className="auth-btn" text="Cadastrar" />
 			{notification && (
 				<Notification
 					message={notification}
