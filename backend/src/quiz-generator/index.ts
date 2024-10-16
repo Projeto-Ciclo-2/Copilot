@@ -5,7 +5,7 @@ import { config } from "../config";
 import { ErrorWhileGeneratingQuiz } from "../utils/Exception";
 import { examples } from "./responseExamples";
 
-interface IQuizQuestion {
+interface IGPTQuizQuestion {
 	statement: string;
 	options: string[];
 	answer: string;
@@ -74,7 +74,7 @@ export class QuizGenerator {
 
 	public async create(
 		prompt: Prompt
-	): Promise<IQuizQuestion[] | ErrorWhileGeneratingQuiz> {
+	): Promise<IGPTQuizQuestion[] | ErrorWhileGeneratingQuiz> {
 		if (!this.use_gpt_key) {
 			const x = Math.round(Math.random() * examples.length);
 			return this.jsonConstructor(examples[x]);
@@ -119,7 +119,7 @@ export class QuizGenerator {
 		for (const question of parsedJSONResponse) {
 			this.validateQuestion(question);
 		}
-		return parsedJSONResponse as any[] as IQuizQuestion[];
+		return parsedJSONResponse as any[] as IGPTQuizQuestion[];
 	}
 
 	private validateQuestion(question: any) {
