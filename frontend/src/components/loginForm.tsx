@@ -64,8 +64,11 @@ const LoginForm: React.FC = () => {
 		setNotification(defaultMessages.SERVER_ERROR);
 	};
 	return (
+		<>
+		<div className="form-container">
+					<h2>Enigmus</h2>
 		<form onSubmit={handleSubmit}>
-			<h2>Copilot QUIZ</h2>
+ 
 			<div className="auth-div">
 				<label>Usuário:</label>
 				<Input
@@ -88,13 +91,18 @@ const LoginForm: React.FC = () => {
 				text="Entrar"
 				disabled={!username || !password || fetching}
 			/>
+		</form>
+		</div>
+		<div id="notification">
+
 			{notification && (
 				<Notification
 					message={notification}
 					onClose={handleNotificationCLose}
 				/>
 			)}
-		</form>
+		</div>
+		</>
 	);
 };
 

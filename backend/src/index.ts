@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import { config } from "./config/index";
 import { router } from "./routes/router";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 const app: Express = express();
 app.use(cors());
