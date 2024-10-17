@@ -1,8 +1,9 @@
-import { IUserEntity } from "../entities/userEntity";
+import { IUserEntity } from "../entities/UserEntity";
 import UserRepository from "../repositories/userRepository";
-import BcryptService from "./BCryptService";
 import { ConflictException, NotFoundException } from "../utils/Exception";
+
 import { Message } from "../utils/Message";
+import BcryptService from "./BCryptService";
 
 export class UserService {
 	private userRepository: UserRepository;
