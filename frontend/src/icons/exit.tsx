@@ -1,6 +1,8 @@
 import React from "react";
+import type { SVGProps } from 'react';
 
-const ExitIcon = () => {
+
+export default function ExitIcon(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg
 			width="27"
@@ -27,5 +29,4 @@ const ExitIcon = () => {
 	);
 };
 
-export default ExitIcon;
 

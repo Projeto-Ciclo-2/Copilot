@@ -5,7 +5,7 @@ import MoreIcon from "../icons/moreIcon";
 import Search from "../icons/search";
 import CardQuiz, { card } from "../components/cardQuiz";
 import SpeedDialElement from "../components/speedDial";
-import Exit from "../icons/exit";
+import Logout from "../icons/logout";
 import { useNavigate } from "react-router-dom";
 import Btn from "../components/button";
 
@@ -45,7 +45,7 @@ const Homepage = () => {
 						<span></span>
 					</div>
 					<div id="dropdown-menu">
-						<Btn type="button" id="logout" text="Sair" icon={Exit} iconPosition="left" onClick={logout}/>
+						<Btn type="button" id="logout" text="Sair" icon={Logout} iconPosition="left" onClick={logout}/>
 					</div>
 				</label>
 			</div>

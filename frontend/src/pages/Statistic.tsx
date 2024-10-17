@@ -20,7 +20,7 @@ const Statistic = () => {
 			<Btn
 				type="button"
 				text={null}
-				icon={<ExitIcon />}
+				icon={ExitIcon}
 				className="btn-exit"
 				onClick={exit}
 			/>
