@@ -6,9 +6,11 @@ import MoreIcon from "../icons/moreIcon";
 import Search from "../icons/search";
 import CardQuiz, { card } from "../components/cardQuiz";
 import SpeedDialElement from "../components/speedDial";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
 	const [cards, setCards] = useState<card[] | null>(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		async function fetchCards() {
@@ -48,7 +50,9 @@ const Homepage = () => {
 						Prepare-se para <span>testar seus conhecimentos</span> e{" "}
 						<span>superar seus limites</span>
 					</h3>
-					<button className="quiz-btn"><a href="#quiz">Começar agora</a></button>
+					<button className="quiz-btn">
+						<a href="#quiz">Começar agora</a>
+					</button>
 				</div>
 				<div id="icon-vr">
 					<VRIcon />
@@ -68,7 +72,7 @@ const Homepage = () => {
 						<p>Sem quiz criado</p>
 					)}
 				</div>
-				<button id="btn-add-quiz">
+				<button id="btn-add-quiz" onClick={() => navigate("/create")}>
 					Adicionar Quiz <MoreIcon />
 				</button>
 			</section>

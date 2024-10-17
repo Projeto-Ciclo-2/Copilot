@@ -1,0 +1,70 @@
+@keyframes shakeContainer {
+    0% {
+        transform: translateX(-3px) translateY(3px);
+    }
+    30% {
+        transform: translateX(2px) translateY(5px);
+    }
+    60% {
+        transform: translateX(0px) translateY(-2px);
+    }
+    90% {
+        transform: translateX(3px) translateY(3px);
+    }
+}
+
+.shakeIt {
+    animation: shakeContainer 100ms ease-in-out alternate both;
+}
+
+#inputIcon {
+	display: flex;
+	flex-direction: column;
+	border: none;
+	max-width: 100%;
+	& > div {
+		display: flex;
+		align-items: center;
+		height: 1.5rem;
+		line-height: 1.5rem;
+		margin-bottom: 0.5rem;
+		& > svg {
+			height: 1rem;
+			width: 1.2rem;
+			margin-right: 5px;
+		}
+		& > label {
+			font-weight: 700;
+			max-width: calc(80vw);
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
+	& > input,
+	& > select {
+		padding: 0.5rem;
+		font-size: 1rem;
+		background-color: var(--bkg_1);
+		border: 1px solid rgba(255, 255, 255, 0);
+		border-radius: 5px;
+		&:focus-visible {
+			outline: var(--primary_2) 2px solid;
+		}
+	}
+	& > select > option {
+		font-family: var(--text);
+	}
+	& > span {
+		height: 1rem;
+		color: var(--red);
+		font-weight: 600;
+		max-width: 70vw;
+		max-height: 1rem;
+		line-height: 1rem;
+		font-size: 1rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}

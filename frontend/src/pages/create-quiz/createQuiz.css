@@ -1,10 +1,12 @@
 #createBody {
 	width: 100vw;
-	background-color: var(--bkg_1);
+	background-color: var(--bkg_2);
 	height: 100vh;
+	max-width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: flex-start;
 }
 
 #createHeader {
@@ -19,6 +21,123 @@
 	margin-top: 1rem;
 	flex-direction: column;
 	width: 90%;
-	height: calc(70% - 1rem);
-	background-color: aquamarine;
+	height: calc(80% - 1rem);
+}
+
+#createMain-section {
+	display: flex;
+	& > svg {
+		width: calc(50% - 1rem);
+		margin-right: 1rem;
+	}
+	& > div {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 50%;
+		& > h3 {
+			font-weight: 700;
+		}
+		& > p {
+			max-height: 100px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+}
+
+#createMain-form {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 100%;
+	& > * {
+		width: 100%;
+		margin-bottom: 1rem;
+	}
+}
+
+#createMain-btns {
+	position: fixed;
+	bottom: 2rem;
+	width: 90%;
+	height: 2.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	& > button {
+		height: 100%;
+		width: 40%;
+		font-weight: 700;
+		line-height: 1rem;
+		border: 1px solid rgba(0, 0, 0, 0);
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	& button:first-of-type {
+		background: none;
+		color: var(--primary);
+		border-color: var(--primary);
+		&:hover {
+			background-color: var(--primary);
+			color: var(--bkg_2);
+		}
+		&:active {
+			filter: brightness(0.9);
+		}
+	}
+	& button:last-of-type {
+		background: var(--gradient);
+		color: var(--bkg_2);
+		&:hover {
+			background: var(--primary);
+			color: var(--bkg_2);
+		}
+		&:active {
+			filter: brightness(0.9);
+		}
+	}
+}
+
+@media screen and (max-height: 850px) {
+	#createMain {
+		height: auto;
+	}
+	#createMain-btns {
+		position: initial;
+		width: 100%;
+	}
+}
+@media screen and (max-height: 800px) {
+	#createBody {
+		height: auto;
+	}
+}
+
+@media screen and (min-width: 800px) {
+	#createBody {
+		padding-bottom: 5rem;
+	}
+	#createMain {
+		width: 80vw;
+		height: auto;
+	}
+	#createMain-btns {
+		position: initial;
+		margin-top: 3rem;
+		width: 100%;
+	}
+}
+@media screen and (min-width: 1200px) {
+	#createMain {
+		width: 60vw;
+		height: auto;
+	}
+}
+@media screen and (min-width: 1700px) {
+	#createMain {
+		width: 40vw;
+		height: auto;
+	}
 }
