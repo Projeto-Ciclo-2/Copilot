@@ -6,9 +6,26 @@ export default class PollRepository {
 	private POLL_KEY_PREFIX = "poll:";
 
 	public async createPoll(poll: Partial<IPollEntity>) {
+		const {
+			title,
+			theme,
+			number_of_question,
+			number_of_alternatives,
+			duration_in_minutes,
+		} = poll;
 		const [createdPoll] = (await dbConnection<IPollEntity>("polls")
-			.insert(poll)
+			.insert({
+				title,
+				theme,
+				number_of_question,
+				number_of_alternatives,
+				duration_in_minutes,
+			})
 			.returning("*")) as IPollEntity[];
+
+		if (poll.questions) {
+			createdPoll.questions = poll.questions;
+		}
 
 		await redisClient.set(
 			`${this.POLL_KEY_PREFIX}${createdPoll.id}`,
