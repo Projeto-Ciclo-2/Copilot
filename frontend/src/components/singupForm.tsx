@@ -116,6 +116,7 @@ const SignupForm = () => {
 					onChange={handlePasswordCheckerChange}
 				/>
 			</div>
+
 			<Btn
 				type="submit"
 				className="auth-btn"

@@ -2,17 +2,18 @@ import React from "react";
 import type { SVGProps } from "react";
 
 interface ButtonProps {
-	type: "submit" | "button";
-	text?: string;
-	id?: string;
-	className?: string;
-	onClick?: () => void;
+  type: 'submit' | 'button';
+  text: string | null;
+  id?: string;
+  icon?: any | null;
+  className?: string;
+  onClick?: () => void;
 	disabled?: boolean;
 	icon?: React.ComponentType<SVGProps<SVGSVGElement>>;
 	iconPosition?: "left" | "right";
 	href?: string;
 }
-
+  
 const Btn: React.FC<ButtonProps> = ({
 	type,
 	text,
@@ -46,6 +47,7 @@ const Btn: React.FC<ButtonProps> = ({
 			{Icon && iconPosition === "right" && (
 				<Icon style={{ marginLeft: "0.5rem" }} />
 			)}
+
 		</button>
 			</a>
 	);

@@ -11,6 +11,22 @@ export default class UserController {
 		this.userService = new UserService();
 	}
 
+	public async getMyUser(req: Request, res: Response): Promise<void> {
+		try {
+			const response = new HttpResponse({
+				status: 200,
+				data: req.authUser,
+			});
+
+			res.status(response.status).json(response);
+		} catch (error: any) {
+			const response = new HttpResponse({
+				status: error.statusCode,
+				error: error.name,
+				message: error.message,
+			});
+		}
+	}
 	public async createUser(req: Request, res: Response): Promise<void> {
 		try {
 			const { name, password } = req.body;

@@ -9,7 +9,7 @@ import HttpResponse from "../utils/HttpResponse";
 declare global {
 	namespace Express {
 		interface Request {
-			authUser: IUserEntity;
+			authUser: Partial<IUserEntity>;
 		}
 	}
 }
