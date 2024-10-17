@@ -1,4 +1,4 @@
-export interface IQuizQuestion {
+export interface IPollQuestion {
 	id: number;
 	statement: string;
 	options: string[];
@@ -6,7 +6,7 @@ export interface IQuizQuestion {
 	explanation: string;
 }
 
-export interface IQuiz {
+export interface IPoll {
 	id: string;
 	title: string;
 	theme: string;
@@ -14,7 +14,7 @@ export interface IQuiz {
 	number_of_alternatives: number;
 	duration_in_minutes: number;
 	created_at?: string; //timestamp
-	questions: IQuizQuestion[];
+	questions: IPollQuestion[];
 }
 
 // redis:

@@ -7,3 +7,5 @@ const redisClient = new Redis({
 	port: Number(process.env.REDIS_PORT),
 	host: process.env.DB_HOST,
 });
+
+export default redisClient;
