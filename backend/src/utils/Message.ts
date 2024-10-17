@@ -10,4 +10,7 @@ export const Message = {
 	DUPLICATED_NAME: "Nome já utilizado",
 	NAME_REQUIRED: "Nome obrigatório",
 	TOKEN_NOT_PROVIDED: "Token não informado",
+	POLL_NOT_FOUND: "Quiz não encontrado",
+	INVALID_ID: "Id inválido",
+	MISSING_FIELDS: "Todos os campos são obrigatórios",
 } as const;

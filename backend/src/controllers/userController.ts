@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { IUserEntity } from "../entities/userEntity";
+
 import { UserService } from "../services/userService";
 import HttpResponse from "../utils/HttpResponse";
 import { Message } from "../utils/Message";
 import { BadRequestException } from "../utils/Exception";
+import { IUserEntity } from "../entities/UserEntity";
 
 export default class UserController {
 	private userService: UserService;
@@ -62,9 +63,7 @@ export default class UserController {
 			const id = req.params.user_id;
 
 			if (!id) {
-				throw new BadRequestException(
-					Message.USERNAME_OR_PASSWORD_INCORRECT
-				);
+				throw new BadRequestException(Message.INVALID_ID);
 			}
 
 			const result = await this.userService.getUserById(id);
@@ -112,9 +111,7 @@ export default class UserController {
 			const id = req.params.user_id;
 
 			if (!id) {
-				throw new BadRequestException(
-					Message.USERNAME_OR_PASSWORD_INCORRECT
-				);
+				throw new BadRequestException(Message.INVALID_ID);
 			}
 
 			const { name, password } = req.body;
@@ -148,9 +145,7 @@ export default class UserController {
 			const id = req.params.user_id;
 
 			if (!id) {
-				throw new BadRequestException(
-					Message.USERNAME_OR_PASSWORD_INCORRECT
-				);
+				throw new BadRequestException(Message.INVALID_ID);
 			}
 			const result = await this.userService.delete(id);
 

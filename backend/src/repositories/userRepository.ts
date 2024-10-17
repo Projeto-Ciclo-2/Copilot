@@ -1,4 +1,4 @@
-import { IUserEntity } from "../entities/userEntity";
+import { IUserEntity } from "../entities/UserEntity";
 import dbConnection from "../database/dbConnection";
 
 export default class UserRepository {
