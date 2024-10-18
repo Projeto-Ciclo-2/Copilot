@@ -8,7 +8,7 @@ let redisController: any;
 let ws: any;
 
 ws.on("postQuiz", async (e: any) => {
-	const { title, qntd_question, qntd_alternatives, theme } = e.body;
+	const { title, qntd_question, qntd_alternatives, theme, owner } = e.body;
 	// validar
 	const prompt = quizGenerator.generatePrompt(
 		title,
@@ -32,6 +32,7 @@ ws.on("postQuiz", async (e: any) => {
 	const quizID = generateUUID();
 	const quiz: IPoll = {
 		id: quizID, //gerar id do quiz
+		owner: owner ?? null,
 		title: title,
 		theme: theme,
 		number_of_alternatives: qntd_alternatives,
