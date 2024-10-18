@@ -1,8 +1,10 @@
-import { IPoll } from "../interfaces/IQuiz";
-import { QuizGenerator } from "../quiz-generator";
 import PollService from "../services/pollService";
-import { ErrorWhileGeneratingQuiz } from "../utils/Exception";
+import {
+	BadRequestException,
+	ErrorWhileGeneratingQuiz,
+} from "../utils/Exception";
 import WebSocket from "ws";
+import { Message } from "../utils/Message";
 
 const pollService = new PollService();
 const users = new Set<WebSocket>();
@@ -12,35 +14,30 @@ export const wss = new WebSocket.Server({ noServer: true });
 wss.on("connection", (ws: WebSocket) => {
 	users.add(ws);
 	ws.send(""); //lista de polls
-	ws.on("message", (message) => {
+	ws.on("message", async (message) => {
 		const data = JSON.parse(message.toString());
-		if (!data.type) return;
-		if (data.type === "postPoll") {
-			//
-			const { title, qntd_question, qntd_alternatives, theme, owner } =
-				data.body;
-			// validar
-			// function
-			return;
+		switch (data.type) {
+			case "postPolls":
+				try {
+					const poll = await pollService.createPoll(data.body);
+					broadcast(poll);
+				} catch (error: any) {
+					ws.send(JSON.stringify({ error: error.message }));
+				}
+				break;
+			case "postVote":
+				break;
+			default:
+				throw new BadRequestException(Message.INVALID_TYPE);
 		}
-		if(data.type === "postVote") {
-			const vote = {}
-			// redis
-			broadcast(JSON.stringify(vote))
-		}
-
 	});
 	ws.on("close", () => {
-		users.delete(ws)
+		users.delete(ws);
 	});
 });
 
-function generateUUID() {
-	return "Function not implemented.";
-}
-
-function broadcast(data: string):void {
+function broadcast(data: string): void {
 	for (const user of users) {
-		user.send(data)
+		user.send(data);
 	}
 }

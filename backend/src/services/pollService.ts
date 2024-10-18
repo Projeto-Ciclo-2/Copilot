@@ -8,67 +8,60 @@ import {
 } from "../utils/Exception";
 import { Message } from "../utils/Message";
 import { QuizGenerator } from "../quiz-generator";
-import { examples } from "../quiz-generator/responseExamples";
 
 export default class PollService {
 	private pollRepository: PollRepository;
-	private wss = new WebSocket.Server({ port: 3000 });
+
 	private quizGenerator: QuizGenerator;
 	constructor() {
 		this.quizGenerator = new QuizGenerator();
 		this.pollRepository = new PollRepository();
 	}
-	public async createPoll(poll: Partial<IPollEntity>): Promise<String> {
-		this.wss.on("postPoll", async () => {
-			const {
-				title,
-				theme,
-				number_of_question,
-				number_of_alternatives,
-				duration_in_minutes,
-			} = poll;
-			if (
-				!title ||
-				!theme ||
-				!number_of_question ||
-				!number_of_alternatives ||
-				!duration_in_minutes
-			) {
-				throw new BadRequestException(Message.MISSING_FIELDS);
-			}
+	public async createPoll(poll: Partial<IPollEntity>): Promise<string> {
+		const {
+			title,
+			theme,
+			number_of_question,
+			number_of_alternatives,
+			duration_in_minutes,
+		} = poll;
+		if (
+			!title ||
+			!theme ||
+			!number_of_question ||
+			!number_of_alternatives ||
+			!duration_in_minutes
+		) {
+			throw new BadRequestException(Message.MISSING_FIELDS);
+		}
 
-			const prompt = this.quizGenerator.generatePrompt(
-				title,
-				theme,
-				number_of_question,
-				number_of_alternatives
-				//duration_in_minutes
-			);
+		const prompt = this.quizGenerator.generatePrompt(
+			title,
+			theme,
+			number_of_question,
+			number_of_alternatives
+		);
 
-			const gptQuestions = await this.quizGenerator.create(prompt);
+		const gptQuestions = await this.quizGenerator.create(prompt);
 
-			if (gptQuestions instanceof ErrorWhileGeneratingQuiz) {
-				throw new ErrorWhileGeneratingQuiz(gptQuestions.message);
-			}
+		if (gptQuestions instanceof ErrorWhileGeneratingQuiz) {
+			throw new ErrorWhileGeneratingQuiz(gptQuestions.message);
+		}
 
-			const gptQuestionsWithID = gptQuestions.map((question, index) => {
-				return {
-					id: index,
-					statement: question.statement,
-					options: question.options,
-					answer: question.answer,
-					explanation: question.explanation,
-				};
-			});
-			poll.questions = gptQuestionsWithID;
-			await this.pollRepository.createPoll(poll);
+		const gptQuestionsWithID = gptQuestions.map((question, index) => {
+			return {
+				id: index,
+				statement: question.statement,
+				options: question.options,
+				answer: question.answer,
+				explanation: question.explanation,
+			};
 		});
 
-		this.wss.clients.forEach((client) => {
-			if (client.readyState === WebSocket.OPEN) {
-				client.send(JSON.stringify(poll));
-			}
-		});
+		poll.questions = gptQuestionsWithID;
+		poll.duration_in_minutes = duration_in_minutes;
+
+		await this.pollRepository.createPoll(poll);
 
 		return JSON.stringify(poll);
 	}

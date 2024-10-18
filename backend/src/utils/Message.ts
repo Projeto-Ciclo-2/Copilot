@@ -13,4 +13,5 @@ export const Message = {
 	POLL_NOT_FOUND: "Quiz não encontrado",
 	INVALID_ID: "Id inválido",
 	MISSING_FIELDS: "Todos os campos são obrigatórios",
+	INVALID_TYPE: "Tipo de requisição inválida",
 } as const;
