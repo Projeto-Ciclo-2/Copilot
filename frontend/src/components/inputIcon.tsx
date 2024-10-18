@@ -17,7 +17,6 @@ export default function InputIcon(props: {
 		if (e.target instanceof HTMLInputElement && props.setValue) {
 			const value = e.target.value;
 			const input = e.target;
-			e.target.value = value.trim();
 
 			const invalid = /[^A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+/.test(value);
 			const bigger = value.length >= 50;
