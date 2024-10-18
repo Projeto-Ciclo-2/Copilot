@@ -57,6 +57,17 @@ export class UserAPI {
 			return { error: true, err };
 		}
 	}
+	public async getMyUser(): Promise<any> {
+		try {
+			const apiURL = this.url + "/users/me";
+			const res = await fetch(apiURL);
+			const result = await res.json();
+			return result;
+		} catch (err) {
+			return { error: true, err };
+		}
+	}
+
 	private getRequestOptions(
 		method: "POST" | "GET" | "DELETE",
 		obj?: object

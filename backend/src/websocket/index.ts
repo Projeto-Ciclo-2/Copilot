@@ -1,52 +1,46 @@
 import { IPoll } from "../interfaces/IQuiz";
 import { QuizGenerator } from "../quiz-generator";
+import PollService from "../services/pollService";
 import { ErrorWhileGeneratingQuiz } from "../utils/Exception";
+import WebSocket from "ws";
 
-const quizGenerator = new QuizGenerator();
-let redisController: any;
+const pollService = new PollService();
+const users = new Set<WebSocket>();
 
-let ws: any;
+export const wss = new WebSocket.Server({ noServer: true });
 
-ws.on("postQuiz", async (e: any) => {
-	const { title, qntd_question, qntd_alternatives, theme, owner } = e.body;
-	// validar
-	const prompt = quizGenerator.generatePrompt(
-		title,
-		theme,
-		qntd_question,
-		qntd_alternatives
-	);
-	const gptQuestions = await quizGenerator.create(prompt);
-	if (gptQuestions instanceof ErrorWhileGeneratingQuiz) {
-		return;
-	}
-	const gptQuestionsWithID = gptQuestions.map((question, index) => {
-		return {
-			id: index,
-			statement: question.statement,
-			options: question.options,
-			answer: question.answer,
-			explanation: question.explanation,
-		};
+wss.on("connection", (ws: WebSocket) => {
+	users.add(ws);
+	ws.send(""); //lista de polls
+	ws.on("message", (message) => {
+		const data = JSON.parse(message.toString());
+		if (!data.type) return;
+		if (data.type === "postPoll") {
+			//
+			const { title, qntd_question, qntd_alternatives, theme, owner } =
+				data.body;
+			// validar
+			// function
+			return;
+		}
+		if(data.type === "postVote") {
+			const vote = {}
+			// redis
+			broadcast(JSON.stringify(vote))
+		}
+
 	});
-	const quizID = generateUUID();
-	const quiz: IPoll = {
-		id: quizID, //gerar id do quiz
-		owner: owner ?? null,
-		title: title,
-		theme: theme,
-		number_of_alternatives: qntd_alternatives,
-		number_of_question: qntd_question,
-		questions: gptQuestionsWithID,
-		duration_in_minutes: 10,
-	};
-
-	redisController.set(quizID, quiz);
-	redisController.get(quizID);
+	ws.on("close", () => {
+		users.delete(ws)
+	});
 });
-
-ws.on("triggerStart");
 
 function generateUUID() {
 	return "Function not implemented.";
+}
+
+function broadcast(data: string):void {
+	for (const user of users) {
+		user.send(data)
+	}
 }
