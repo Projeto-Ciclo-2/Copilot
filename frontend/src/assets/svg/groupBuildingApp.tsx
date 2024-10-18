@@ -49,7 +49,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask0_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="162"
 				y="192"
@@ -128,7 +128,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask1_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="114"
 				y="110"
@@ -167,7 +167,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask2_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="132"
 				y="110"
@@ -231,7 +231,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask3_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="105"
 				y="113"
@@ -276,7 +276,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask4_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="174"
 				y="197"
@@ -358,7 +358,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask5_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="162"
 				y="81"
@@ -564,7 +564,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask6_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="62"
 				y="120"
@@ -707,7 +707,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask7_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="94"
 				y="50"
@@ -745,7 +745,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask8_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="112"
 				y="48"
@@ -809,7 +809,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask9_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="89"
 				y="51"
@@ -994,7 +994,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask10_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="104"
 				y="174"
@@ -1032,7 +1032,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask11_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="123"
 				y="174"
@@ -1096,7 +1096,7 @@ export default function GroupBuildingApp() {
 			/>
 			<mask
 				id="mask12_105_76"
-				style="mask-type:luminance"
+				// style="mask-type:luminance"
 				maskUnits="userSpaceOnUse"
 				x="99"
 				y="178"
