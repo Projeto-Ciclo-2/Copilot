@@ -20,7 +20,6 @@ wss.on("connection", (ws: WebSocket) => {
 			case "postPolls":
 				try {
 					const poll = await pollService.createPoll(data.body);
-					ws.send(poll);
 					broadcast(poll);
 				} catch (error: any) {
 					ws.send(JSON.stringify({ error: error.message }));
