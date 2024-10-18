@@ -266,7 +266,7 @@ const Quiz = () => {
 							<Btn
 								type="button"
 								text="Confirmar"
-								icon={<ConfirmIcon />}
+								// icon={<ConfirmIcon />}
 								className="button-confirm-alternative"
 								disabled={
 									markedAlternative !== null ? false : true
