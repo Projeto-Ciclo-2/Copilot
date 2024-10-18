@@ -17,6 +17,11 @@ export interface IWSMessageSendPoll {
 	poll: IPoll;
 }
 
+export interface IWSMessageOwnerChange {
+	type: "ownerChange";
+	userID: string;
+}
+
 export interface IWSMessageSendVote {
 	type: "sendVote";
 	userID: string;
@@ -56,13 +61,25 @@ export interface IWSMessageOwnerGiveUp {
 	userID: string;
 }
 
+export interface IWSMessageJoinQuiz {
+	type: "joinQuiz";
+	userID: string;
+	pollID: string;
+}
+
+export interface IWSMessageLeftQuiz {
+	type: "leftQuiz";
+	userID: string;
+	pollID: string;
+}
+
 export interface IWSMessageGameInit {
 	type: "gameInit";
 	userID: string;
 }
 
 export interface IWSMessagePostVote {
-	type: "postVote",
+	type: "postVote";
 	userID: string;
 	pollID: string;
 	pollQuestionID: string;
