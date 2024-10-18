@@ -1,8 +1,9 @@
-import { IUserEntity } from "../entities/userEntity";
+import { IUserEntity } from "../entities/UserEntity";
 import UserRepository from "../repositories/userRepository";
-import BcryptService from "./BCryptService";
 import { ConflictException, NotFoundException } from "../utils/Exception";
+
 import { Message } from "../utils/Message";
+import BcryptService from "./BCryptService";
 
 export class UserService {
 	private userRepository: UserRepository;
@@ -37,7 +38,7 @@ export class UserService {
 		if (!foundUser) {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
-		return await this.userRepository.delete(foundUser.id);
+		return await this.userRepository.delete(id);
 	}
 	public async update(id: string, user: Partial<IUserEntity>) {
 		const foundUser = await this.userRepository.getUserById(id);
@@ -48,6 +49,6 @@ export class UserService {
 
 		user.password = await BcryptService.hash(String(user.password));
 
-		return await this.userRepository.update(foundUser.id, user);
+		return await this.userRepository.update(id, user);
 	}
 }

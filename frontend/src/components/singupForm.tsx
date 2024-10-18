@@ -88,8 +88,10 @@ const SignupForm = () => {
 		setNotification(null);
 	};
 	return (
+		<>
+		<div className="form-container">
+					<h2>Enigmus</h2>
 		<form onSubmit={handleSubmit}>
-			<h2>Copilot QUIZ</h2>
 			<div className="auth-div">
 				<label>Nome de usuário:</label>
 				<Input
@@ -121,13 +123,18 @@ const SignupForm = () => {
 				text="Cadastrar"
 				disabled={!username || !password || fetching}
 			/>
+		</form>
+				</div>
+		<div id="notification">
+
 			{notification && (
 				<Notification
 					message={notification}
 					onClose={handleNotificationCLose}
 				/>
 			)}
-		</form>
+		</div>
+		</>
 	);
 };
 

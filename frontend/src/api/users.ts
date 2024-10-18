@@ -46,16 +46,43 @@ export class UserAPI {
 		}
 	}
 
+	public async Ranking(): Promise<any> {
+		try {
+			const apiURL = this.url + "/users";
+			const requestOptions: RequestInit = this.getRequestOptions("GET");
+			const res = await fetch(apiURL, requestOptions);
+			const result = await res.json();
+			return result;
+		} catch (err: any) {
+			return { error: true, err };
+		}
+	}
+	public async getMyUser(): Promise<any> {
+		try {
+			const apiURL = this.url + "/users/me";
+			const res = await fetch(apiURL);
+			const result = await res.json();
+			return result;
+		} catch (err) {
+			return { error: true, err };
+		}
+	}
+
 	private getRequestOptions(
 		method: "POST" | "GET" | "DELETE",
-		obj: object = {}
+		obj?: object
 	): RequestInit {
-		return {
+		const options: RequestInit = {
 			method,
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(obj),
 		};
+
+		if(method !== "GET" && obj) {
+			options.body = JSON.stringify(obj);
+		}
+		return options;
 	}
+
 }

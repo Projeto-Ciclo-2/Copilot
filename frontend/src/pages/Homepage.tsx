@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./css/HomePage.css";
-import EpArrowDown from "../icons/downArrow";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
 import Search from "../icons/search";
 import CardQuiz, { card } from "../components/cardQuiz";
 import SpeedDialElement from "../components/speedDial";
+import Logout from "../icons/logout";
+import { useNavigate } from "react-router-dom";
+import Btn from "../components/button";
 
 const Homepage = () => {
 	const [cards, setCards] = useState<card[] | null>(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		async function fetchCards() {
@@ -28,18 +31,23 @@ const Homepage = () => {
 		fetchCards();
 	}, []);
 
+	const logout = () => {
+		navigate("/");
+	};
 	return (
 		<>
-			<div id="profile">
-				<div id="profile-btn">
-					<div id="user-div">
-						<div id="avatar"></div>
-						<p>Name</p>
+			<div id="burguer-container">
+				<label id="burguer">
+					<input type="checkbox" />
+					<div id="burger-checkmark">
+						<span></span>
+						<span></span>
+						<span></span>
 					</div>
-					<div id="arrow">
-						<EpArrowDown />
+					<div id="dropdown-menu">
+						<Btn type="button" id="logout" text="Sair" icon={Logout} iconPosition="left" onClick={logout}/>
 					</div>
-				</div>
+				</label>
 			</div>
 			<section id="wellcome">
 				<div id="content-text">
@@ -48,7 +56,7 @@ const Homepage = () => {
 						Prepare-se para <span>testar seus conhecimentos</span> e{" "}
 						<span>superar seus limites</span>
 					</h3>
-					<button className="quiz-btn"><a href="#quiz">Começar agora</a></button>
+					<Btn type="button" className="quiz-btn" href="#quiz" text="Começar agora" />
 				</div>
 				<div id="icon-vr">
 					<VRIcon />
@@ -68,9 +76,7 @@ const Homepage = () => {
 						<p>Sem quiz criado</p>
 					)}
 				</div>
-				<button id="btn-add-quiz">
-					Adicionar Quiz <MoreIcon />
-				</button>
+				<Btn type="button" id="btn-add-quiz" icon={MoreIcon} text="Adicionar Quiz" iconPosition="right" onClick={() => navigate("/create")}/>
 			</section>
 			<div id="plus-btn">
 				<SpeedDialElement />

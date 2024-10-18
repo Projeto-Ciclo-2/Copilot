@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUserEntity } from "../entities/userEntity";
+import { IUserEntity } from "../entities/UserEntity";
 import JwtTokenService from "../services/JwtTokenService";
 import UserRepository from "../repositories/userRepository";
 import { NotFoundException, UnauthorizedException } from "../utils/Exception";
@@ -9,7 +9,7 @@ import HttpResponse from "../utils/HttpResponse";
 declare global {
 	namespace Express {
 		interface Request {
-			authUser: IUserEntity;
+			authUser: Partial<IUserEntity>;
 		}
 	}
 }

@@ -9,10 +9,10 @@
 
 	& #content-text {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 1rem;
-		padding-top: 150px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-top: 3rem;
 
 		& h1 {
 			font-family: var(--title);
@@ -228,37 +228,96 @@
 		}
 	}
 }
-
-#profile-btn {
+#burguer-container{
+	display: flex;
+	justify-content: flex-end;
+	margin: 1rem;
+	position: relative;
+}
+#burguer input {
+	position: absolute;
+	opacity: 0;
 	cursor: pointer;
-	position: fixed;
-	top: 1rem;
-	right: 2rem;
-	background-color: var(--accent);
-	padding: 0.5rem;
+	height: 0;
+	width: 0;
+}
+
+#burguer {
+	display: block;
+	position: relative;
+	cursor: pointer;
+	font-size: 2rem;
+	user-select: none;
+}
+
+#burger-checkmark {
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 1.3rem;
+	width: 1.3rem;
+}
+
+#burger-checkmark span {
+	width: 2rem;
+	height: .2rem;
+	background-color: var(--primary);
+	position: absolute;
+	transition: all 0.3s ease-in-out;
+}
+
+#burger-checkmark span:nth-child(1) {
+	top: 10%;
+}
+
+#burger-checkmark  span:nth-child(2) {
+	top: 50%;
+}
+
+#burger-checkmark  span:nth-child(3) {
+	top: 90%;
+}
+
+#burguer input:checked + #burger-checkmark  span:nth-child(1) {
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+#burguer input:checked + #burger-checkmark  span:nth-child(2) {
+	top: 50%;
+	transform: translateY(-50%) rotate(-45deg);
+}
+
+#burguer input:checked + #burger-checkmark span:nth-child(3) {
+	transform: translateX(-50px);
+	opacity: 0;
+}
+#dropdown-menu{
+	position: absolute;
+	right: -.5rem;
+	top: -100px;
+	transition: 300ms;
+	background-color: transparent;
+	border-radius: 5px;
+	display: block;
+}
+#logout{
+	background-color: #67ce3b;
+	color: white;
+	font-weight: bold;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
 	border-radius: 5px;
 	display: flex;
-	align-items: center;
-	gap: 3rem;
-	justify-content: space-between;
-	box-shadow: 0px 0.01em 0.01em #32a02866,
-		0px 0.3em 0.7em -0.01em rgba(4, 26, 9, 0.3),
-		inset 0px -0.01em 0px rgba(4, 26, 8, 0.5);
+	gap: 10px;
 }
-#profile-btn:hover {
-	box-shadow: 0px 0.1em 0.2em rgba(47, 95, 52, 0.4),
-		0px 0.4em 0.7em -0.1em rgba(68, 179, 57, 0.3),
-		inset 0px -0.1em 0px #2db138;
-	transform: translateY(-0.1em);
+#burguer input:checked ~ #dropdown-menu{
+	display: block;
+	top: 2.5rem;
 }
-#profile-btn:active {
-	box-shadow: inset 0px 0.1em 0.6em #0fd629;
-	transform: translateY(0em);
-}
-#profile-btn p {
-	margin: 0;
-	font-size: small;
-}
+
+
 #user-div {
 	display: flex;
 	align-items: center;
@@ -273,6 +332,9 @@
 #arrow {
 	margin-right: 0.5rem;
 }
+a{
+	text-decoration: none;
+}
 .quiz-btn {
 	font-family: var(--text);
 	margin: 0;
@@ -286,11 +348,7 @@
 	box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%),
 		0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%),
 		inset 0px -0.01em 0px rgb(58 65 111 / 50%);
-
-	& a {
-		color: white;
-		text-decoration: none;
-	}
+	color: white;
 }
 .quiz-btn:hover {
 	box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%),
@@ -377,6 +435,9 @@
 			}
 		}
 	}
+	#burguer-container{
+		margin: 1rem 2.5rem;
+	}
 }
 
 @media (min-width: 500px) {
@@ -399,6 +460,9 @@
 				}
 			}
 		}
+	}
+	#burguer-container{
+		margin: 1rem 3rem;
 	}
 }
 
@@ -437,6 +501,9 @@
 				width: 48%;
 			}
 		}
+	}
+	#burguer-container{
+		margin: 1rem 4rem;
 	}
 }
 

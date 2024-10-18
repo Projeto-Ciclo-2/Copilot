@@ -36,9 +36,10 @@ const AuthPage: React.FC = () => {
 						Cadastro
 					</button>
 				</div>
-				<div className="form-container">
+				<>
 					{activeTab === "login" ? <LoginForm /> : <SignupForm />}
-				</div>
+				</>
+				
 			</div>
 		</div>
 	);
