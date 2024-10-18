@@ -1,0 +1,145 @@
+#globalpage{
+    min-height: 100vh;
+    width: 100%;
+	background: var(--gradient);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1rem 2rem;
+	overflow-y: auto;
+}
+#header{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+	margin-top: .5rem;
+}
+#header h2{
+    font-family: var(--title);
+    color: white;
+}
+#back-btn{
+    position: absolute;
+		top: 1rem;
+		left: .5rem;
+		padding: .5rem;
+		background-color: var(--red);
+		outline: none;
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+		transition: .5s;
+		&:hover {
+			background-color: var(--red-hover);
+		}
+}
+#ranking-container{
+    background-color: var(--bkg_1);
+    margin-top: 3rem;
+	height: 80vh;
+	overflow-y: scroll;
+    width: 100%;
+
+	border-radius: 15px;
+}
+  .ranking-card{
+	display: flex;
+	padding: 5px;
+	border-bottom: 1px solid #ccc;
+	align-items: center;
+	margin-bottom: .5rem;
+	margin: 1rem;
+	border-radius: 10px;
+	border: 2px solid;
+	box-shadow: 0 0 6px 4px rgba(151, 102, 163, 0.3);
+	border-color: #ccc;
+	justify-content: space-evenly;
+	min-width: 4rem;
+  }
+  .medal-ranking svg{
+	filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.5));
+  }
+  .ranking-content{
+	display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+	align-content: center;
+  }
+  .name{
+	margin: .5rem;
+  }
+  .content{
+	display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    padding: .5rem 1rem;
+    justify-content: flex-end;
+	& p{
+		margin: 0 1rem;
+	}
+  }
+
+  @media (min-width: 500px){
+	#ranking-container{
+		width: 85%;
+	}
+	.content{
+		justify-content: space-around;
+	}
+  }
+  @media(min-width: 600px){
+	.content{
+		width: 100%;
+	}
+  }
+  @media(min-width: 650px){
+	.content{
+		justify-content: space-between;
+	}
+  }
+  @media(min-width: 700px){
+	.name, .content{
+		font-size: large;
+	}
+	.medal-ranking svg{
+		width: 3.5rem;
+		height: 3.5rem;
+		margin: 0 1rem;
+	  }
+	
+  }
+@media(min-width: 801px){
+	
+}
+@media(min-width: 1000px){
+	#ranking-container{
+		width: 75%;
+	}
+	.medal-ranking svg{
+		width: 4rem;
+		height: 4rem;
+		margin: 0 0 0 1rem;
+	  }
+}
+@media(min-width: 1200px){
+	#ranking-container{
+		width: 65%;
+	}
+}
+@media(min-width: 1200px){
+	#ranking-container{
+		width: 60%;
+	}
+}
+@media(min-width: 1439px){
+	#ranking-container{
+		width: 50%;
+	}
+}
+@media(min-width: 2300px){
+	#ranking-container{
+		width: 40%;
+	}
+}
