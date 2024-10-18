@@ -76,7 +76,7 @@ const Homepage = () => {
 						<p>Sem quiz criado</p>
 					)}
 				</div>
-				<Btn type="button" id="btn-add-quiz" icon={MoreIcon} text="Adicionar Quiz" iconPosition="right"/>
+				<Btn type="button" id="btn-add-quiz" icon={MoreIcon} text="Adicionar Quiz" iconPosition="right" onClick={() => navigate("/create")}/>
 			</section>
 			<div id="plus-btn">
 				<SpeedDialElement />
