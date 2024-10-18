@@ -23,10 +23,6 @@ export default class PollRepository {
 			})
 			.returning("*")) as IPollEntity[];
 
-		if (poll.questions) {
-			createdPoll.questions = poll.questions;
-		}
-
 		await redisClient.set(
 			`${this.POLL_KEY_PREFIX}${createdPoll.id}`,
 			JSON.stringify(createdPoll)

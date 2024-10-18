@@ -1,0 +1,174 @@
+#section-quiz {
+	height: 100vh;
+	padding: 2rem;
+	overflow-y: auto;
+
+	& #header-quiz {
+		display: flex;
+		background: var(--gradient);
+		justify-content: space-between;
+		align-items: center;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 10vh;
+		padding: 0 2rem;
+		z-index: 2;
+
+		& .button-exit-quiz {
+			height: fit-content;
+			padding: 0.5rem 2rem;
+			border-radius: 1.5rem;
+			background: var(--red) !important;
+			color: var(--background);
+			font-weight: bold;
+			outline: none;
+			border: none;
+		}
+
+		& div {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			align-items: flex-end;
+			gap: 0.2rem;
+
+			& .current-question {
+				font-weight: bold;
+				color: var(--background);
+				font-size: 1.3rem;
+			}
+
+			& .correct-questions {
+				color: var(--bkg_1);
+			}
+		}
+	}
+
+	& #content-quiz {
+		padding-top: 10vh;
+
+		& .title-quiz {
+			font-size: 1rem;
+			color: var(--text-color);
+			margin-top: 1.5rem;
+		}
+
+		& .question-quiz {
+			font-size: 1.1rem;
+			font-weight: bold;
+			text-align: justify;
+			margin-top: 0.5rem;
+		}
+
+		& .alternatives-quiz {
+			margin: 2rem 0;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			transition: 0.5s;
+		}
+	}
+
+	& #div-button {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+
+		& .button-confirm-alternative {
+			display: flex;
+			width: fit-content;
+			flex-direction: row-reverse;
+			align-items: center;
+			gap: 1rem;
+			padding: 1rem 1.5rem;
+			border-radius: 2rem;
+			position: relative;
+			border: none;
+			background-color: var(--primary) !important;
+			font-weight: bold;
+			color: var(--background);
+			margin-top: 3rem;
+			transition: 0.5s;
+
+			&:hover {
+				transform: scale(1.02);
+				background-color: #9b3ba4 !important;
+			}
+
+			&:disabled {
+				background-color: var(--bkg_3) !important;
+				color: var(--gray);
+			}
+
+			/* &:hover::before {
+				content: "Ação irreversível. Tem certeza que deseja confirmar? ⚠️";
+				position: absolute;
+				width: 200px;
+				font-size: 0.8rem;
+				border-radius: 5px;
+				color: var(--red);
+				font-weight: bold;
+				top: 55px;
+				left: 120px;
+				padding: 0.5rem;
+			} */
+		}
+	}
+}
+
+@media (min-width: 750px) {
+	#section-quiz {
+		#content-quiz {
+			& .alternatives-quiz {
+				padding: 0 3rem;
+			}
+		}
+	}
+}
+
+
+@media (min-width: 900px) {
+	#section-quiz {
+		#content-quiz {
+			& .alternatives-quiz {
+				padding: 0 4rem;
+			}
+		}
+	}
+}
+
+@media (min-width: 1000px) {
+	#section-quiz {
+		#content-quiz {
+			padding: 0 2rem;
+			padding-top: 10vh;
+		}
+	}
+}
+
+@media (min-width: 1200px) {
+	#section-quiz {
+		#content-quiz {
+			padding: 0 2rem;
+			padding-top: 10vh;
+		}
+	}
+}
+
+@media (min-width: 1300px) {
+	main {
+		display: flex;
+		justify-content: center;
+	}
+
+	#section-quiz {
+		width: 1100px;
+
+		#content-quiz {
+			padding: 0 4rem;
+			padding-top: 10vh;
+		}
+	}
+}

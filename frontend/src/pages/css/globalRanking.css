@@ -1,4 +1,4 @@
-#globalpage{
+#globalpage, #ranking-quiz{
     min-height: 100vh;
     width: 100%;
 	background: var(--gradient);
@@ -108,10 +108,10 @@
 		height: 3.5rem;
 		margin: 0 1rem;
 	  }
-	
+
   }
 @media(min-width: 801px){
-	
+
 }
 @media(min-width: 1000px){
 	#ranking-container{
