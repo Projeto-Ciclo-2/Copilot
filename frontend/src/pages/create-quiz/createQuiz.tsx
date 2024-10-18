@@ -12,11 +12,15 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationQuiz from "./confirmationQuiz";
 import GroupBuildingApp from "../../assets/svg/groupBuildingApp";
 import TextWriteAnimated from "../../components/other/TextWriteAnimated";
+import { useWebSocket } from "../../context/WebSocketContext";
 
 type nullNumber = undefined | number;
 
 const CreateQuiz = () => {
 	const navigate = useNavigate();
+
+	const webSocketContext = useWebSocket();
+
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
 	const [xQuestions, setXQuestions] = React.useState<nullNumber>();
@@ -27,6 +31,33 @@ const CreateQuiz = () => {
 	const [wantToConfirm, setWantToConfirm] = React.useState(false);
 	const [loadingContent, setLoadingContent] = React.useState(false);
 	const [wantToLeaveLoading, setWantToLeaveLoading] = React.useState(false);
+
+	const confirmForm = () => {
+		if (typeof title !== "string" && typeof theme !== "string") {
+			console.error("os valores não estão corretos");
+			return;
+		}
+		const message = {
+			type: "postPolls",
+			body: {
+				title: title,
+				theme: theme,
+				number_of_question: xQuestions,
+				number_of_alternatives: xAlternatives,
+				duration_in_minutes: Number.parseInt(time),
+			},
+		};
+		// webSocketContext.sendMessage(JSON.stringify(message));
+		setTimeout(() => {
+			setLoadingContent(true);
+		}, 300);
+	};
+
+	if (!webSocketContext || !webSocketContext.isConnected) {
+		console.log("Web socket não conectado");
+		navigate("/");
+		return;
+	}
 
 	if (loadingContent)
 		return (
@@ -79,7 +110,7 @@ const CreateQuiz = () => {
 				<header id="createHeader"></header>
 				<main id="createMain">
 					<ConfirmationQuiz
-						onAccept={() => setLoadingContent(true)}
+						onAccept={confirmForm}
 						onReject={() => setWantToConfirm(false)}
 					/>
 				</main>

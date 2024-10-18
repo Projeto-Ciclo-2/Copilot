@@ -6,7 +6,7 @@ import {
 import WebSocket from "ws";
 import { Message } from "../utils/Message";
 
-// const pollService = new PollService();
+const pollService = new PollService();
 const users = new Set<WebSocket>();
 
 export const wss = new WebSocket.Server({ noServer: true });
@@ -17,11 +17,11 @@ wss.on("connection", (ws: WebSocket) => {
 	ws.on("message", async (message) => {
 		const data = JSON.parse(message.toString());
 		switch (data.type) {
-			case "postPolls":
+			case "postPoll":
 				try {
 					const poll = await pollService.createPoll(data.body);
 					const messageServer = {
-						type: "postPolls",
+						type: "sendPoll",
 						body: poll,
 					};
 					broadcast(JSON.stringify(messageServer));

@@ -48,6 +48,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 
 		socket.onmessage = (event: MessageEvent) => {
 			setLatestMessage(event.data);
+			console.log(event.data);
 		};
 
 		socket.onclose = () => {

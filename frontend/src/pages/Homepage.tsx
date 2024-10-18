@@ -52,7 +52,9 @@ const Homepage = () => {
 		}
 
 		validateSession().then(() => {
-			webSocketContext.setCanConnect(true);
+			if (!webSocketContext.isConnected) {
+				webSocketContext.setCanConnect(true);
+			}
 		});
 		// fetchCards();
 	}, [userContext, navigate, location, webSocketContext]);
