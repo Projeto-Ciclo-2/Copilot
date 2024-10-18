@@ -4,7 +4,7 @@ import PollService from "../services/pollService";
 import { ErrorWhileGeneratingQuiz } from "../utils/Exception";
 import WebSocket from "ws";
 
-const pollService = new PollService();
+// const pollService = new PollService();
 const users = new Set<WebSocket>();
 
 export const wss = new WebSocket.Server({ noServer: true });

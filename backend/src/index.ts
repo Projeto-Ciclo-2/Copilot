@@ -8,7 +8,12 @@ import http from "http";
 import { wss } from "./websocket";
 
 const app: Express = express();
-app.use(cors());
+app.use(
+	cors({
+		origin: config.CLIENT_URL,
+		credentials: true,
+	})
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", router);
@@ -16,13 +21,13 @@ app.use("/api", router);
 // 	console.log(`server running at port ${config.PORT}!`)
 // );
 
-const server = http.createServer(app)
+const server = http.createServer(app);
 server.listen(config.PORT, () => {
-    console.log(`server running at port ${config.PORT}!`)
+	console.log(`server running at port ${config.PORT}!`);
 });
 
 server.on("upgrade", (req, socket, head) => {
-    wss.handleUpgrade(req, socket, head, (ws) => {
-        wss.emit("connection", ws, req);
-    });
+	wss.handleUpgrade(req, socket, head, (ws) => {
+		wss.emit("connection", ws, req);
+	});
 });
