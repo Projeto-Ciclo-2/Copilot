@@ -1,18 +1,18 @@
 import React from "react";
 
 interface ButtonProps {
-  type: 'submit' | 'button';
-  text: string | null;
-  icon?: any | null;
-  className?: string;
-  onClick?: () => void;
+	type: "submit" | "button";
+	text: string | null;
+	icon?: any | null;
+	className?: string;
+	onClick?: () => void;
 	disabled?: boolean;
 }
-  
+
 const Btn: React.FC<ButtonProps> = ({
 	type,
 	text,
-  icon,
+	icon,
 	className,
 	onClick,
 	disabled = false,
@@ -28,8 +28,8 @@ const Btn: React.FC<ButtonProps> = ({
 				cursor: disabled ? "not-allowed" : "pointer",
 			}}
 		>
-      {icon && icon}
-      {text && text}
+			{icon && icon}
+			{text && text}
 		</button>
 	);
 };
