@@ -2,10 +2,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
+import { useNavigate } from "react-router-dom";
 
 const LinearProgressComponent = () => {
 	const [progress, setProgress] = React.useState(0);
 	let testeTime = 0;
+
+	const navigate = useNavigate();
 
 	const { timeQuestion, currentQuestion, addQuestion, numberOfQuestions } =
 		useCurrentQuestion();
@@ -25,7 +28,7 @@ const LinearProgressComponent = () => {
 						addQuestion();
 					}
 					if ((currentQuestion as number) >= numberOfQuestions - 1) {
-						console.log("acabou as perguntas");
+						navigate('/ranking')
 					}
 
 					return 100;
