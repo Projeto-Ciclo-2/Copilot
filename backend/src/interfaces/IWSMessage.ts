@@ -22,6 +22,12 @@ export interface IWSMessageOwnerChange {
 	userID: string;
 }
 
+export interface IWSMessageSendGameInit {
+	type: "sendGameInit",
+	pollID: string;
+	started_at: string; //timestamp
+}
+
 export interface IWSMessageSendVote {
 	type: "sendVote";
 	userID: string;
@@ -75,7 +81,8 @@ export interface IWSMessageLeftQuiz {
 
 export interface IWSMessageGameInit {
 	type: "gameInit";
-	userID: string;
+	userID: string; //todo: posteriormente validar no backend
+	pollID: string;
 }
 
 export interface IWSMessagePostVote {
