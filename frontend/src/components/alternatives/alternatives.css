@@ -1,0 +1,129 @@
+.alternative {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	border-radius: 5px;
+	font-weight: bold;
+
+	& .content-alternative {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+
+		& .item-alternative {
+			padding: 0.5rem 1rem;
+			border-radius: 50%;
+		}
+	}
+
+	& .div-percentage {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 .5rem;
+		width: 100px;
+		& p {
+			color: var(--text-color);
+		}
+	}
+}
+
+.standard {
+	border: 1px solid var(--text-color);
+	cursor: pointer;
+	transition: 0.5s;
+
+	&:hover {
+		transform: scale(1.01);
+		background-color: var(--primary);
+		color: var(--background);
+		border: 1px solid var(--primary);
+
+		& .content-alternative {
+			& .item-alternative {
+				border: 1px solid var(--background);
+			}
+		}
+	}
+}
+
+& .content-alternative {
+	& .item-alternative {
+		border: 1px solid var(--text-color);
+	}
+}
+
+.chose {
+	transform: scale(1.03);
+	background-color: var(--primary-hover);
+	color: var(--background);
+	border: 1px solid var(--primary-hover);
+
+	&:hover {
+		transform: scale(1.01);
+		background-color: var(--primary-hover);
+		color: var(--background);
+		border: 1px solid var(--primary-hover);
+
+		& .content-alternative {
+			& .item-alternative {
+				border: 1px solid var(--background);
+			}
+		}
+	}
+
+	& .content-alternative {
+		& .item-alternative {
+			border: 1px solid var(--background);
+		}
+	}
+}
+
+.disabled {
+	background-color: none;
+	color: var(--bkg_3);
+	border: 2px dashed var(--bkg_3);
+
+	& .content-alternative {
+		& .item-alternative {
+			border: 1px solid var(--bkg_3);
+		}
+	}
+}
+
+.correct {
+	transform: scale(1.01);
+	background-color: var(--accent);
+	color: var(--text-color);
+	border: 1px solid var(--text-color);
+
+	& .content-alternative {
+		& .item-alternative {
+			border: 1px solid var(--text-color);
+		}
+	}
+}
+
+.wrong {
+	transform: scale(1.01);
+	background-color: var(--red);
+	color: var(--background);
+	border: 1px solid var(--red);
+
+	& .content-alternative {
+		& .item-alternative {
+			border: 1px solid var(--background);
+		}
+	}
+}
+
+span.MuiLinearProgress-root {
+	background: var(--background);
+	box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+span.MuiLinearProgress-bar {
+	background: var(--gradient);
+}
