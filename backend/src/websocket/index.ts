@@ -17,11 +17,11 @@ wss.on("connection", (ws: WebSocket) => {
 	ws.on("message", async (message) => {
 		const data = JSON.parse(message.toString());
 		switch (data.type) {
-			case "postPolls":
+			case "postPoll":
 				try {
 					const poll = await pollService.createPoll(data.body);
 					const messageServer = {
-						type: "postPolls",
+						type: "sendPoll",
 						body: poll,
 					};
 					broadcast(JSON.stringify(messageServer));

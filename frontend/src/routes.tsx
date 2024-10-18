@@ -1,5 +1,8 @@
 import React from "react";
 import { Route, BrowserRouter, Routes as Switch } from "react-router-dom";
+import { WebSocketProvider } from "./context/WebSocketContext";
+import UserProvider from "./context/UserContext";
+
 import AuthPage from "./pages/AuthPage";
 import Homepage from "./pages/Homepage";
 import Quiz from "./pages/Quiz";
@@ -12,18 +15,23 @@ import RankingQuiz from "./pages/rankingQuiz";
 const AppRouter = () => {
 	return (
 		<main>
-			<BrowserRouter>
-				<Switch>
-					<Route element={<AuthPage />} path="/" />
-					<Route element={<Homepage />} path="/home" />
-					<Route element={<Quiz />} path="/quiz" />
-					<Route element={<Statistic />} path="/statistic" />
-					<Route element={<CreateQuiz />} path="/create" />
-					<Route element={<Lobby />} path="/lobby" />
-					<Route element={<GlobalRanking/>} path="/global" />
-					<Route element={<RankingQuiz/>} path="/ranking" />
-				</Switch>
-			</BrowserRouter>
+			<UserProvider>
+				<WebSocketProvider>
+					<BrowserRouter>
+						<Switch>
+							<Route element={<AuthPage />} path="/" />
+							<Route element={<Homepage />} path="/home" />
+							<Route element={<Quiz />} path="/quiz" />
+							<Route element={<Statistic />} path="/statistic" />
+							<Route element={<CreateQuiz />} path="/create" />
+							<Route element={<GlobalRanking />} path="/global" />
+							<Route element={<Lobby />} path="/lobby" />
+							<Route element={<GlobalRanking />} path="/global" />
+							<Route element={<RankingQuiz />} path="/ranking" />
+						</Switch>
+					</BrowserRouter>
+				</WebSocketProvider>
+			</UserProvider>
 		</main>
 	);
 };
