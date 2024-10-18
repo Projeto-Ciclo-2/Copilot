@@ -5,6 +5,7 @@ import Homepage from "./pages/Homepage";
 import Quiz from "./pages/Quiz";
 import Statistic from "./pages/Statistic";
 import CreateQuiz from "./pages/create-quiz/createQuiz";
+import Lobby from "./pages/Lobby";
 
 const AppRouter = () => {
 	return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
 					<Route element={<Quiz />} path="/quiz" />
 					<Route element={<Statistic />} path="/statistic" />
 					<Route element={<CreateQuiz />} path="/create" />
+					<Route element={<Lobby />} path="/lobby" />
 				</Switch>
 			</BrowserRouter>
 		</main>
