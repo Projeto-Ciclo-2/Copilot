@@ -8,6 +8,7 @@ export interface IPollQuestion {
 
 export interface IPoll {
 	id: string;
+	owner: string | null;
 	title: string;
 	theme: string;
 	number_of_question: number;
