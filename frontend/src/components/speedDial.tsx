@@ -2,12 +2,14 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import React from "react";
 import Statistic from "../icons/statistic";
 import Global from "../icons/global";
+import { useNavigate } from "react-router-dom";
 
 const SpeedDialElement = () => {
+	const navigate = useNavigate()
 	// icons
 	const actions = [
-		{ icon: <Statistic />, name: "Statistic" },
-		{ icon: <Global />, name: "Global" },
+		{ icon: <Statistic />, name: "Statistic", route: "/statistic" },
+		{ icon: <Global />, name: "Global", route: "/global" },
 	];
 
 	return (
@@ -27,6 +29,7 @@ const SpeedDialElement = () => {
 					key={action.name}
 					icon={action.icon}
 					tooltipTitle={action.name}
+					onClick={() => navigate(action.route)}
 				/>
 			))}
 		</SpeedDial>

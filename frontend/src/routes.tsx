@@ -4,6 +4,7 @@ import AuthPage from "./pages/AuthPage";
 import Homepage from "./pages/Homepage";
 import Statistic from "./pages/Statistic";
 import CreateQuiz from "./pages/create-quiz/createQuiz";
+import GlobalRanking from "./pages/globalRanking";
 
 const AppRouter = () => {
 	return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
 					<Route element={<Homepage />} path="/home" />
 					<Route element={<Statistic />} path="/statistic" />
 					<Route element={<CreateQuiz />} path="/create" />
+					<Route element={<GlobalRanking/>} path="/global" />
 				</Switch>
 			</BrowserRouter>
 		</main>
