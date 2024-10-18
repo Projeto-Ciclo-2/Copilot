@@ -1,29 +1,57 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
+import { useCurrentQuestion } from "../context/questionCurrentContext";
 
 const LinearProgressComponent = () => {
 	const [progress, setProgress] = React.useState(0);
+	let testeTime = 0;
+
+	const { timeQuestion, currentQuestion, addQuestion, numberOfQuestions } =
+		useCurrentQuestion();
 
 	React.useEffect(() => {
+		if ((timeQuestion as number) <= 0) return;
+
+		const increment = 100 / ((timeQuestion as number) / 100);
+
 		const timer = setInterval(() => {
 			setProgress((oldProgress) => {
-				if (oldProgress === 100) {
-					return 0;
+				if (oldProgress >= 100) {
+					clearInterval(timer);
+
+					// adicionar pergunta
+					if ((currentQuestion as number) < numberOfQuestions - 1) {
+						addQuestion();
+					}
+					if ((currentQuestion as number) >= numberOfQuestions - 1) {
+						console.log("acabou as perguntas");
+					}
+
+					return 100;
 				}
-				const diff = Math.random() * 10;
-				return Math.min(oldProgress + diff, 100);
+				return Math.min(oldProgress + increment, 100);
 			});
-		}, 500);
+			testeTime += 100;
+		}, 100);
 
 		return () => {
 			clearInterval(timer);
+			setProgress(0);
 		};
-	}, []);
+	}, [timeQuestion as number, currentQuestion]);
 
 	return (
 		<Box sx={{ width: "100%" }}>
-			<LinearProgress variant="determinate" value={progress} />
+			<LinearProgress
+				sx={{
+					height: "1rem",
+					borderRadius: "1rem",
+					color: "var(--primary)",
+				}}
+				variant="determinate"
+				value={progress}
+			/>
 		</Box>
 	);
 };
