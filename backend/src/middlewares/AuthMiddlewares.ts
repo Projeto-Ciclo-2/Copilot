@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUserEntity } from "../entities/UserEntity";
+import { IUserEntity } from "../entities/userEntity";
 import JwtTokenService from "../services/JwtTokenService";
 import UserRepository from "../repositories/userRepository";
 import { NotFoundException, UnauthorizedException } from "../utils/Exception";

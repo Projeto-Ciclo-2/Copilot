@@ -4,7 +4,7 @@ import { UserService } from "../services/userService";
 import HttpResponse from "../utils/HttpResponse";
 import { Message } from "../utils/Message";
 import { BadRequestException } from "../utils/Exception";
-import { IUserEntity } from "../entities/UserEntity";
+import { IUserEntity } from "../entities/userEntity";
 
 export default class UserController {
 	private userService: UserService;

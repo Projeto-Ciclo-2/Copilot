@@ -1,0 +1,27 @@
+#section-wait-ranking {
+	background: var(--gradient);
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	& #wait-ranking {
+		background-color: var(--bkg_1);
+		padding: 2rem 3rem;
+		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		gap: 1rem;
+
+		& h4 {
+			font-weight: bold;
+			font-size: 1.5rem;
+		}
+
+		& p {
+			font-size: 0.9rem;
+			margin-bottom: 1rem;
+		}
+	}
+}

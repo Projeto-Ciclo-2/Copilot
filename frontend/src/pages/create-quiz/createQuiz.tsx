@@ -24,6 +24,7 @@ const CreateQuiz = () => {
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
+
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
 	const [xQuestions, setXQuestions] = React.useState<nullNumber>();
@@ -70,10 +71,6 @@ const CreateQuiz = () => {
 		};
 		webSocketContext.sendPoll(message);
 	};
-
-	webSocketContext.onReceivePoll((e) => {
-		console.log(e);
-	});
 
 	if (!webSocketContext || !webSocketContext.isConnected) {
 		console.log("Web socket não conectado");
