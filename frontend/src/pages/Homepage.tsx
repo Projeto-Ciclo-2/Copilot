@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
@@ -16,14 +16,15 @@ import { useWebSocket } from "../context/WebSocketContext";
 const userAPI = new UserAPI();
 
 const Homepage = () => {
-	const userContext = React.useContext(UserContext);
 	const webSocketContext = useWebSocket();
-	const [cards, setCards] = useState<card[] | null>(null);
+	const userContext = React.useContext(UserContext);
+
+	const [cards, setCards] = React.useState<card[] | null>(null);
 
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	useEffect(() => {
+	React.useEffect(() => {
 		async function fetchCards() {
 			try {
 				const response = await fetch("http://localhost:3003/cards");
@@ -53,11 +54,18 @@ const Homepage = () => {
 
 		validateSession().then(() => {
 			if (!webSocketContext.isConnected) {
+				console.log("ws not connected in home page. setting canConnect");
+
+				webSocketContext.setCanConnect(false);
 				webSocketContext.setCanConnect(true);
 			}
 		});
 		// fetchCards();
 	}, [userContext, navigate, location, webSocketContext]);
+
+	webSocketContext.onReceivePoll((e) => {
+		console.log(e);
+	})
 
 	if (!userContext) return <h1>Eita!</h1>;
 

@@ -1,5 +1,15 @@
 import { IPoll } from "./IQuiz";
 
+/** Generic
+ */
+export type IWSMessageServerMessages =
+	| IWSMessagePolls
+	| IWSMessageSendPoll
+	| IWSMessageOwnerChange
+	| IWSMessageSendGameInit
+	| IWSMessageSendVote
+	| IWSMessagePollRank;
+
 /**	SERVER MESSAGES
  * messages that only server will send
  */
@@ -19,7 +29,7 @@ export interface IWSMessageOwnerChange {
 }
 
 export interface IWSMessageSendGameInit {
-	type: "sendGameInit",
+	type: "sendGameInit";
 	pollID: string;
 	started_at: string; //timestamp
 }
@@ -50,8 +60,8 @@ export interface IWSMessagePostPoll {
 	type: "postPoll";
 	body: {
 		title: string;
-		qntd_question: number;
-		qntd_alternatives: number;
+		number_of_question: number;
+		number_of_alternatives: number;
 		theme: string;
 		duration_in_minutes: number;
 		owner: string;
