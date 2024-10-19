@@ -1,15 +1,5 @@
 import { IPoll } from "./IQuiz";
 
-/** Generic
- */
-export type IWSMessageServerMessages =
-	| IWSMessagePolls
-	| IWSMessageSendPoll
-	| IWSMessageOwnerChange
-	| IWSMessageSendGameInit
-	| IWSMessageSendVote
-	| IWSMessagePollRank;
-
 /**	SERVER MESSAGES
  * messages that only server will send
  */
