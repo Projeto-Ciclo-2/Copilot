@@ -58,7 +58,7 @@ const CreateQuiz = () => {
 			console.error("os valores não estão corretos");
 			return returnHome();
 		}
-		const message: IWSMessagePostPoll = {
+		const message = {
 			type: "postPoll",
 			body: {
 				title: title,
