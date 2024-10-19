@@ -7,6 +7,7 @@ interface alternativeProps {
 	content: string;
 	confirmed: boolean;
 	icon?: ReactNode;
+	render: "alternative" | "response";
 	percentage?: string | number;
 	onClick?: () => void;
 }
@@ -18,6 +19,7 @@ const Alternative: React.FC<alternativeProps> = ({
 	confirmed,
 	icon,
 	percentage,
+	render,
 	onClick,
 }) => {
 	const itemLabels = ["a", "b", "c", "d", "e"];
@@ -52,7 +54,7 @@ const Alternative: React.FC<alternativeProps> = ({
 			</div>
 
 			{/* Exibir porcentagem */}
-			{confirmed && (
+			{render === 'response' && (
 				<div className="div-percentage">
 					{icon}
 					<p>{percentage} %</p>

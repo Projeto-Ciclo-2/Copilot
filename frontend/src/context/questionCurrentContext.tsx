@@ -1,9 +1,5 @@
-import React, {
-	ReactNode,
-	createContext,
-	useContext,
-	useState,
-} from "react";
+import React, { ReactNode, createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IQuestionCurrentContextType {
 	timeQuestion: number | null;
@@ -13,25 +9,46 @@ interface IQuestionCurrentContextType {
 	setNumberOfQuestions: (questions: number) => void;
 	setConfirmed: (confirmed: boolean) => void;
 	confirmed: boolean;
+	showPageRanking: boolean;
 	currentQuestion: number | null;
 	numberOfQuestions: number;
 	setCurrentQuestion: (question_number: number) => void;
-	addQuestion: (option?: "reset") => void;
+	timeNextQuestion: (time: number) => void;
+	showAlternative: "alternative" | "response";
+	setShowAlternative: (type: "alternative" | "response") => void;
 }
 
-const QuestionCurrentContext = createContext<IQuestionCurrentContextType | undefined>(undefined);
+const QuestionCurrentContext = createContext<
+	IQuestionCurrentContextType | undefined
+>(undefined);
 
 export const QuestionCurrentProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const [currentQuestion, setCurrentQuestion] = useState<number>(0); // 0 = primeira questão
 	const [numberOfQuestions, setNumberOfQuestions] = useState<number>(0);
-	const [markedAlternative, setMarkedAlternative] = useState<number | null>(null)
+	const [markedAlternative, setMarkedAlternative] = useState<number | null>(
+		null
+	);
 	const [timeQuestion, setTimeQuestion] = useState<number | null>(null);
 	const [confirmed, setConfirmed] = useState(false);
+	const [showAlternative, setShowAlternative] = useState<
+		"alternative" | "response"
+	>("alternative");
+	const [showPageRanking, setShowPageRanking] = useState(false);
 
-	function addQuestion(option?: "reset") {
-		setCurrentQuestion(currentQuestion + 1);
+	function timeNextQuestion(time: number) {
+		const timeout = setTimeout(() => {
+			// adicionar pergunta
+			if (currentQuestion < numberOfQuestions - 1) {
+				setCurrentQuestion(currentQuestion + 1);
+				setShowAlternative('alternative')
+			}
+			if ((currentQuestion as number) >= numberOfQuestions - 1) {
+				setShowPageRanking(true);
+			}
+			clearTimeout(timeout);
+		}, time);
 	}
 
 	return (
@@ -47,7 +64,10 @@ export const QuestionCurrentProvider: React.FC<{ children: ReactNode }> = ({
 				setTimeQuestion,
 				confirmed,
 				setConfirmed,
-				addQuestion,
+				timeNextQuestion,
+				showAlternative,
+				setShowAlternative,
+				showPageRanking,
 			}}
 		>
 			{children}

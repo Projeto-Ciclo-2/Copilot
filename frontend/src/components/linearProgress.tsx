@@ -2,34 +2,29 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
-import { useNavigate } from "react-router-dom";
 
-const LinearProgressComponent = () => {
+const LinearProgressComponent = ( ) => {
 	const [progress, setProgress] = React.useState(0);
 	let testeTime = 0;
 
-	const navigate = useNavigate();
-
-	const { timeQuestion, currentQuestion, addQuestion, numberOfQuestions } =
-		useCurrentQuestion();
+	const {
+		timeQuestion,
+		currentQuestion,
+		timeNextQuestion,
+		setShowAlternative,
+	} = useCurrentQuestion();
 
 	React.useEffect(() => {
 		if ((timeQuestion as number) <= 0) return;
 
 		const increment = 100 / ((timeQuestion as number) / 100);
-
 		const timer = setInterval(() => {
 			setProgress((oldProgress) => {
 				if (oldProgress >= 100) {
 					clearInterval(timer);
 
-					// adicionar pergunta
-					if ((currentQuestion as number) < numberOfQuestions - 1) {
-						addQuestion();
-					}
-					if ((currentQuestion as number) >= numberOfQuestions - 1) {
-						navigate('/ranking')
-					}
+					setShowAlternative("response"); // Mostrar porcentagem
+					timeNextQuestion(10000); // 10 segundos para exibir próxima questão
 
 					return 100;
 				}
@@ -37,7 +32,6 @@ const LinearProgressComponent = () => {
 			});
 			testeTime += 100;
 		}, 100);
-
 		return () => {
 			clearInterval(timer);
 			setProgress(0);
