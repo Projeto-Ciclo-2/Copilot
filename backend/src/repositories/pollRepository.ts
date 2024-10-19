@@ -1,6 +1,6 @@
 import dbConnection from "../database/dbConnection";
 import redisClient from "../database/redisClient";
-import { IPollEntity } from "../entities/PollEntity";
+import { IPollEntity } from "../entities/pollEntity";
 
 export default class PollRepository {
 	private POLL_KEY_PREFIX = "poll:";
