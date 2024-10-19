@@ -13,13 +13,17 @@ import ConfirmationQuiz from "./confirmationQuiz";
 import GroupBuildingApp from "../../assets/svg/groupBuildingApp";
 import TextWriteAnimated from "../../components/other/TextWriteAnimated";
 import { useWebSocket } from "../../context/WebSocketContext";
+import { IWSMessagePostPoll } from "../../interfaces/IWSMessages";
+import { UserContext } from "../../context/UserContext";
 
 type nullNumber = undefined | number;
 
 const CreateQuiz = () => {
 	const navigate = useNavigate();
 
-	// const webSocketContext = useWebSocket();
+	const webSocketContext = useWebSocket();
+	const userContext = React.useContext(UserContext);
+
 
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
@@ -32,32 +36,46 @@ const CreateQuiz = () => {
 	const [loadingContent, setLoadingContent] = React.useState(false);
 	const [wantToLeaveLoading, setWantToLeaveLoading] = React.useState(false);
 
-	const confirmForm = () => {
-		if (typeof title !== "string" && typeof theme !== "string") {
+	const returnHome = () => {
+		setTimeout(() => {
+			navigate("/home");
+		}, 100);
+
+		return <></>;
+	};
+	const sendPoll = () => {
+		if (!userContext || !userContext.user) {
+			console.error("user context not available");
+			return returnHome();
+		}
+		if (
+			typeof title !== "string" &&
+			typeof theme !== "string" &&
+			typeof xQuestions !== "number" &&
+			typeof xAlternatives !== "number" &&
+			Number.isNaN(Number.parseInt(time))
+		) {
 			console.error("os valores não estão corretos");
-			return;
+			return returnHome();
 		}
 		const message = {
-			type: "postPolls",
+			type: "postPoll",
 			body: {
 				title: title,
 				theme: theme,
-				number_of_question: xQuestions,
-				number_of_alternatives: xAlternatives,
+				number_of_question: xQuestions as number,
+				number_of_alternatives: xAlternatives as number,
 				duration_in_minutes: Number.parseInt(time),
+				owner: userContext.user.name,
 			},
 		};
-		// webSocketContext.sendMessage(JSON.stringify(message));
-		setTimeout(() => {
-			setLoadingContent(true);
-		}, 300);
+		webSocketContext.sendPoll(message);
 	};
 
-	/* if (!webSocketContext || !webSocketContext.isConnected) {
+	if (!webSocketContext || !webSocketContext.isConnected) {
 		console.log("Web socket não conectado");
-		navigate("/");
-		return;
-	} */
+		return returnHome();
+	}
 
 	if (loadingContent)
 		return (
@@ -110,7 +128,7 @@ const CreateQuiz = () => {
 				<header id="createHeader"></header>
 				<main id="createMain">
 					<ConfirmationQuiz
-						onAccept={confirmForm}
+						onAccept={sendPoll}
 						onReject={() => setWantToConfirm(false)}
 					/>
 				</main>
