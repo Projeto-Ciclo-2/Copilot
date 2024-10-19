@@ -19,7 +19,7 @@ type nullNumber = undefined | number;
 const CreateQuiz = () => {
 	const navigate = useNavigate();
 
-	const webSocketContext = useWebSocket();
+	// const webSocketContext = useWebSocket();
 
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
@@ -53,11 +53,11 @@ const CreateQuiz = () => {
 		}, 300);
 	};
 
-	if (!webSocketContext || !webSocketContext.isConnected) {
+	/* if (!webSocketContext || !webSocketContext.isConnected) {
 		console.log("Web socket não conectado");
 		navigate("/");
 		return;
-	}
+	} */
 
 	if (loadingContent)
 		return (
