@@ -3,5 +3,5 @@ export interface IVoteEntity {
 	pollID: string;
 	pollQuestionID: number;
 	userChoice: string;
-	voted_at: string; //o timestamp de quando o voto ocorreu no frontend
+	voted_at: number; //o timestamp de quando o voto ocorreu no frontend
 }
