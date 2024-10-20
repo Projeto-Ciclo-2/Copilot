@@ -3,7 +3,7 @@ import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
 import Search from "../icons/search";
-import CardQuiz, { card } from "../components/cardQuiz";
+import CardQuiz from "../components/cardQuiz";
 import SpeedDialElement from "../components/speedDial";
 import Logout from "../icons/logout";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import { UserContext } from "../context/UserContext";
 import { UserAPI } from "../api/users";
 import { IUser } from "../interfaces/IUser";
 import { useWebSocket } from "../context/WebSocketContext";
+import { usePolls } from "../context/PollsContext";
+import { IPoll } from "../interfaces/IQuiz";
 
 const userAPI = new UserAPI();
 
@@ -19,25 +21,18 @@ const Homepage = () => {
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
-	const [cards, setCards] = React.useState<card[] | null>(null);
-
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	React.useEffect(() => {
-		async function fetchCards() {
-			try {
-				const response = await fetch("http://localhost:3003/cards");
-				if (!response.ok) {
-					throw new Error("Erro ao buscar os dados");
-				}
-				const data = await response.json();
+	const { polls, setCurrentPoll } = usePolls();
 
-				setCards(data);
-			} catch (error) {
-				console.error("Erro:", error);
-			}
-		}
+	// Navegar pra página de Lobby ao clicar
+	function openQuiz(poll: IPoll) {
+		setCurrentPoll(poll);
+		navigate("/lobby");
+	}
+
+	React.useEffect(() => {
 		async function validateSession() {
 			if (!userContext) return;
 			if (userContext.user) return;
@@ -54,7 +49,9 @@ const Homepage = () => {
 
 		validateSession().then(() => {
 			if (!webSocketContext.isConnected) {
-				console.log("ws not connected in home page. setting canConnect");
+				console.log(
+					"ws not connected in home page. setting canConnect"
+				);
 
 				webSocketContext.setCanConnect(false);
 				webSocketContext.setCanConnect(true);
@@ -63,10 +60,6 @@ const Homepage = () => {
 		// fetchCards();
 	}, [userContext, navigate, location, webSocketContext]);
 
-	webSocketContext.onReceivePoll((e) => {
-		console.log(e);
-	})
-
 	if (!userContext) return <h1>Eita!</h1>;
 
 	const logout = async () => {
@@ -74,7 +67,7 @@ const Homepage = () => {
 		navigate("/");
 	};
 	return (
-		<>
+		<div id="home">
 			<div id="burguer-container">
 				<label id="burguer">
 					<input type="checkbox" />
@@ -119,9 +112,14 @@ const Homepage = () => {
 					<Search />
 				</div>
 				<div id="cards">
-					{cards ? (
-						cards.map((card, index) => (
-							<CardQuiz key={index} card={card} index={index} />
+					{polls ? (
+						polls.map((poll, index) => (
+							<CardQuiz
+								key={index}
+								poll={poll}
+								index={index}
+								onClick={() => openQuiz(poll)}
+							/>
 						))
 					) : (
 						<p>Sem quiz criado</p>
@@ -139,7 +137,7 @@ const Homepage = () => {
 			<div id="plus-btn">
 				<SpeedDialElement />
 			</div>
-		</>
+		</div>
 	);
 };
 
