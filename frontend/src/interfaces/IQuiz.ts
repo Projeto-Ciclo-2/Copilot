@@ -15,8 +15,8 @@ export interface IPoll {
 	number_of_question: number;
 	number_of_alternatives: number;
 	duration_in_minutes: number;
-	created_at?: string; //timestamp
-	started_at?: string; //timestamp
+	created_at?: number; //timestamp
+	started_at?: number; //timestamp
 	questions: IPollQuestion[];
 	playing_users: []; //array com ids dos usuários
 }
