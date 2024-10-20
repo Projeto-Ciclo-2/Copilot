@@ -17,20 +17,23 @@ export default class PollService {
 		this.quizGenerator = new QuizGenerator();
 		this.pollRepository = new PollRepository();
 	}
-	public async createPoll(poll: Partial<IPollEntity>): Promise<Partial<IPollEntity>> {
+
+	public async createPoll(poll: Partial<IPollEntity>): Promise<IPollEntity> {
 		const {
 			title,
 			theme,
 			number_of_question,
 			number_of_alternatives,
 			duration_in_minutes,
+			owner,
 		} = poll;
 		if (
 			!title ||
 			!theme ||
 			!number_of_question ||
 			!number_of_alternatives ||
-			!duration_in_minutes
+			!duration_in_minutes ||
+			!owner
 		) {
 			throw new BadRequestException(Message.MISSING_FIELDS);
 		}
@@ -59,11 +62,14 @@ export default class PollService {
 		});
 
 		poll.questions = gptQuestionsWithID;
-		poll.duration_in_minutes = duration_in_minutes;
+		poll.started = false;
+		poll.created_at = Date.now();
+		poll.started_at = null;
+		poll.playing_users = [];
 
 		await this.pollRepository.createPoll(poll);
 
-		return poll;
+		return poll as IPollEntity;
 	}
 
 	public async getPollById(id: string) {

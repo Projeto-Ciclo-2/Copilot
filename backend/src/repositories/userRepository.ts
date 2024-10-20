@@ -16,10 +16,11 @@ export default class UserRepository {
 		return createdUser;
 	}
 
-	public async getUserById(id: string) {
+	public async getUserById(id: string): Promise<IUserEntity | undefined> {
 		const user = await dbConnection<IUserEntity>("users")
 			.where({ id })
 			.first([
+				"id",
 				"name",
 				"created_at",
 				"wins",
