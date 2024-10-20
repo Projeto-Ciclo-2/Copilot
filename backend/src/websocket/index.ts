@@ -8,6 +8,7 @@ import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
 import {
 	IWSMessagePlayerJoin,
+	IWSMessagePolls,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
 } from "../interfaces/IWSMessage";
@@ -102,5 +103,11 @@ function broadcast(data: string): void {
 }
 
 function sendAllPolls(ws: WebSocket): void {
-	pollService.getAllPollsFromRedis().then((e) => ws.send(JSON.stringify(e)));
+	pollService.getAllPollsFromRedis().then((e) => {
+		const message: IWSMessagePolls = {
+			type: "allPolls",
+			polls: e,
+		};
+		ws.send(JSON.stringify(message));
+	});
 }
