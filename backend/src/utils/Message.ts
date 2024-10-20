@@ -16,4 +16,5 @@ export const Message = {
 	INVALID_TYPE: "Tipo de requisição inválida",
 	VOTE_ALREDY_DONE: "Voto ja efetuado para essa questão",
 	USER_NOT_FOUND_OR_NOT_OWNER: "Usuario não encontrado ou não é dono do quiz",
+	USER_ALREADY_IN_GAME: "O usuário já está na partida.",
 } as const;
