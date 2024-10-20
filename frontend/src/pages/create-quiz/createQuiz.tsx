@@ -69,7 +69,7 @@ const CreateQuiz = () => {
 				owner: userContext.user.name,
 			},
 		};
-		webSocketContext.sendPoll(message);
+		webSocketContext.sendPoll(message as any);
 	};
 
 	if (!webSocketContext || !webSocketContext.isConnected) {
