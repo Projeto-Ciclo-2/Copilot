@@ -13,6 +13,12 @@ export interface IWSMessageSendPoll {
 	poll: IPoll;
 }
 
+export interface IWSMessagePlayerJoin {
+	type: "sendPlayerJoin";
+	pollID: string;
+	username: string;
+}
+
 export interface IWSMessageOwnerChange {
 	type: "ownerChange";
 	userID: string;
@@ -28,7 +34,7 @@ export interface IWSMessageSendVote {
 	type: "sendVote";
 	userID: string;
 	pollID: string;
-	pollQuestionID: string;
+	pollQuestionID: number;
 	userChoice: string;
 }
 
@@ -50,8 +56,8 @@ export interface IWSMessagePostPoll {
 	type: "postPoll";
 	body: {
 		title: string;
-		number_of_question: number;
-		number_of_alternatives: number;
+		qntd_question: number;
+		qntd_alternatives: number;
 		theme: string;
 		duration_in_minutes: number;
 		owner: string;
