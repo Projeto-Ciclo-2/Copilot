@@ -75,6 +75,7 @@ wss.on("connection", (ws: WebSocket) => {
 					};
 					broadcast(JSON.stringify(message));
 					if (result.newOwner) {
+						sendNewOwner(result.newOwner)
 					}
 				} catch (error) {
 					if (error instanceof Error) return sendErr(ws, error);
