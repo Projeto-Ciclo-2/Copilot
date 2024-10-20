@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
@@ -6,14 +6,26 @@ import Search from "../icons/search";
 import CardQuiz, { card } from "../components/cardQuiz";
 import SpeedDialElement from "../components/speedDial";
 import Logout from "../icons/logout";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Btn from "../components/button";
+import { UserContext } from "../context/UserContext";
+import { UserAPI } from "../api/users";
+import { IUser } from "../interfaces/IUser";
+import { useWebSocket } from "../context/WebSocketContext";
+
+const userAPI = new UserAPI();
 
 const Homepage = () => {
-	const [cards, setCards] = useState<card[] | null>(null);
-	const navigate = useNavigate();
+	const [started, setStarted] = useState(false);
+	const webSocketContext = useWebSocket();
+	const userContext = React.useContext(UserContext);
 
-	useEffect(() => {
+	const [cards, setCards] = React.useState<card[] | null>(null);
+
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	React.useEffect(() => {
 		async function fetchCards() {
 			try {
 				const response = await fetch("http://localhost:3003/cards");
@@ -27,13 +39,44 @@ const Homepage = () => {
 				console.error("Erro:", error);
 			}
 		}
+		async function validateSession() {
+			if (!userContext) return;
+			if (userContext.user) return;
 
-		fetchCards();
-	}, []);
+			const res = await userAPI.getMyUser();
+			if (!res || res.error || !res.data) {
+				console.log("Sessão não válida");
+				return navigate("/");
+			}
+			const user = res.data as IUser;
 
-	const logout = () => {
+			userContext.setUser(user);
+		}
+
+		validateSession().then(() => {
+			if (!webSocketContext.isConnected) {
+				console.log("ws not connected in home page. setting canConnect");
+
+				webSocketContext.setCanConnect(false);
+				webSocketContext.setCanConnect(true);
+			}
+		});
+		// fetchCards();
+	}, [userContext, navigate, location, webSocketContext]);
+
+	webSocketContext.onReceivePoll((e) => {
+		console.log(e);
+	})
+
+	if (!userContext) return <h1>Eita!</h1>;
+
+	const logout = async () => {
+		await userAPI.logout();
 		navigate("/");
 	};
+	const startNow = () => {
+		setStarted(true)
+	}
 	return (
 		<>
 			<div id="burguer-container">
@@ -45,10 +88,19 @@ const Homepage = () => {
 						<span></span>
 					</div>
 					<div id="dropdown-menu">
-						<Btn type="button" id="logout" text="Sair" icon={Logout} iconPosition="left" onClick={logout}/>
+						<Btn
+							type="button"
+							id="logout"
+							text="Sair"
+							icon={Logout}
+							iconPosition="left"
+							onClick={logout}
+						/>
 					</div>
 				</label>
 			</div>
+			{!started ? (
+				<>
 			<section id="wellcome">
 				<div id="content-text">
 					<h1>Desafie seus amigos</h1>
@@ -56,12 +108,21 @@ const Homepage = () => {
 						Prepare-se para <span>testar seus conhecimentos</span> e{" "}
 						<span>superar seus limites</span>
 					</h3>
-					<Btn type="button" className="quiz-btn" href="#quiz" text="Começar agora" />
+					<Btn
+						type="button"
+						className="quiz-btn"
+						href="#quiz"
+						text="Começar agora"
+						onClick={startNow}
+					/>
 				</div>
 				<div id="icon-vr">
 					<VRIcon />
 				</div>
-			</section>
+			</section>	
+				</>
+			) : (
+				<>
 			<section id="quiz">
 				<div id="input-search-quiz">
 					<input type="text" placeholder="Pesquisar quiz" />
@@ -76,8 +137,17 @@ const Homepage = () => {
 						<p>Sem quiz criado</p>
 					)}
 				</div>
-				<Btn type="button" id="btn-add-quiz" icon={MoreIcon} text="Adicionar Quiz" iconPosition="right" onClick={() => navigate("/create")}/>
+				<Btn
+					type="button"
+					id="btn-add-quiz"
+					icon={MoreIcon}
+					text="Adicionar Quiz"
+					iconPosition="right"
+					onClick={() => navigate("/create")}
+				/>
 			</section>
+				</>
+			)}
 			<div id="plus-btn">
 				<SpeedDialElement />
 			</div>

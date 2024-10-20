@@ -3,7 +3,11 @@ Caso seja necessário subir o backend de forma independente (para fins de teste)
 
 ## Requisitos
 - Cliente PostgreSQL instalado localmente.
+- Cliente Redis
 - NodeJS & NPM
+
+## iniciando container Redis de testes
+`docker run -d --name redis-test -p 6379:6379 redis`
 
 ## Passo a passo
 1. Dentro do diretório, acesse a pasta backend.

@@ -1,5 +1,7 @@
+import { config } from "../config/config";
+
 export class UserAPI {
-	private url = "http://localhost:5000/api";
+	private url = config.API_URL;
 
 	public async singIn(name: string, password: string): Promise<any> {
 		try {
@@ -60,7 +62,8 @@ export class UserAPI {
 	public async getMyUser(): Promise<any> {
 		try {
 			const apiURL = this.url + "/users/me";
-			const res = await fetch(apiURL);
+			const requestOptions = this.getRequestOptions("GET");
+			const res = await fetch(apiURL, requestOptions);
 			const result = await res.json();
 			return result;
 		} catch (err) {
@@ -77,6 +80,7 @@ export class UserAPI {
 			headers: {
 				"Content-Type": "application/json",
 			},
+			credentials: "include"
 		};
 
 		if(method !== "GET" && obj) {

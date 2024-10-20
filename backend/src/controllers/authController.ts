@@ -19,7 +19,12 @@ export default class AuthController {
 
 			const token = await this.authService.login(name, password);
 
-			res.cookie("token", token);
+			res.cookie("token", token, {
+                maxAge: 8 * 60 * 60 * 1000,
+                httpOnly: true,
+                sameSite: 'strict',
+                secure: false
+            });
 
 			res.status(200).json({ message: Message.LOGIN_SUCCESS });
 		} catch (error: any) {

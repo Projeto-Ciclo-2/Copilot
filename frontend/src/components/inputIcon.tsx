@@ -77,7 +77,10 @@ export default function InputIcon(props: {
 				{props.placeholder}
 			</option>
 			{props.selectOptions?.map((opt, index) => (
-				<option value={opt} id={opt.toString() + index + Date.now()}>
+				<option
+					value={opt}
+					id={opt.toString() + window.crypto.randomUUID()}
+				>
 					{opt}
 				</option>
 			))}

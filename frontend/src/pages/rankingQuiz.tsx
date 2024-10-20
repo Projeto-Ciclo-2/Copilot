@@ -5,6 +5,7 @@ import Ranking from "../icons/ranking";
 import UserRanking from "../components/userRanking";
 import ExitIcon from "../icons/exit";
 import { useNavigate } from "react-router-dom";
+import WaitRanking from "../components/waitRanking/waitRanking";
 
 export interface IPlayer {
 	username: string;
@@ -27,7 +28,9 @@ const RankingQuiz = () => {
 
 	function orderPlayers(players: IPlayer[]) {
 		if (players) {
-			const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+			const sortedPlayers = [...players].sort(
+				(a, b) => b.points - a.points
+			);
 			setPlayers(assignRanks(sortedPlayers));
 		}
 	}
@@ -42,7 +45,10 @@ const RankingQuiz = () => {
 
 			if (i > 0 && player.points === sortedPlayers[i - 1].points) {
 				// Empate: usa a mesma classificação do jogador anterior
-				newRankings.push({ ...player, position_rank: newRankings[i - 1].position_rank });
+				newRankings.push({
+					...player,
+					position_rank: newRankings[i - 1].position_rank,
+				});
 			} else {
 				// Não há empate: nova classificação
 				newRankings.push({ ...player, position_rank: currentRank });
@@ -65,7 +71,7 @@ const RankingQuiz = () => {
 		}, 2000);
 	}, []);
 
-	return (
+	return players ? (
 		<section id="ranking-quiz">
 			<div id="header">
 				<Btn
@@ -92,6 +98,8 @@ const RankingQuiz = () => {
 					))}
 			</div>
 		</section>
+	) : (
+		<WaitRanking />
 	);
 };
 

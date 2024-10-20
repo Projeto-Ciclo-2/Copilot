@@ -1,4 +1,4 @@
-import { IPollEntity } from "../entities/PollEntity";
+import { IPollEntity } from "../entities/pollEntity";
 import WebSocket from "ws";
 import PollRepository from "../repositories/pollRepository";
 import {
@@ -17,9 +17,11 @@ export default class PollService {
 		this.quizGenerator = new QuizGenerator();
 		this.pollRepository = new PollRepository();
 	}
+
 	public async createPoll(
 		poll: Partial<IPollEntity>
 	): Promise<Partial<IPollEntity>> {
+
 		const {
 			title,
 			theme,

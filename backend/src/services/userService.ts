@@ -1,4 +1,4 @@
-import { IUserEntity } from "../entities/UserEntity";
+import { IUserEntity } from "../entities/userEntity";
 import UserRepository from "../repositories/userRepository";
 import { ConflictException, NotFoundException } from "../utils/Exception";
 

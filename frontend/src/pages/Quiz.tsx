@@ -58,6 +58,8 @@ const Quiz = () => {
 		setNumberOfQuestions,
 		markedAlternative,
 		setMarkedAlternative,
+		showAlternative,
+		showPageRanking,
 	} = useCurrentQuestion();
 
 	const navigate = useNavigate();
@@ -144,6 +146,12 @@ const Quiz = () => {
 		setConfirmed,
 	]);
 
+	useEffect(() => {
+		if (showPageRanking) {
+			navigate("/ranking");
+		}
+	}, [showPageRanking, navigate]);
+
 	return (
 		<section id="section-quiz">
 			{quiz ? (
@@ -182,59 +190,25 @@ const Quiz = () => {
 							}{" "}
 						</p>
 
-						{/* Alternatives */}
 						<div className="alternatives-quiz">
-							{confirmed
-								? // Visualizar porcentagem
-								  quiz.questions[
-										currentQuestion as number
-								  ].options.map((question, index) => (
-										<>
-											{/* Questão correta */}
-											{index === correctAlternative && (
-												<Alternative
-													key={index}
-													type="correct"
-													item={index}
-													content={question}
-													confirmed={confirmed}
-													icon={<GroupIcon />}
-													percentage={
-														percentageQuetions[
-															index
-														]
-													}
-												/>
-											)}
-
-											{/* Questão errada */}
-											{index === wrongAlternative && (
-												<Alternative
-													key={index}
-													type="wrong"
-													item={index}
-													content={question}
-													confirmed={confirmed}
-													icon={<GroupIcon />}
-													percentage={
-														percentageQuetions[
-															index
-														]
-													}
-												/>
-											)}
-
-											{/* Questão simples */}
-											{index !== wrongAlternative &&
-												index !==
-													correctAlternative && (
+							{/* Alternativas */}
+							{showAlternative === "alternative"
+								? confirmed
+									? // Visualizar porcentagem
+									  quiz.questions[
+											currentQuestion as number
+									  ].options.map((question, index) => (
+											<div key={index}>
+												{/* Questão marcada */}
+												{index ===
+													markedAlternative && (
 													<Alternative
-														key={index}
-														type="disabled"
+														type="chose"
 														item={index}
 														content={question}
-														confirmed={confirmed}
+														confirmed={false}
 														icon={<GroupIcon />}
+														render={showAlternative}
 														percentage={
 															percentageQuetions[
 																index
@@ -242,22 +216,96 @@ const Quiz = () => {
 														}
 													/>
 												)}
-										</>
-								  ))
-								: // Escolher alternativa
-								  quiz.questions[
+												{/* Questão simples */}
+												{index !==
+													markedAlternative && (
+													<Alternative
+														type="disabled"
+														item={index}
+														content={question}
+														confirmed={false}
+														icon={<GroupIcon />}
+														render={showAlternative}
+														percentage={
+															percentageQuetions[
+																index
+															]
+														}
+													/>
+												)}
+											</div>
+									  ))
+									: // Escolher alternativa
+									  quiz.questions[
+											currentQuestion as number
+									  ].options.map((question, index) => (
+											<Alternative
+												key={index}
+												type="standard"
+												item={index}
+												content={question}
+												confirmed={confirmed}
+												render={showAlternative}
+												onClick={() =>
+													responseQuestion(index)
+												}
+											/>
+									  ))
+								: quiz.questions[
 										currentQuestion as number
 								  ].options.map((question, index) => (
-										<Alternative
-											key={index}
-											type="standard"
-											item={index}
-											content={question}
-											confirmed={confirmed}
-											onClick={() =>
-												responseQuestion(index)
-											}
-										/>
+										<div key={index}>
+											{/* Questão correta */}
+											{index === correctAlternative && (
+												<Alternative
+													type="correct"
+													item={index}
+													content={question}
+													confirmed={false}
+													icon={<GroupIcon />}
+													render="response"
+													percentage={
+														percentageQuetions[
+															index
+														]
+													}
+												/>
+											)}
+											{/* Questão errada */}
+											{index === wrongAlternative && (
+												<Alternative
+													type="wrong"
+													item={index}
+													content={question}
+													confirmed={false}
+													icon={<GroupIcon />}
+													render="response"
+													percentage={
+														percentageQuetions[
+															index
+														]
+													}
+												/>
+											)}
+											{/* Questão simples */}
+											{index !== wrongAlternative &&
+												index !==
+													correctAlternative && (
+													<Alternative
+														type="disabled"
+														item={index}
+														content={question}
+														confirmed={false}
+														icon={<GroupIcon />}
+														render="response"
+														percentage={
+															percentageQuetions[
+																index
+															]
+														}
+													/>
+												)}
+										</div>
 								  ))}
 						</div>
 					</section>
