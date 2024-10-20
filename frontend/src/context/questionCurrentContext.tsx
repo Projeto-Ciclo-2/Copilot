@@ -37,6 +37,16 @@ export const QuestionCurrentProvider: React.FC<{ children: ReactNode }> = ({
 	>("alternative");
 	const [showPageRanking, setShowPageRanking] = useState(false);
 
+	// CALCULAR PORCENTAGEM
+	// Vote (state)
+	// receber voto -> setVote()
+	const [percentageQuetions, setPercentageQuestions] = useState<string[]>([
+		"25",
+		"15",
+		"31",
+		"29",
+	]);
+
 	function timeNextQuestion(time: number) {
 		const timeout = setTimeout(() => {
 			// adicionar pergunta
