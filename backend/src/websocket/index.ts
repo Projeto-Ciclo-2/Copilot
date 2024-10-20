@@ -19,7 +19,8 @@ export const wss = new WebSocket.Server({ noServer: true });
 
 wss.on("connection", (ws: WebSocket) => {
 	users.add(ws);
-	ws.send(""); //lista de polls
+	sendAllPolls(ws);
+
 	ws.on("message", async (message) => {
 		const data = JSON.parse(message.toString());
 		switch (data.type) {
@@ -66,4 +67,8 @@ function broadcast(data: string): void {
 	for (const user of users) {
 		user.send(data);
 	}
+}
+
+function sendAllPolls(ws: WebSocket): void {
+	pollService.getAllPollsFromRedis().then((e) => ws.send(JSON.stringify(e)));
 }

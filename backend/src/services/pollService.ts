@@ -85,6 +85,10 @@ export default class PollService {
 		return polls;
 	}
 
+	public async getAllPollsFromRedis() {
+		return await this.pollRepository.getAllPollsFromRedis();
+	}
+
 	public async read(id: string): Promise<IPollEntity | null> {
 		const poll = await this.pollRepository.read(id);
 		if (!poll) {
