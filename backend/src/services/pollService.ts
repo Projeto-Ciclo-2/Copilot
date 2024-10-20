@@ -115,9 +115,10 @@ export default class PollService {
 	public async joinGame(
 		userID: string,
 		pollID: string
-	): Promise<{ username: string; pollID: string }> {
+	): Promise<{ username: string; pollID: string; newOwner: null | string }> {
 		const user = await this.userRepository.getUserById(userID);
 		const poll = await this.pollRepository.read(pollID);
+		let ownerChange = false;
 
 		if (!poll) throw new NotFoundException(Message.POLL_NOT_FOUND);
 
@@ -135,8 +136,18 @@ export default class PollService {
 			poll.playing_users = [];
 		}
 		poll.playing_users.push(user.id);
+
+		if (!poll.owner) {
+			poll.owner = user.id;
+			ownerChange = true;
+		}
+
 		await this.pollRepository.write(poll.id, poll);
 
-		return { pollID, username: user.name };
+		if (ownerChange) {
+			return { pollID, username: user.name, newOwner: user.id };
+		}
+
+		return { pollID, username: user.name, newOwner: null };
 	}
 }

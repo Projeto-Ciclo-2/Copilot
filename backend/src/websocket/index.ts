@@ -7,6 +7,7 @@ import WebSocket from "ws";
 import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
 import {
+	IWSMessageOwnerChange,
 	IWSMessagePlayerJoin,
 	IWSMessagePolls,
 	IWSMessageSendPoll,
@@ -74,6 +75,8 @@ wss.on("connection", (ws: WebSocket) => {
 						username: result.username,
 					};
 					broadcast(JSON.stringify(message));
+					if (result.newOwner) {
+					}
 				} catch (error) {
 					if (error instanceof Error) return sendErr(ws, error);
 					sendErr(ws);
@@ -110,4 +113,12 @@ function sendAllPolls(ws: WebSocket): void {
 		};
 		ws.send(JSON.stringify(message));
 	});
+}
+
+function sendNewOwner(newOwnerID: string) {
+	const message: IWSMessageOwnerChange = {
+		type: "ownerChange",
+		userID: newOwnerID,
+	};
+	broadcast(JSON.stringify(message));
 }
