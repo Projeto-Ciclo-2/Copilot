@@ -1,4 +1,4 @@
-import { IPollQuestionEntity } from "./PollQuestionEntity";
+import { IPollQuestionEntity } from "./pollQuestionEntity";
 
 export interface IPollEntity {
 	id: string;
@@ -9,8 +9,8 @@ export interface IPollEntity {
 	duration_in_minutes: number;
 	started: boolean;
 	owner: string;
-	created_at?: string; //timestamp
-	started_at?: string; //timestamp
+	created_at?: number; //timestamp
+	started_at?: number | null; //timestamp
 	questions: IPollQuestionEntity[];
-	playing_users: []; //array com ids dos usuários
+	playing_users: string[]; //array com ids dos usuários
 }

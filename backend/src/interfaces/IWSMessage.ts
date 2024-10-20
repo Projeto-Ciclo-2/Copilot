@@ -1,8 +1,5 @@
-// WebSocket on upgrade
-
+import { IPollEntity } from "../entities/pollEntity";
 import { IPoll } from "./IQuiz";
-
-// adicionar usuário na lista global de usuários ou numa classe controladora
 
 /**	SERVER MESSAGES
  * messages that only server will send
@@ -14,7 +11,13 @@ export interface IWSMessagePolls {
 
 export interface IWSMessageSendPoll {
 	type: "sendPoll";
-	poll: IPoll;
+	poll: IPollEntity;
+}
+
+export interface IWSMessagePlayerJoin {
+	type: "sendPlayerJoin";
+	pollID: string;
+	username: string;
 }
 
 export interface IWSMessageOwnerChange {
@@ -23,7 +26,7 @@ export interface IWSMessageOwnerChange {
 }
 
 export interface IWSMessageSendGameInit {
-	type: "sendGameInit",
+	type: "sendGameInit";
 	pollID: string;
 	started_at: string; //timestamp
 }
@@ -32,7 +35,7 @@ export interface IWSMessageSendVote {
 	type: "sendVote";
 	userID: string;
 	pollID: string;
-	pollQuestionID: string;
+	pollQuestionID: number;
 	userChoice: string;
 }
 

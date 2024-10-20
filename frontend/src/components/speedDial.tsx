@@ -8,8 +8,8 @@ const SpeedDialElement = () => {
 	const navigate = useNavigate()
 	// icons
 	const actions = [
-		{ icon: <Statistic />, name: "Statistic", route: "/statistic" },
-		{ icon: <Global />, name: "Global", route: "/global" },
+		{ icon: <Statistic />, name: "Estatísticas", route: "/statistic" },
+		{ icon: <Global />, name: "Melhores Jogadores", route: "/global" },
 	];
 
 	return (
