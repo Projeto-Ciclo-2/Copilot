@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./css/Lobby.css";
 import Btn from "../components/button";
 import { useNavigate } from "react-router-dom";
+import { usePolls } from "../context/PollsContext";
+import { useWebSocket } from "../context/WebSocketContext";
+import UserProvider, { UserContext } from "../context/UserContext";
+import { IWSMessageGameInit } from "../interfaces/IWSMessages";
 
 const Lobby = () => {
 	const [usernames, setUsernames] = useState<string[]>([
@@ -12,14 +16,35 @@ const Lobby = () => {
 		"javaNerd",
 	]);
 
+	const PollsContext = usePolls();
+	const WebSocketContext = useWebSocket();
+	const userContext = React.useContext(UserContext);
+
 	const navigate = useNavigate();
 
 	function exitPage() {
 		navigate("/home");
 	}
 
-	function navigatePageQuiz() {
-		navigate("/quiz");
+	function initQuiz() {
+		console.log('Message gameInit');
+		const message: IWSMessageGameInit = {
+			type: "gameInit",
+			userID: userContext?.user?.id as string,
+			pollID: PollsContext.currentPoll?.id as string,
+		};
+		WebSocketContext.sendGameInit(message);
+	}
+
+	if (PollsContext.currentPoll) {
+		// Começou
+		if (PollsContext.currentPoll.started) {
+			setTimeout(() => {
+				navigate("/quiz");
+			}, 100);
+
+			return <></>;
+		}
 	}
 
 	return (
@@ -53,7 +78,7 @@ const Lobby = () => {
 				type="button"
 				text="iniciar"
 				className="btn-init-quiz"
-				onClick={navigatePageQuiz}
+				onClick={initQuiz}
 			/>
 		</section>
 	);
