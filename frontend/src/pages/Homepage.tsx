@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
@@ -16,6 +16,7 @@ import { useWebSocket } from "../context/WebSocketContext";
 const userAPI = new UserAPI();
 
 const Homepage = () => {
+	const [started, setStarted] = useState(false);
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
@@ -73,6 +74,9 @@ const Homepage = () => {
 		await userAPI.logout();
 		navigate("/");
 	};
+	const startNow = () => {
+		setStarted(true)
+	}
 	return (
 		<>
 			<div id="burguer-container">
@@ -95,6 +99,8 @@ const Homepage = () => {
 					</div>
 				</label>
 			</div>
+			{!started ? (
+				<>
 			<section id="wellcome">
 				<div id="content-text">
 					<h1>Desafie seus amigos</h1>
@@ -107,12 +113,16 @@ const Homepage = () => {
 						className="quiz-btn"
 						href="#quiz"
 						text="Começar agora"
+						onClick={startNow}
 					/>
 				</div>
 				<div id="icon-vr">
 					<VRIcon />
 				</div>
-			</section>
+			</section>	
+				</>
+			) : (
+				<>
 			<section id="quiz">
 				<div id="input-search-quiz">
 					<input type="text" placeholder="Pesquisar quiz" />
@@ -136,6 +146,8 @@ const Homepage = () => {
 					onClick={() => navigate("/create")}
 				/>
 			</section>
+				</>
+			)}
 			<div id="plus-btn">
 				<SpeedDialElement />
 			</div>
