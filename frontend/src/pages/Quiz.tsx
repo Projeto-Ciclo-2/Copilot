@@ -7,6 +7,7 @@ import ConfirmIcon from "../icons/confirm";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
 import GroupIcon from "../icons/group";
 import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../context/WebSocketContext";
 
 interface IQuizQuestion {
 	id: number;
@@ -49,6 +50,8 @@ const Quiz = () => {
 		"31",
 		"29",
 	]);
+
+	
 
 	const {
 		currentQuestion,
