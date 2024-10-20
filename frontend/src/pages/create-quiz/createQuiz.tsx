@@ -24,7 +24,6 @@ const CreateQuiz = () => {
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
-
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
 	const [xQuestions, setXQuestions] = React.useState<nullNumber>();
@@ -58,7 +57,7 @@ const CreateQuiz = () => {
 			console.error("os valores não estão corretos");
 			return returnHome();
 		}
-		const message = {
+		const message: IWSMessagePostPoll = {
 			type: "postPoll",
 			body: {
 				title: title,
