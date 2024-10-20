@@ -14,4 +14,5 @@ export const Message = {
 	INVALID_ID: "Id inválido",
 	MISSING_FIELDS: "Todos os campos são obrigatórios",
 	INVALID_TYPE: "Tipo de requisição inválida",
+	VOTE_ALREDY_DONE: "Voto ja efetuado para essa questão",
 } as const;
