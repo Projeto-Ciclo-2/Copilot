@@ -51,7 +51,7 @@ export class VoteRepository {
 	async getQuestionVotes(
 		pollID: string,
 		pollQuestionID: number
-	): Promise<Record<string, number>> {
+	): Promise<IVoteEntity | {}> {
 		const voteData = await redisClient.get(
 			`${this.VOTE_KEY_PREFIX}${pollID}:${pollQuestionID}`
 		);

@@ -16,7 +16,7 @@ export class VoteService {
 		this.userRepository = new UserRepository();
 	}
 
-	async createVote(vote: IVoteEntity): Promise<Record<string, number>> {
+	async createVote(vote: IVoteEntity): Promise<IVoteEntity | null> {
 		const poll = await this.pollRepository.read(vote.pollID);
 		const user = await this.userRepository.getUserById(vote.userID);
 
@@ -24,8 +24,7 @@ export class VoteService {
 			throw new NotFoundException(Message.POLL_NOT_FOUND);
 		}
 
-		if (!user) {
-			// || poll.playing_users.includes(vote.userID)
+		if (!user || !poll.playing_users.includes(vote.userID)) {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
 
@@ -39,22 +38,29 @@ export class VoteService {
 			throw new ConflictException(Message.VOTE_ALREDY_DONE);
 		}
 
-		poll.questions.find((question) => {
+		poll.questions.find(async (question) => {
 			if (question.id === vote.pollQuestionID) {
 				this.voteRepository.setQuestionVotes(vote);
 
 				if (question.answer === vote.userChoice) {
 					user.points += 10;
+					await this.userRepository.update(user.id, user);
 				}
 			}
 		});
 
 		await this.voteRepository.createVote(vote);
 
-		return await this.voteRepository.getQuestionVotes(
+		const votes = await this.voteRepository.getQuestionVotes(
 			vote.pollID,
 			vote.pollQuestionID
 		);
+
+		if (Object.keys(votes).length === 0) {
+			return null;
+		}
+
+		return votes as IVoteEntity;
 	}
 
 	async getVote(
@@ -94,7 +100,7 @@ export class VoteService {
 	async getQuestionVotes(
 		pollID: string,
 		pollQuestionID: number
-	): Promise<Record<string, number>> {
+	): Promise<IVoteEntity | {}> {
 		return await this.voteRepository.getQuestionVotes(
 			pollID,
 			pollQuestionID

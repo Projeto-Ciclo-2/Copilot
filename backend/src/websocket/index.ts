@@ -6,6 +6,10 @@ import {
 import WebSocket from "ws";
 import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
+import {
+	IWSMessageSendPoll,
+	IWSMessageSendVote,
+} from "../interfaces/IWSMessage";
 
 const pollService = new PollService();
 const voteService = new VoteService();
@@ -22,9 +26,9 @@ wss.on("connection", (ws: WebSocket) => {
 			case "postPoll":
 				try {
 					const poll = await pollService.createPoll(data.body);
-					const messageServer = {
+					const messageServer: IWSMessageSendPoll = {
 						type: "sendPoll",
-						body: poll,
+						poll: poll,
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
@@ -34,9 +38,15 @@ wss.on("connection", (ws: WebSocket) => {
 			case "postVote":
 				try {
 					const vote = await voteService.createVote(data.body);
-					const messageServer = {
-						type: "postVote",
-						body: vote,
+					if (!vote) {
+						return;
+					}
+					const messageServer: IWSMessageSendVote = {
+						type: "sendVote",
+						userID: vote.userID,
+						pollID: vote.pollID,
+						pollQuestionID: vote.pollQuestionID,
+						userChoice: vote.userChoice,
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
