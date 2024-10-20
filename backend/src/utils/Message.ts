@@ -15,4 +15,5 @@ export const Message = {
 	MISSING_FIELDS: "Todos os campos são obrigatórios",
 	INVALID_TYPE: "Tipo de requisição inválida",
 	VOTE_ALREDY_DONE: "Voto ja efetuado para essa questão",
+	USER_ALREADY_IN_GAME: "O usuário já está na partida."
 } as const;
