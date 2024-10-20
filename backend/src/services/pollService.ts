@@ -3,16 +3,19 @@ import WebSocket from "ws";
 import PollRepository from "../repositories/pollRepository";
 import {
 	BadRequestException,
+	ConflictException,
 	ErrorWhileGeneratingQuiz,
 	NotFoundException,
 } from "../utils/Exception";
 import { Message } from "../utils/Message";
 import { QuizGenerator } from "../quiz-generator";
+import UserRepository from "../repositories/userRepository";
 
 export default class PollService {
 	private pollRepository: PollRepository;
-
 	private quizGenerator: QuizGenerator;
+	private userRepository = new UserRepository();
+
 	constructor() {
 		this.quizGenerator = new QuizGenerator();
 		this.pollRepository = new PollRepository();
@@ -107,5 +110,33 @@ export default class PollService {
 
 	public async delete(id: string) {
 		await this.pollRepository.delete(id);
+	}
+
+	public async joinGame(
+		userID: string,
+		pollID: string
+	): Promise<{ username: string; pollID: string }> {
+		const user = await this.userRepository.getUserById(userID);
+		const poll = await this.pollRepository.read(pollID);
+
+		if (!poll) throw new NotFoundException(Message.POLL_NOT_FOUND);
+
+		if (!user) throw new NotFoundException(Message.USER_NOT_FOUND);
+
+		if (
+			poll.playing_users &&
+			Array.isArray(poll.playing_users) &&
+			poll.playing_users.length > 0 &&
+			poll.playing_users.includes(user.id)
+		)
+			throw new ConflictException(Message.USER_ALREADY_IN_GAME);
+
+		if (!poll.playing_users || !Array.isArray(poll.playing_users)) {
+			poll.playing_users = [];
+		}
+		poll.playing_users.push(user.id);
+		await this.pollRepository.write(poll.id, poll);
+
+		return { pollID, username: user.name };
 	}
 }

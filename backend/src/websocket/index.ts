@@ -7,6 +7,8 @@ import WebSocket from "ws";
 import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
 import {
+	IWSMessagePlayerJoin,
+	IWSMessagePolls,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
 } from "../interfaces/IWSMessage";
@@ -51,7 +53,30 @@ wss.on("connection", (ws: WebSocket) => {
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
-					ws.send(JSON.stringify({ error: error.message }));
+					if (error instanceof Error) sendErr(ws, error);
+					sendErr(ws);
+				}
+				break;
+			case "joinQuiz":
+				if (!data.userID || !data.pollID)
+					return sendErr(
+						ws,
+						new Error("user don't provide userID and pollID")
+					);
+				try {
+					const result = await pollService.joinGame(
+						data.userID,
+						data.pollID
+					);
+					const message: IWSMessagePlayerJoin = {
+						type: "sendPlayerJoin",
+						pollID: result.pollID,
+						username: result.username,
+					};
+					broadcast(JSON.stringify(message));
+				} catch (error) {
+					if (error instanceof Error) return sendErr(ws, error);
+					sendErr(ws);
 				}
 				break;
 			default:
@@ -63,6 +88,14 @@ wss.on("connection", (ws: WebSocket) => {
 	});
 });
 
+function sendErr(ws: WebSocket, error?: Error) {
+	ws.send(
+		JSON.stringify({
+			error: error ? error.message : "A internal error happen",
+		})
+	);
+}
+
 function broadcast(data: string): void {
 	for (const user of users) {
 		user.send(data);
@@ -70,5 +103,11 @@ function broadcast(data: string): void {
 }
 
 function sendAllPolls(ws: WebSocket): void {
-	pollService.getAllPollsFromRedis().then((e) => ws.send(JSON.stringify(e)));
+	pollService.getAllPollsFromRedis().then((e) => {
+		const message: IWSMessagePolls = {
+			type: "allPolls",
+			polls: e,
+		};
+		ws.send(JSON.stringify(message));
+	});
 }
