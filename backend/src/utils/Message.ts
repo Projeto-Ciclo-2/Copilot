@@ -15,4 +15,5 @@ export const Message = {
 	MISSING_FIELDS: "Todos os campos são obrigatórios",
 	INVALID_TYPE: "Tipo de requisição inválida",
 	VOTE_ALREDY_DONE: "Voto ja efetuado para essa questão",
+	USER_NOT_FOUND_OR_NOT_OWNER: "Usuario não encontrado ou não é dono do quiz",
 } as const;

@@ -1,12 +1,11 @@
 import PollService from "../services/pollService";
-import {
-	BadRequestException,
-	ErrorWhileGeneratingQuiz,
-} from "../utils/Exception";
+import { BadRequestException } from "../utils/Exception";
 import WebSocket from "ws";
 import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
 import {
+	IWSMessageGameInit,
+	IWSMessageSendGameInit,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
 } from "../interfaces/IWSMessage";
@@ -47,6 +46,24 @@ wss.on("connection", (ws: WebSocket) => {
 						pollID: vote.pollID,
 						pollQuestionID: vote.pollQuestionID,
 						userChoice: vote.userChoice,
+					};
+					broadcast(JSON.stringify(messageServer));
+				} catch (error: any) {
+					ws.send(JSON.stringify({ error: error.message }));
+				}
+				break;
+			case "gameInit":
+				try {
+					const poll = await pollService.updateRedis(data.body);
+
+					if (!poll) {
+						throw new BadRequestException(Message.POLL_NOT_FOUND);
+					}
+
+					const messageServer: IWSMessageSendGameInit = {
+						type: "sendGameInit",
+						pollID: poll.id,
+						started_at: poll.started_at || Date.now(),
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {

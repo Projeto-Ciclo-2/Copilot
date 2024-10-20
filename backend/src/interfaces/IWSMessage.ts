@@ -26,7 +26,7 @@ export interface IWSMessageOwnerChange {
 export interface IWSMessageSendGameInit {
 	type: "sendGameInit";
 	pollID: string;
-	started_at: string; //timestamp
+	started_at: number; //timestamp
 }
 
 export interface IWSMessageSendVote {

@@ -23,14 +23,14 @@ export default class PollRepository {
 			})
 			.returning("*")) as IPollEntity[];
 
-		await redisClient.set(
-			`${this.POLL_KEY_PREFIX}${createdPoll.id}`,
-			JSON.stringify(createdPoll)
-		);
-
 		return createdPoll;
 	}
-
+	public async createPollRedis(poll: Partial<IPollEntity>) {
+		await redisClient.set(
+			`${this.POLL_KEY_PREFIX}${poll.id}`,
+			JSON.stringify(poll)
+		);
+	}
 	public async getPollById(id: string) {
 		const poll = await dbConnection<IPollEntity>("polls")
 			.where({ id })
@@ -48,15 +48,37 @@ export default class PollRepository {
 		return pollData ? JSON.parse(pollData) : null;
 	}
 
-	async write(id: string, updatedPoll: Partial<IPollEntity>): Promise<void> {
-		const poll = await this.read(id);
-		if (!poll) {
-			throw new Error("Quiz not found");
-		}
-		const newPoll = { ...poll, ...updatedPoll };
+	async updateRedis(
+		id: string,
+		updatedPoll: Partial<IPollEntity>
+	): Promise<void> {
 		await redisClient.set(
 			`${this.POLL_KEY_PREFIX}${id}`,
-			JSON.stringify(newPoll)
+			JSON.stringify(updatedPoll)
+		);
+	}
+
+	async update(id: string, updatedPoll: Partial<IPollEntity>) {
+		const {
+			title,
+			theme,
+			number_of_question,
+			number_of_alternatives,
+			duration_in_minutes,
+		} = updatedPoll;
+		const [updatedPollData] = await dbConnection<IPollEntity>("polls")
+			.where({ id })
+			.update({
+				title,
+				theme,
+				number_of_question,
+				number_of_alternatives,
+				duration_in_minutes,
+			})
+			.returning("*");
+		await redisClient.set(
+			`${this.POLL_KEY_PREFIX}${updatedPollData.id}`,
+			JSON.stringify(updatedPollData)
 		);
 	}
 

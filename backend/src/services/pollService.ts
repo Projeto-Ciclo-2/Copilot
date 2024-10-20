@@ -1,5 +1,4 @@
 import { IPollEntity } from "../entities/pollEntity";
-import WebSocket from "ws";
 import PollRepository from "../repositories/pollRepository";
 import {
 	BadRequestException,
@@ -8,6 +7,7 @@ import {
 } from "../utils/Exception";
 import { Message } from "../utils/Message";
 import { QuizGenerator } from "../quiz-generator";
+import { IWSMessageGameInit } from "../interfaces/IWSMessage";
 
 export default class PollService {
 	private pollRepository: PollRepository;
@@ -61,15 +61,17 @@ export default class PollService {
 			};
 		});
 
-		poll.questions = gptQuestionsWithID;
-		poll.started = false;
-		poll.created_at = Date.now();
-		poll.started_at = null;
-		poll.playing_users = [];
+		const createdPoll = await this.pollRepository.createPoll(poll);
 
-		await this.pollRepository.createPoll(poll);
+		createdPoll.questions = gptQuestionsWithID;
+		createdPoll.started = false;
+		createdPoll.created_at = Date.now();
+		createdPoll.started_at = null;
+		createdPoll.playing_users = [];
 
-		return poll as IPollEntity;
+		await this.pollRepository.createPollRedis(createdPoll);
+
+		return createdPoll as IPollEntity;
 	}
 
 	public async getPollById(id: string) {
@@ -93,8 +95,37 @@ export default class PollService {
 		return poll;
 	}
 
-	public async write(id: string, poll: Partial<IPollEntity>) {
-		await this.pollRepository.write(id, poll);
+	public async updateRedis(
+		pollInit: IWSMessageGameInit
+	): Promise<IPollEntity> {
+		try {
+			const { pollID, userID } = pollInit;
+			if (!pollID || !userID) {
+				throw new BadRequestException(Message.MISSING_FIELDS);
+			}
+
+			const poll = await this.pollRepository.read(pollInit.pollID);
+			if (!poll) {
+				throw new NotFoundException(Message.POLL_NOT_FOUND);
+			}
+
+			const owner = poll.playing_users.find(
+				(id) => id === pollInit.userID && poll.owner === id
+			);
+
+			if (!owner) {
+				throw new NotFoundException(
+					Message.USER_NOT_FOUND_OR_NOT_OWNER
+				);
+			}
+			poll.started_at = Date.now();
+			poll.started = true;
+			await this.pollRepository.updateRedis(poll.id, poll);
+
+			return poll;
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
 	}
 
 	public async deleteRedis(id: string) {
