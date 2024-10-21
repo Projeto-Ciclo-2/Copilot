@@ -122,10 +122,14 @@ wss.on("connection", (ws: WebSocket) => {
 					);
 					const messageServer: IWSMessageLeftQuiz = {
 						type: "leftQuiz",
-						userID: result.userID,
+						username: result.username,
 						pollID: result.pollID,
 					};
 					broadcast(JSON.stringify(messageServer));
+
+					if (result.newOwner) {
+						sendNewOwner(result.newOwner);
+					}
 				} catch (error: any) {
 					ws.send(JSON.stringify({ error: error.message }));
 				}
