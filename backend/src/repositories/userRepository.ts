@@ -53,7 +53,6 @@ export default class UserRepository {
 	}
 
 	public async update(id: string, user: Partial<IUserEntity>) {
-		console.log("chamou o update");
 		const [updatedUser] = await dbConnection<IUserEntity>("users")
 			.where({ id })
 			.update(user)
