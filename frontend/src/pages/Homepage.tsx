@@ -14,6 +14,7 @@ import { IUser } from "../interfaces/IUser";
 import { useWebSocket } from "../context/WebSocketContext";
 import { usePolls } from "../context/PollsContext";
 import { IPoll } from "../interfaces/IQuiz";
+import { useCurrentQuestion } from "../context/questionCurrentContext";
 
 const userAPI = new UserAPI();
 
@@ -21,15 +22,24 @@ const Homepage = () => {
 	const [started, setStarted] = useState(false);
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
+	const { setTimeQuestion } = useCurrentQuestion();
 
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { polls, setCurrentPoll } = usePolls();
+	const { polls, setCurrentPoll, players, setPlayers } = usePolls();
 
 	// Navegar pra página de Lobby ao clicar
 	function openQuiz(poll: IPoll) {
 		setCurrentPoll(poll);
+		setPlayers(poll.playing_users);
+		// Definir tempo para cada questão
+		const timeTotal = poll.duration_in_minutes * 60;
+		const seconds = timeTotal / poll.number_of_question;
+		const milliseconds = seconds * 1000;
+		setTimeQuestion(milliseconds);
+		console.log(`TEMPO POR PARTIDA: ${milliseconds}`);
+
 		navigate("/lobby");
 	}
 
