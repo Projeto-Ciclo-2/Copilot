@@ -26,7 +26,7 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [polls, setPolls] = useState<IPoll[] | null>(null);
 	const [currentPoll, setCurrentPoll] = useState<IPoll | null>(null);
-	// const [players, setPlayers] = useState<IPlayer[] | null>(null);
+	const [players, setPlayers] = useState<string[] | null>(null);
 	const [currentRank, setCurrentRank] = useState<IWSMessagePollRank | null>(
 		null
 	);
@@ -68,15 +68,31 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 			console.log("onReceivePoll -> Novo quiz adicionado!");
 			updatePolls(e.poll);
 		});
-		/* WebSocketContext.((e) => {
-			const playersArray = players | [];
 
-			// onReceivePlayerjoin
-			if (e.pollId === currentPoll?.id) {
-				playersArray.push(e.username)
+		// Entrar no quiz
+		WebSocketContext.onReceivePlayerJoin((e) => {
+			let playersArray = players || [];
+			if (e.pollID === currentPoll?.id) {
+				// Verificar se o play já está adicionado
+				const exist = playersArray.some((p) => p === e.username);
+
+				if (!exist) {
+					playersArray.push(e.username);
+				}
 			}
 			setPlayers(playersArray);
-		}); */
+		});
+
+		// Sair do quiz
+		WebSocketContext.onReceivePlayerLeft((e) => {
+			let playersArray = players || [];
+			if (e.pollID === currentPoll?.id) {
+				// Remover o player se ele estiver na lista
+				// playersArray = playersArray.filter((p) => p !== e.);
+			}
+		});
+
+
 		WebSocketContext.onReceiveGameInit((e) => {
 			console.log("onReceiveGameInit -> Quiz inciado!");
 			const timeout = Date.now();
