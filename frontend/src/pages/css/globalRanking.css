@@ -7,13 +7,24 @@
 	align-items: center;
 	padding: 1rem 2rem;
 	overflow-y: auto;
+	justify-content: center;
+}
+#globalpage{
+	background-image: url('../../assets/textures/4094.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+
 }
 #header{
-    display: flex;
+	position: absolute;
+	display: flex;
+	top: 0;
+	padding: 1rem;
     width: 100%;
     align-items: center;
     justify-content: center;
-	margin-top: .5rem;
+	background-image: url('../../assets/textures/win_bkg.svg');
 }
 #header h2{
     font-family: var(--title);
@@ -59,6 +70,25 @@
   }
   .medal-ranking svg{
 	filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.5));
+  }
+  .rank0{
+	background-image: linear-gradient(#ffd900b3, #ffd900b3),url('../../assets/textures/metal.svg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	border: #b39802;
+
+  }
+  .rank1 {
+	background-image: linear-gradient(#c0c0c0b3, #c0c0c0b3), url('../../assets/textures/metal.svg');
+	border-color: #9b9999;
+	background-size: cover;
+	background-repeat: no-repeat;
+  }
+  .rank2{
+	background-image: linear-gradient(#cd8032b3, #cd8032b3), url('../../assets/textures/metal.svg');
+ 	border-color: #cd7f32;
+  	background-size: cover;
+	background-repeat: no-repeat;
   }
   .ranking-content{
 	display: flex;
