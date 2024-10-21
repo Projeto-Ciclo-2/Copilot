@@ -186,14 +186,22 @@ export default class PollService {
 		return { pollID, username: user.name, newOwner: null };
 	}
 
-	public async leftPoll(userID: string, pollID: string) {
-		let ownerChange = false;
+	public async leftPoll(
+		userID: string,
+		pollID: string
+	): Promise<{
+		pollID: string;
+		userID: string;
+		username: string;
+		newOwner: string | null;
+	}> {
 		if (!pollID || !userID) {
 			throw new BadRequestException(Message.MISSING_FIELDS);
 		}
 		console.log(pollID);
 		const user = await this.userRepository.getUserById(userID);
 		const poll = await this.pollRepository.read(pollID);
+		let ownerChange = false;
 
 		if (!poll) {
 			throw new NotFoundException(Message.POLL_NOT_FOUND);
@@ -213,9 +221,19 @@ export default class PollService {
 		await this.pollRepository.updateRedis(poll.id, poll);
 
 		if (ownerChange) {
-			return { pollID: poll.id, userID: user.id, newOwner: user.id };
+			return {
+				pollID: poll.id,
+				userID: user.id,
+				username: user.name,
+				newOwner: user.id,
+			};
 		}
 
-		return { pollID: poll.id, userID: user.id, newOwner: null };
+		return {
+			pollID: poll.id,
+			userID: user.id,
+			username: user.name,
+			newOwner: null,
+		};
 	}
 }

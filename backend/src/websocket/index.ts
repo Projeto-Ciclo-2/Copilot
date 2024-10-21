@@ -122,7 +122,7 @@ wss.on("connection", (ws: WebSocket) => {
 					);
 					const messageServer: IWSMessageLeftQuiz = {
 						type: "leftQuiz",
-						userID: result.userID,
+						username: result.username,
 						pollID: result.pollID,
 					};
 					broadcast(JSON.stringify(messageServer));

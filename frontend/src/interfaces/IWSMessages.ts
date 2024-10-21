@@ -19,6 +19,12 @@ export interface IWSMessagePlayerJoin {
 	username: string;
 }
 
+export interface IWSMessageLeftQuiz {
+	type: "leftQuiz";
+	username: string;
+	pollID: string;
+}
+
 export interface IWSMessageOwnerChange {
 	type: "ownerChange";
 	userID: string;
@@ -27,7 +33,7 @@ export interface IWSMessageOwnerChange {
 export interface IWSMessageSendGameInit {
 	type: "sendGameInit";
 	pollID: string;
-	started_at: string; //timestamp
+	started_at: number; //timestamp
 }
 
 export interface IWSMessageSendVote {
@@ -75,7 +81,7 @@ export interface IWSMessageJoinQuiz {
 	pollID: string;
 }
 
-export interface IWSMessageLeftQuiz {
+export interface IWSMessagePostLeftQuiz {
 	type: "leftQuiz";
 	userID: string;
 	pollID: string;
@@ -83,7 +89,7 @@ export interface IWSMessageLeftQuiz {
 
 export interface IWSMessageGameInit {
 	type: "gameInit";
-	userID: string; //todo: posteriormente validar no backend
+	userID: string;
 	pollID: string;
 }
 
