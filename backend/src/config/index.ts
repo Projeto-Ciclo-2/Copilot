@@ -14,7 +14,8 @@ const dotenvIsConfig =
 	process.env.DB_PORT != null &&
 	process.env.REDIS_PORT != null &&
 	process.env.DATABASE_URL != null &&
-	process.env.JWT != null;
+	process.env.JWT != null &&
+	process.env.PAUSE_TIME_BETWEEN_QUESTIONS != null;
 
 if (!dotenvIsConfig)
 	console.error(
@@ -39,4 +40,7 @@ export const config = {
 	REDIS_PORT: process.env.REDIS_PORT || 6379,
 	DATABASE_URL: process.env.DATABASE_URL || "",
 	JWT: process.env.JWT || "1234",
+
+	PAUSE_TIME_BETWEEN_QUESTIONS:
+		(process.env.PAUSE_TIME_BETWEEN_QUESTIONS as number | undefined) || 5,
 };
