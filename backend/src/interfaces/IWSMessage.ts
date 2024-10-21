@@ -26,6 +26,11 @@ export interface IWSMessageLeftQuiz {
 	pollID: string;
 }
 
+export interface IWSMessageOwnerChange {
+	type: "ownerChange";
+	userID: string;
+}
+
 export interface IWSMessageSendGameInit {
 	type: "sendGameInit";
 	pollID: string;
