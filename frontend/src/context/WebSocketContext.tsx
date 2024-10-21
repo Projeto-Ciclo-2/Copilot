@@ -9,6 +9,7 @@ import {
 	IWSMessagePlayerJoin,
 	IWSMessagePollRank,
 	IWSMessagePolls,
+	IWSMessagePostLeftQuiz,
 	IWSMessagePostPoll,
 	IWSMessagePostVote,
 	IWSMessageSendGameInit,
@@ -118,7 +119,7 @@ interface WebSocketContextType {
 	 * Sends a request to leave the quiz.
 	 * @param {IWSMessageLeftQuiz} obj - The leave request data.
 	 */
-	sendLeftQuiz: (obj: IWSMessageLeftQuiz) => void;
+	sendLeftQuiz: (obj: IWSMessagePostLeftQuiz) => void;
 
 	/**
 	 * Sends game initialization data to the server.
@@ -301,7 +302,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 				sendJoinQuiz: (obj: IWSMessageJoinQuiz) => {
 					sendMessage(JSON.stringify(obj));
 				},
-				sendLeftQuiz: (obj: IWSMessageLeftQuiz) => {
+				sendLeftQuiz: (obj: IWSMessagePostLeftQuiz) => {
 					sendMessage(JSON.stringify(obj));
 				},
 				sendGameInit: (obj: IWSMessageGameInit) => {
