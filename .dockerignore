@@ -4,3 +4,5 @@
 npm-debug.log
 .gitignore
 README.md
+node_modules
+dist
