@@ -68,8 +68,8 @@ const Homepage = () => {
 		navigate("/");
 	};
 	const startNow = () => {
-		setStarted(true)
-	}
+		setStarted(true);
+	};
 	return (
 		<div id="home">
 			<div id="burguer-container">
@@ -94,56 +94,57 @@ const Homepage = () => {
 			</div>
 			{!started ? (
 				<>
-			<section id="wellcome">
-				<div id="content-text">
-					<h1>Desafie seus amigos</h1>
-					<h3>
-						Prepare-se para <span>testar seus conhecimentos</span> e{" "}
-						<span>superar seus limites</span>
-					</h3>
-					<Btn
-						type="button"
-						className="quiz-btn"
-						href="#quiz"
-						text="Começar agora"
-						onClick={startNow}
-					/>
-				</div>
-				<div id="icon-vr">
-					<VRIcon />
-				</div>
-			</section>	
+					<section id="wellcome">
+						<div id="content-text">
+							<h1>Desafie seus amigos</h1>
+							<h3>
+								Prepare-se para{" "}
+								<span>testar seus conhecimentos</span> e{" "}
+								<span>superar seus limites</span>
+							</h3>
+							<Btn
+								type="button"
+								className="quiz-btn"
+								href="#quiz"
+								text="Começar agora"
+								onClick={startNow}
+							/>
+						</div>
+						<div id="icon-vr">
+							<VRIcon />
+						</div>
+					</section>
 				</>
 			) : (
 				<>
-			<section id="quiz">
-				<div id="input-search-quiz">
-					<input type="text" placeholder="Pesquisar quiz" />
-					<Search />
-				</div>
-				<div id="cards">
-					{polls ? (
-						polls.map((poll, index) => (
-							<CardQuiz
-								key={index}
-								poll={poll}
-								index={index}
-								onClick={() => openQuiz(poll)}
-							/>
-						))
-					) : (
-						<p>Sem quiz criado</p>
-					)}
-				</div>
-				<Btn
-					type="button"
-					id="btn-add-quiz"
-					icon={MoreIcon}
-					text="Adicionar Quiz"
-					iconPosition="right"
-					onClick={() => navigate("/create")}
-				/>
-			</section>
+					<section id="quiz">
+						<div id="input-search-quiz">
+							<input type="text" placeholder="Pesquisar quiz" />
+							<Search />
+						</div>
+						<div id="cards">
+							{polls ? (
+								polls.map((poll, index) => (
+									<CardQuiz
+										key={index}
+										poll={poll}
+										index={index}
+										onClick={() => openQuiz(poll)}
+									/>
+								))
+							) : (
+								<p>Sem quiz criado</p>
+							)}
+						</div>
+						<Btn
+							type="button"
+							id="btn-add-quiz"
+							icon={MoreIcon}
+							text="Adicionar Quiz"
+							iconPosition="right"
+							onClick={() => navigate("/create")}
+						/>
+					</section>
 				</>
 			)}
 			<div id="plus-btn">
