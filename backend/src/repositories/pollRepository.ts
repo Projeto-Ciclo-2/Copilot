@@ -44,12 +44,14 @@ export default class PollRepository {
 	}
 
 	public async getAllPollsFromRedis(): Promise<IPollEntity[]> {
-		const keys = await redisClient.keys('poll:*');
-		const polls = await Promise.all(keys.map(key => redisClient.get(key)));
+		const keys = await redisClient.keys("poll:*");
+		const polls = await Promise.all(
+			keys.map((key) => redisClient.get(key))
+		);
 		const parsedPolls: IPollEntity[] = [];
 
 		for (const poll of polls) {
-			if(poll) parsedPolls.push(JSON.parse(poll));
+			if (poll) parsedPolls.push(JSON.parse(poll));
 		}
 
 		return parsedPolls;

@@ -20,9 +20,10 @@ export interface IWSMessagePlayerJoin {
 	username: string;
 }
 
-export interface IWSMessageOwnerChange {
-	type: "ownerChange";
+export interface IWSMessageLeftQuiz {
+	type: "leftQuiz";
 	userID: string;
+	pollID: string;
 }
 
 export interface IWSMessageSendGameInit {

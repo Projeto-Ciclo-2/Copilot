@@ -10,6 +10,7 @@ import {
 	IWSMessagePolls,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
+	IWSMessageLeftQuiz,
 } from "../interfaces/IWSMessage";
 
 const pollService = new PollService();
@@ -80,7 +81,7 @@ wss.on("connection", (ws: WebSocket) => {
 				break;
 			case "gameInit":
 				try {
-					const poll = await pollService.updateRedis(data.body);
+					const poll = await pollService.updateRedis(data);
 
 					if (!poll) {
 						throw new BadRequestException(Message.POLL_NOT_FOUND);
@@ -90,6 +91,22 @@ wss.on("connection", (ws: WebSocket) => {
 						type: "sendGameInit",
 						pollID: poll.id,
 						started_at: poll.started_at || Date.now(),
+					};
+					broadcast(JSON.stringify(messageServer));
+				} catch (error: any) {
+					ws.send(JSON.stringify({ error: error.message }));
+				}
+				break;
+			case "leftQuiz":
+				try {
+					const result = await pollService.leftPoll(
+						data.userID,
+						data.pollID
+					);
+					const messageServer: IWSMessageLeftQuiz = {
+						type: "leftQuiz",
+						userID: result.userID,
+						pollID: result.pollID,
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
