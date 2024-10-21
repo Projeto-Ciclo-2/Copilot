@@ -17,13 +17,11 @@ interface CardProps {
 	onClick: () => void;
 }
 
-const CardQuiz: React.FC<CardProps> = ({ poll, index }) => {
-	console.log(poll.playing_users);
-
+const CardQuiz: React.FC<CardProps> = ({ poll, index, onClick }) => {
 	const number_image = Math.floor(Math.random() * 4) + 1;
 
 	return (
-		<div key={index} className="card-quiz">
+		<div key={index} className="card-quiz" onClick={onClick}>
 			<div className="div-img-card">
 				{index % 2 === 0 ? (
 					<ImagesCards number_image={number_image} color="#DCD0DC" />
