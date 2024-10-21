@@ -34,24 +34,29 @@ export class VoteService {
 			vote.pollQuestionID
 		);
 
-		if (voteAlreadyExists) {
-			throw new ConflictException(Message.VOTE_ALREDY_DONE);
-		}
+		// if (voteAlreadyExists) {
+		// 	throw new ConflictException(Message.VOTE_ALREDY_DONE);
+		// }
 
-		poll.questions.find(async (question) => {
+		let points = 0;
+		console.log("UserPoints antes:", user.points);
+		for (const question of poll.questions) {
 			if (question.id === vote.pollQuestionID) {
-				this.voteRepository.setQuestionVotes(vote);
-
-				if (question.answer === vote.userChoice) {
-					user.points += 10;
-					await this.userRepository.update(user.id, user);
+				await this.voteRepository.setQuestionVotes(vote);
+				if (Number(question.answer) === Number(vote.userChoice)) {
+					points = 10;
+					console.log("Points:", points);
 				}
 			}
-		});
+			user.points += points;
+		}
+		console.log("UserPoints depois:", user.points);
+		await this.userRepository.update(user.id, user);
 
 		await this.voteRepository.createVote(vote);
 
 		const votes = await this.voteRepository.getQuestionVotes(
+			vote.userID,
 			vote.pollID,
 			vote.pollQuestionID
 		);
@@ -98,10 +103,12 @@ export class VoteService {
 	}
 
 	async getQuestionVotes(
+		userID: string,
 		pollID: string,
 		pollQuestionID: number
 	): Promise<IVoteEntity | {}> {
 		return await this.voteRepository.getQuestionVotes(
+			userID,
 			pollID,
 			pollQuestionID
 		);

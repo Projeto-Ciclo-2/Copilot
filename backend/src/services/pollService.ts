@@ -187,6 +187,7 @@ export default class PollService {
 	}
 
 	public async leftPoll(userID: string, pollID: string) {
+		let ownerChange = false;
 		if (!pollID || !userID) {
 			throw new BadRequestException(Message.MISSING_FIELDS);
 		}
@@ -206,10 +207,15 @@ export default class PollService {
 
 		if (poll.owner === user.id) {
 			poll.owner = poll.playing_users[0] || "";
+			ownerChange = true;
 		}
 
 		await this.pollRepository.updateRedis(poll.id, poll);
 
-		return { pollID: poll.id, userID: user.id };
+		if (ownerChange) {
+			return { pollID: poll.id, userID: user.id, newOwner: user.id };
+		}
+
+		return { pollID: poll.id, userID: user.id, newOwner: null };
 	}
 }
