@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./css/Lobby.css";
 import Btn from "../components/button";
 import { useNavigate } from "react-router-dom";
@@ -7,35 +7,42 @@ import { useWebSocket } from "../context/WebSocketContext";
 import UserProvider, { UserContext } from "../context/UserContext";
 import {
 	IWSMessageGameInit,
+	IWSMessageJoinQuiz,
 	IWSMessageLeftQuiz,
+	IWSMessagePostLeftQuiz,
 } from "../interfaces/IWSMessages";
 
 const Lobby = () => {
-	const { currentPoll } = usePolls();
+	const { currentPoll, players } = usePolls();
 	const WebSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
+
+	useEffect(() => {
+		if (currentPoll?.started) {
+			navigate("/quiz");
+		}
+	}, [currentPoll]);
 
 	const navigate = useNavigate();
 
 	function exitPage() {
-		navigate("/home");
-
 		// Sair do quiz
-		/* const message: IWSMessageLeftQuiz = {
+		console.log(
+			`send-[joinQuiz] -> usuário ${userContext?.user?.name} SAIU do quiz!`
+		);
+		const message: IWSMessagePostLeftQuiz = {
 			type: "leftQuiz",
 			userID: userContext?.user?.id as string,
 			pollID: currentPoll?.id as string,
 		};
-		WebSocketContext.sendLeftQuiz(message); */
+		WebSocketContext.sendLeftQuiz(message);
+		navigate("/home");
 	}
 
 	const owner = userContext?.user?.id === currentPoll?.owner;
-	/* console.log(owner);
-	console.log(`user id = ${userContext?.user?.id}`);
-	console.log(`owner id = ${currentPoll?.owner}`); */
 
 	function initQuiz() {
-		/* if (userContext?.user?.id === currentPoll?.owner) {
+		if (userContext?.user?.id === currentPoll?.owner) {
 			console.log("message gameInit");
 			const message: IWSMessageGameInit = {
 				type: "gameInit",
@@ -43,7 +50,7 @@ const Lobby = () => {
 				pollID: currentPoll?.id as string,
 			};
 			WebSocketContext.sendGameInit(message);
-		} */
+		}
 		navigate("/quiz");
 	}
 
@@ -57,6 +64,17 @@ const Lobby = () => {
 			return <></>;
 		}
 	}
+
+	console.log(
+		`message-[joinQuiz] -> usuário ${userContext?.user?.name} entrou no quiz!`
+	);
+	// Se não for o owner não informa ao back que
+	const message: IWSMessageJoinQuiz = {
+		type: "joinQuiz",
+		pollID: currentPoll?.id as string,
+		userID: userContext?.user?.id as string,
+	};
+	WebSocketContext.sendJoinQuiz(message);
 
 	return (
 		<section id="lobby-section">
@@ -79,20 +97,20 @@ const Lobby = () => {
 					<p>Chame seus amigos agora!</p>
 					<div>
 						<h4>Jogadores presentes</h4>
-						{/* {players.map((username, index) => (
+						{players?.map((username, index) => (
 							<p key={index}>{username}</p>
-						))} */}
+						))}
 					</div>
 				</div>
 			</div>
-			{/* {owner && (
-			)} */}
-			<Btn
-				type="button"
-				text="iniciar"
-				className="btn-init-quiz"
-				onClick={initQuiz}
-			/>
+			{owner && (
+				<Btn
+					type="button"
+					text="iniciar"
+					className="btn-init-quiz"
+					onClick={initQuiz}
+				/>
+			)}
 		</section>
 	);
 };
