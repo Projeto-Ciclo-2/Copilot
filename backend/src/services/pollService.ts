@@ -8,7 +8,10 @@ import {
 } from "../utils/Exception";
 import { Message } from "../utils/Message";
 import { QuizGenerator } from "../quiz-generator";
-import { IWSMessageGameInit } from "../interfaces/IWSMessage";
+import {
+	IWSMessageGameInit,
+	IWSMessageLeftQuiz,
+} from "../interfaces/IWSMessage";
 import UserRepository from "../repositories/userRepository";
 
 export default class PollService {
@@ -71,6 +74,7 @@ export default class PollService {
 		createdPoll.created_at = Date.now();
 		createdPoll.started_at = null;
 		createdPoll.playing_users = [];
+		createdPoll.owner = owner;
 
 		await this.pollRepository.createPollRedis(createdPoll);
 
@@ -180,5 +184,32 @@ export default class PollService {
 		}
 
 		return { pollID, username: user.name, newOwner: null };
+	}
+
+	public async leftPoll(userID: string, pollID: string) {
+		if (!pollID || !userID) {
+			throw new BadRequestException(Message.MISSING_FIELDS);
+		}
+		console.log(pollID);
+		const user = await this.userRepository.getUserById(userID);
+		const poll = await this.pollRepository.read(pollID);
+
+		if (!poll) {
+			throw new NotFoundException(Message.POLL_NOT_FOUND);
+		}
+
+		if (!user) {
+			throw new NotFoundException(Message.USER_NOT_FOUND);
+		}
+
+		poll.playing_users = poll.playing_users.filter((id) => id !== user.id);
+
+		if (poll.owner === user.id) {
+			poll.owner = poll.playing_users[0] || "";
+		}
+
+		await this.pollRepository.updateRedis(poll.id, poll);
+
+		return { pollID: poll.id, userID: user.id };
 	}
 }

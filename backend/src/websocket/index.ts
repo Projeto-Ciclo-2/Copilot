@@ -11,6 +11,7 @@ import {
 	IWSMessagePolls,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
+	IWSMessageLeftQuiz,
 	IWSMessagePollRank,
 } from "../interfaces/IWSMessage";
 import { config } from "../config";
@@ -109,6 +110,22 @@ wss.on("connection", (ws: WebSocket) => {
 						poll.duration_in_minutes,
 						poll.number_of_question
 					);
+				} catch (error: any) {
+					ws.send(JSON.stringify({ error: error.message }));
+				}
+				break;
+			case "leftQuiz":
+				try {
+					const result = await pollService.leftPoll(
+						data.userID,
+						data.pollID
+					);
+					const messageServer: IWSMessageLeftQuiz = {
+						type: "leftQuiz",
+						userID: result.userID,
+						pollID: result.pollID,
+					};
+					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
 					ws.send(JSON.stringify({ error: error.message }));
 				}
