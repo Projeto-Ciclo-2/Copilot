@@ -21,7 +21,7 @@ export interface IWSMessagePlayerJoin {
 
 export interface IWSMessageLeftQuiz {
 	type: "leftQuiz";
-	userID: string;
+	username: string;
 	pollID: string;
 }
 
@@ -81,7 +81,7 @@ export interface IWSMessageJoinQuiz {
 	pollID: string;
 }
 
-export interface IWSMessageLeftQuiz {
+export interface IWSMessagePostLeftQuiz {
 	type: "leftQuiz";
 	userID: string;
 	pollID: string;
