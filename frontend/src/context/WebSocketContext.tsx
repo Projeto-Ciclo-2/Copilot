@@ -6,6 +6,7 @@ import {
 	IWSMessageLeftQuiz,
 	IWSMessageOwnerChange,
 	IWSMessageOwnerGiveUp,
+	IWSMessagePlayerJoin,
 	IWSMessagePollRank,
 	IWSMessagePolls,
 	IWSMessagePostPoll,
@@ -59,6 +60,18 @@ interface WebSocketContextType {
 	onReceivePoll: (cbFn: (e: IWSMessageSendPoll) => any) => void;
 
 	/**
+	 * Registers a callback to handle when a player joins a game
+	 * @param {(e: IWSMessagePlayerJoin) => any} cbFn - The callback function for handling the poll data.
+	 */
+	onReceivePlayerJoin: (cbFn: (e: IWSMessagePlayerJoin) => any) => void;
+
+	/**
+	 * Registers a callback to handle a player quitting a quiz
+	 * @param {(e: IWSMessageLeftQuiz) => any} cbFn - The callback function for handling the poll data.
+	 */
+	onReceivePlayerLeft: (cbFn: (e: IWSMessageLeftQuiz) => any) => void;
+
+	/**
 	 * Registers a callback to handle owner change events from the server.
 	 * @param {(e: IWSMessageOwnerChange) => any} cbFn - The callback function for handling the owner change.
 	 */
@@ -89,7 +102,8 @@ interface WebSocketContextType {
 	sendPoll: (obj: IWSMessagePostPoll) => void;
 
 	/**
-	 * Sends a request to give up ownership of the quiz.
+	 * @deprecated DO NOT USE THIS SEND EVENT. INSTEAD USE LEFT QUIZ FOR ALL USERS, OWNER INCLUDED.
+	 * @description Sends a request to give up ownership of the quiz.
 	 * @param {IWSMessageOwnerGiveUp} obj - The give-up request data.
 	 */
 	sendOwnerGiveUp: (obj: IWSMessageOwnerGiveUp) => void;
@@ -119,7 +133,6 @@ interface WebSocketContextType {
 	sendVote: (obj: IWSMessagePostVote) => void;
 }
 
-
 const WebSocketContext = React.createContext<WebSocketContextType | undefined>(
 	undefined
 );
@@ -132,6 +145,8 @@ let tryingToConnect = false;
 type serverActions =
 	| "allPolls"
 	| "sendPoll"
+	| "sendPlayerJoin"
+	| "leftQuiz"
 	| "ownerChange"
 	| "sendGameInit"
 	| "sendVote"
@@ -139,6 +154,8 @@ type serverActions =
 const validActions: serverActions[] = [
 	"allPolls",
 	"sendPoll",
+	"sendPlayerJoin",
+	"leftQuiz",
 	"ownerChange",
 	"sendGameInit",
 	"sendVote",
@@ -147,6 +164,8 @@ const validActions: serverActions[] = [
 const fnMapping: Record<serverActions, (e: any) => void> = {
 	allPolls: (e: IWSMessagePolls) => {},
 	sendPoll: (e: IWSMessageSendPoll) => {},
+	sendPlayerJoin: (e: IWSMessagePlayerJoin) => {},
+	leftQuiz: (e: IWSMessageLeftQuiz) => {},
 	ownerChange: (e: IWSMessageOwnerChange) => {},
 	sendGameInit: (e: IWSMessageSendGameInit) => {},
 	sendVote: (e: IWSMessageSendVote) => {},
@@ -195,7 +214,9 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 						if (action === type) isValidAction = true;
 					}
 					if (isValidAction) {
-						DebugConsole("ws calling callback function '" + type + "'.");
+						DebugConsole(
+							"ws calling callback function '" + type + "'."
+						);
 
 						return fnMapping[type as serverActions](data);
 					}
@@ -258,6 +279,10 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 					setCallback<IWSMessagePolls>("allPolls", cbFn),
 				onReceivePoll: (cbFn) =>
 					setCallback<IWSMessageSendPoll>("sendPoll", cbFn),
+				onReceivePlayerJoin: (cbFn) =>
+					setCallback<IWSMessagePlayerJoin>("sendPlayerJoin", cbFn),
+				onReceivePlayerLeft: (cbFn) =>
+					setCallback<IWSMessageLeftQuiz>("leftQuiz", cbFn),
 				onReceiveOwnerChange: (cbFn) =>
 					setCallback<IWSMessageOwnerChange>("ownerChange", cbFn),
 				onReceiveGameInit: (cbFn) =>
