@@ -26,7 +26,7 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [polls, setPolls] = useState<IPoll[] | null>(null);
 	const [currentPoll, setCurrentPoll] = useState<IPoll | null>(null);
-	const [players, setPlayers] = useState<IPlayer[] | null>(null);
+	// const [players, setPlayers] = useState<IPlayer[] | null>(null);
 	const [currentRank, setCurrentRank] = useState<IWSMessagePollRank | null>(
 		null
 	);
@@ -68,7 +68,7 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 			console.log("onReceivePoll -> Novo quiz adicionado!");
 			updatePolls(e.poll);
 		});
-		/* WebSocketContext.onReceivePlayerJoin((e) => {
+		/* WebSocketContext.((e) => {
 			const playersArray = players | [];
 
 			// onReceivePlayerjoin
