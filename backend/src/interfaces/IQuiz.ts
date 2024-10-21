@@ -18,7 +18,7 @@ export interface IPoll {
 	created_at?: number; //timestamp
 	started_at?: number | null; //timestamp
 	questions: IPollQuestion[];
-	playing_users: string[] //array com ids dos usuários
+	playing_users: string[]; //array com ids dos usuários
 }
 
 // redis:
@@ -28,4 +28,12 @@ export interface IVote {
 	poll_id: string;
 	poll_question_id: string;
 	user_choice: string;
+}
+
+export interface IPollRank {
+	players: Array<{
+		username: string;
+		correctAnswers: number;
+		points: number;
+	}>;
 }
