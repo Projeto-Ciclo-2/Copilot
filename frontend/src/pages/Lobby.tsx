@@ -5,18 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { usePolls } from "../context/PollsContext";
 import { useWebSocket } from "../context/WebSocketContext";
 import UserProvider, { UserContext } from "../context/UserContext";
-import { IWSMessageGameInit } from "../interfaces/IWSMessages";
+import {
+	IWSMessageGameInit,
+	IWSMessageLeftQuiz,
+} from "../interfaces/IWSMessages";
 
 const Lobby = () => {
-	const [usernames, setUsernames] = useState<string[]>([
-		"johnDoe123",
-		"coolGamer99",
-		"techWiz45",
-		"sarahSmith",
-		"javaNerd",
-	]);
-
-	const PollsContext = usePolls();
+	const { currentPoll } = usePolls();
 	const WebSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
@@ -24,21 +19,37 @@ const Lobby = () => {
 
 	function exitPage() {
 		navigate("/home");
+
+		// Sair do quiz
+		/* const message: IWSMessageLeftQuiz = {
+			type: "leftQuiz",
+			userID: userContext?.user?.id as string,
+			pollID: currentPoll?.id as string,
+		};
+		WebSocketContext.sendLeftQuiz(message); */
 	}
+
+	const owner = userContext?.user?.id === currentPoll?.owner;
+	/* console.log(owner);
+	console.log(`user id = ${userContext?.user?.id}`);
+	console.log(`owner id = ${currentPoll?.owner}`); */
 
 	function initQuiz() {
-		console.log('Message gameInit');
-		const message: IWSMessageGameInit = {
-			type: "gameInit",
-			userID: userContext?.user?.id as string,
-			pollID: PollsContext.currentPoll?.id as string,
-		};
-		WebSocketContext.sendGameInit(message);
+		/* if (userContext?.user?.id === currentPoll?.owner) {
+			console.log("message gameInit");
+			const message: IWSMessageGameInit = {
+				type: "gameInit",
+				userID: userContext?.user?.id as string,
+				pollID: currentPoll?.id as string,
+			};
+			WebSocketContext.sendGameInit(message);
+		} */
+		navigate("/quiz");
 	}
 
-	if (PollsContext.currentPoll) {
+	if (currentPoll) {
 		// Começou
-		if (PollsContext.currentPoll.started) {
+		if (currentPoll.started) {
 			setTimeout(() => {
 				navigate("/quiz");
 			}, 100);
@@ -57,9 +68,9 @@ const Lobby = () => {
 			/>
 			<div id="lobby-content">
 				<div id="quiz-content">
-					<h2>Quiz sobre hierógrifos</h2>
-					<p>Hierógrifos</p>
-					<p>5 perguntas</p>
+					<h2>{currentPoll?.title}</h2>
+					<p>{currentPoll?.theme}</p>
+					<p>{currentPoll?.number_of_question} perguntas</p>
 				</div>
 				<div id="div-message-show">
 					<p>Se prepare que o show vai começar!</p>
@@ -68,12 +79,14 @@ const Lobby = () => {
 					<p>Chame seus amigos agora!</p>
 					<div>
 						<h4>Jogadores presentes</h4>
-						{usernames.map((username, index) => (
+						{/* {players.map((username, index) => (
 							<p key={index}>{username}</p>
-						))}
+						))} */}
 					</div>
 				</div>
 			</div>
+			{/* {owner && (
+			)} */}
 			<Btn
 				type="button"
 				text="iniciar"
