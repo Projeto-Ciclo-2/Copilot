@@ -15,6 +15,7 @@ import TextWriteAnimated from "../../components/other/TextWriteAnimated";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { IWSMessagePostPoll } from "../../interfaces/IWSMessages";
 import { UserContext } from "../../context/UserContext";
+import Banner from "../../components/banner";
 
 type nullNumber = undefined | number;
 
@@ -34,6 +35,22 @@ const CreateQuiz = () => {
 	const [wantToConfirm, setWantToConfirm] = React.useState(false);
 	const [loadingContent, setLoadingContent] = React.useState(false);
 	const [wantToLeaveLoading, setWantToLeaveLoading] = React.useState(false);
+	const [nextDisabled, setNextDisabled] = React.useState(true);
+
+
+	const validateInputs = () => {
+		const titleValid = title.trim().length > 0;
+		const themeValid = theme.trim().length > 0;
+		const XQuestionsValid = typeof xQuestions === "number" && xQuestions > 0;
+		const XAlternativesValid = typeof xAlternatives === "number" && xAlternatives > 0;
+		const timeValid = !Number.isNaN(Number.parseInt(time)) && Number.parseInt(time) > 0;
+
+		setNextDisabled(!(titleValid && themeValid && XQuestionsValid && XAlternativesValid && timeValid))
+	}
+	React.useEffect(() => {
+		validateInputs();
+	}, [title, theme, xQuestions, xAlternatives, time]);
+
 
 	const returnHome = () => {
 		setTimeout(() => {
@@ -124,7 +141,10 @@ const CreateQuiz = () => {
 	if (wantToConfirm)
 		return (
 			<div id="createBody">
-				<header id="createHeader"></header>
+				<header id="createHeader">
+					<Banner/>
+					<h2>Enigmus</h2>
+				</header>
 				<main id="createMain">
 					<ConfirmationQuiz
 						onAccept={sendPoll}
@@ -144,7 +164,10 @@ const CreateQuiz = () => {
 				onReject={() => setWantToLeave(false)}
 			/>
 			<div id="createBody">
-				<header id="createHeader"></header>
+				<header id="createHeader">
+				<Banner/>
+				<h2>Enigmus</h2>
+				</header>
 				<main id="createMain">
 					<section id="createMain-section">
 						<LookingAtComputer />
@@ -220,7 +243,7 @@ const CreateQuiz = () => {
 						<button onClick={() => setWantToLeave(true)}>
 							Cancelar
 						</button>
-						<button onClick={() => setWantToConfirm(true)}>
+						<button onClick={() => setWantToConfirm(true)}  disabled={nextDisabled}>
 							Avançar
 						</button>
 					</div>
