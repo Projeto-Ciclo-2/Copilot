@@ -97,36 +97,6 @@ const Quiz = () => {
 		setConfirmed(true);
 	}
 
-	// get quiz
-	/* useEffect(() => {
-		async function getQuiz() {
-			try {
-				const result = await fetch("http://localhost:3003/quiz");
-				const data: IQuiz = await result.json();
-				setQuiz(data);
-				const alternativeCorrect = Number(data.questions[0].answer);
-				setCorrectAlternative(alternativeCorrect);
-				setNumberOfQuestions(data.number_of_question);
-			} catch (error) {
-				console.log("erro ao buscar quiz!");
-			}
-		}
-
-		setTimeout(() => {
-			getQuiz();
-		}, 2000);
-	}, []); */
-
-	/* // Definir tempo para cada questão
-	useEffect(() => {
-		if (currentPoll) {
-			const timeTotal = currentPoll.duration_in_minutes * 60;
-			const seconds = timeTotal / currentPoll.number_of_question;
-			const milliseconds = seconds * 1000;
-			setTimeQuestion(milliseconds);
-		}
-	}, [currentPoll, setTimeQuestion]); */
-
 	// Alterar questão
 	useEffect(() => {
 		if (currentPoll) {
