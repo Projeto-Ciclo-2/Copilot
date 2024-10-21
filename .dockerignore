@@ -1,6 +1,6 @@
 .editorconfig
-links.md
-README.md
+/docs
 /backend/node_modules
 npm-debug.log
-
+.gitignore
+README.md

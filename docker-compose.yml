@@ -1,4 +1,4 @@
-version: "3.8"
+name: enigmus
 services:
     postgres:
         image: postgres:latest
@@ -17,7 +17,7 @@ services:
             - "6379:6379"
         networks:
             - copilot-network
-    
+
     backend:
         build:
             context: ./backend
@@ -31,7 +31,7 @@ services:
         networks:
             - copilot-network
         volumes:
-            - ./backend:/app 
+            - ./backend:/app
 
     frontend:
         build:
