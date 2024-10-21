@@ -1,5 +1,5 @@
 import { IPollEntity } from "../entities/pollEntity";
-import { IPoll } from "./IQuiz";
+import { IPoll, IPollRank } from "./IQuiz";
 
 /**	SERVER MESSAGES
  * messages that only server will send
@@ -20,6 +20,12 @@ export interface IWSMessagePlayerJoin {
 	username: string;
 }
 
+export interface IWSMessageLeftQuiz {
+	type: "leftQuiz";
+	userID: string;
+	pollID: string;
+}
+
 export interface IWSMessageOwnerChange {
 	type: "ownerChange";
 	userID: string;
@@ -28,7 +34,7 @@ export interface IWSMessageOwnerChange {
 export interface IWSMessageSendGameInit {
 	type: "sendGameInit";
 	pollID: string;
-	started_at: string; //timestamp
+	started_at: number; //timestamp
 }
 
 export interface IWSMessageSendVote {
@@ -41,13 +47,7 @@ export interface IWSMessageSendVote {
 
 export interface IWSMessagePollRank {
 	type: "pollRank";
-	players: [
-		{
-			username: string;
-			correctAnswers: number;
-			points: number;
-		}
-	];
+	players: IPollRank;
 }
 
 /**	CLIENT MESSAGES
