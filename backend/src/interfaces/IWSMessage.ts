@@ -20,6 +20,12 @@ export interface IWSMessagePlayerJoin {
 	username: string;
 }
 
+export interface IWSMessageLeftQuiz {
+	type: "leftQuiz";
+	userID: string;
+	pollID: string;
+}
+
 export interface IWSMessageOwnerChange {
 	type: "ownerChange";
 	userID: string;
