@@ -1,5 +1,5 @@
 import PollService from "../services/pollService";
-import { BadRequestException } from "../utils/Exception";
+import { BadRequestException, NotFoundException } from "../utils/Exception";
 import WebSocket from "ws";
 import { Message } from "../utils/Message";
 import { VoteService } from "../services/voteService";
@@ -11,10 +11,16 @@ import {
 	IWSMessagePolls,
 	IWSMessageSendPoll,
 	IWSMessageSendVote,
+	IWSMessagePollRank,
 } from "../interfaces/IWSMessage";
+import { config } from "../config";
+import { IVoteEntity } from "../entities/voteEntity";
+import { IPollRank } from "../interfaces/IQuiz";
+import { UserService } from "../services/userService";
 
 const pollService = new PollService();
 const voteService = new VoteService();
+const userService = new UserService();
 const users = new Set<WebSocket>();
 
 export const wss = new WebSocket.Server({ noServer: true });
@@ -53,7 +59,7 @@ wss.on("connection", (ws: WebSocket) => {
 					};
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
-					if (error instanceof Error) sendErr(ws, error);
+					if (error instanceof Error) return sendErr(ws, error);
 					sendErr(ws);
 				}
 				break;
@@ -75,7 +81,7 @@ wss.on("connection", (ws: WebSocket) => {
 					};
 					broadcast(JSON.stringify(message));
 					if (result.newOwner) {
-						sendNewOwner(result.newOwner)
+						sendNewOwner(result.newOwner);
 					}
 				} catch (error) {
 					if (error instanceof Error) return sendErr(ws, error);
@@ -84,18 +90,25 @@ wss.on("connection", (ws: WebSocket) => {
 				break;
 			case "gameInit":
 				try {
-					const poll = await pollService.updateRedis(data.body);
+					const poll = await pollService.updateRedis(data);
 
 					if (!poll) {
 						throw new BadRequestException(Message.POLL_NOT_FOUND);
 					}
 
+					const gameStartedAt = poll.started_at || Date.now();
 					const messageServer: IWSMessageSendGameInit = {
 						type: "sendGameInit",
 						pollID: poll.id,
-						started_at: poll.started_at || Date.now(),
+						started_at: gameStartedAt,
 					};
 					broadcast(JSON.stringify(messageServer));
+					setEndGame(
+						poll.id,
+						gameStartedAt,
+						poll.duration_in_minutes,
+						poll.number_of_question
+					);
 				} catch (error: any) {
 					ws.send(JSON.stringify({ error: error.message }));
 				}
@@ -139,4 +152,107 @@ function sendNewOwner(newOwnerID: string) {
 		userID: newOwnerID,
 	};
 	broadcast(JSON.stringify(message));
+}
+
+function setEndGame(
+	id: string,
+	timestamp: number,
+	duration_in_minutes: number,
+	qntd_question: number
+) {
+	const durationInMilliseconds = duration_in_minutes * 1000 * 60;
+	const timeBetweenQuestion =
+		config.PAUSE_TIME_BETWEEN_QUESTIONS * 1000 * qntd_question;
+	const delayInMs = durationInMilliseconds + timeBetweenQuestion;
+	setTimeout(async () => {
+		const fnStarted = Date.now();
+		console.log("iniciando função de encerrar quiz.");
+
+		try {
+			const poll = await pollService.read(id);
+			if (!poll) throw new NotFoundException(Message.POLL_NOT_FOUND);
+
+			const users = poll.playing_users;
+			if (!users || !Array.isArray(users) || users.length <= 0)
+				throw new NotFoundException(Message.NO_USERS);
+
+			if (
+				!poll.questions ||
+				!Array.isArray(poll.questions) ||
+				poll.questions.length <= 0
+			)
+				throw new NotFoundException(Message.NO_QUESTIONS);
+
+			const votes: IPollRank = { players: [] };
+			for (const userID of users) {
+				const user = await userService.getUserById(userID);
+				if (!user) return;
+
+				const tempVotesOfThisPlayer = {
+					username: user.name,
+					correctAnswers: 0,
+					points: 0,
+				};
+
+				for (const question of poll.questions) {
+					const vote = await voteService.getVote(
+						userID,
+						poll.id,
+						question.id
+					);
+					if (vote) {
+						const correct = vote.userChoice === question.answer;
+						const points = correct ? 10 : 0;
+						tempVotesOfThisPlayer.correctAnswers += correct ? 1 : 0;
+						tempVotesOfThisPlayer.points += points;
+					} else {
+						console.error("Alerta! um dos votos estava vazio");
+					}
+				}
+				votes.players.push(tempVotesOfThisPlayer);
+			}
+
+			const message: IWSMessagePollRank = {
+				type: "pollRank",
+				players: votes,
+			};
+			broadcast(JSON.stringify(message));
+			console.log("game ended", JSON.stringify(message));
+			console.log("deleting everything related in redis");
+			// deleting everything
+			pollService.deleteRedis(poll.id);
+			for (const userID of users) {
+				for (const question of poll.questions) {
+					console.log(
+						userID.toString() +
+							poll.id.toString() +
+							question.id.toString()
+					);
+					voteService.deleteVote(
+						userID,
+						poll.id,
+						question.id.toString()
+					);
+				}
+			}
+			console.log("done. ");
+			console.log(
+				"Function executed in " + (Date.now() - fnStarted) + "ms."
+			);
+		} catch (error) {
+			if (error instanceof Error) {
+			}
+			console.error(error);
+		}
+	}, delayInMs);
+	console.log(
+		"função agendada para ser executada daqui " + delayInMs + "ms."
+	);
+	setTimeout(() => {
+		console.log(
+			"metade do tempo. função será executada daqui " +
+				delayInMs / 2 +
+				"ms."
+		);
+	}, delayInMs / 2);
 }
