@@ -10,12 +10,12 @@
 	justify-content: center;
 }
 #globalpage{
-	background-image: url('../../assets/textures/4094.jpg');
+	background-image: linear-gradient( #b744c1a9, #b744c123), url('../../assets/textures/4094.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
-
 }
+
 #header{
 	position: absolute;
 	display: flex;
@@ -25,6 +25,7 @@
     align-items: center;
     justify-content: center;
 	background-image: url('../../assets/textures/win_bkg.svg');
+	background-color: var(--primary);
 }
 #header h2{
     font-family: var(--title);
@@ -47,12 +48,10 @@
 }
 #ranking-container{
     background-color: var(--bkg_1);
-    margin-top: 3rem;
+    margin-top: 1rem;
 	height: 80vh;
 	overflow-y: scroll;
     width: 100%;
-
-	border-radius: 15px;
 }
   .ranking-card{
 	display: flex;
