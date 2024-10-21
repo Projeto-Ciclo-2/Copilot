@@ -6,6 +6,7 @@ import Notification from "./notification/notification";
 import { UserAPI } from "../api/users";
 import { defaultMessages } from "./notification/defaultMessages";
 import { useNavigate } from "react-router-dom";
+import Banner from "./banner";
 
 const SignupForm = () => {
 	const [fetching, setFetching] = useState(false);
@@ -89,51 +90,50 @@ const SignupForm = () => {
 	};
 	return (
 		<>
-		<div className="form-container">
-					<h2>Enigmus</h2>
-		<form onSubmit={handleSubmit}>
-			<div className="auth-div">
-				<label>Nome de usuário:</label>
-				<Input
-					type="text"
-					value={username}
-					onChange={handleUsernameChange}
-				/>
-			</div>
-			<div className="auth-div">
-				<label>Senha:</label>
-				<Input
-					type="password"
-					value={password}
-					onChange={handlePasswordChange}
-				/>
-			</div>
-			<div className="auth-div">
-				<label>Confirmar senha:</label>
-				<Input
-					type="password"
-					value={passwordChecker}
-					onChange={handlePasswordCheckerChange}
-				/>
-			</div>
+			<div className="form-container">
+				<Banner />
+				<form onSubmit={handleSubmit}>
+					<div className="auth-div">
+						<label>Nome de usuário:</label>
+						<Input
+							type="text"
+							value={username}
+							onChange={handleUsernameChange}
+						/>
+					</div>
+					<div className="auth-div">
+						<label>Senha:</label>
+						<Input
+							type="password"
+							value={password}
+							onChange={handlePasswordChange}
+						/>
+					</div>
+					<div className="auth-div">
+						<label>Confirmar senha:</label>
+						<Input
+							type="password"
+							value={passwordChecker}
+							onChange={handlePasswordCheckerChange}
+						/>
+					</div>
 
-			<Btn
-				type="submit"
-				className="auth-btn"
-				text="Cadastrar"
-				disabled={!username || !password || fetching}
-			/>
-		</form>
-				</div>
-		<div id="notification">
-
-			{notification && (
-				<Notification
-					message={notification}
-					onClose={handleNotificationCLose}
-				/>
-			)}
-		</div>
+					<Btn
+						type="submit"
+						className="auth-btn"
+						text="Cadastrar"
+						disabled={!username || !password || fetching}
+					/>
+				</form>
+			</div>
+			<div id="notification">
+				{notification && (
+					<Notification
+						message={notification}
+						onClose={handleNotificationCLose}
+					/>
+				)}
+			</div>
 		</>
 	);
 };
