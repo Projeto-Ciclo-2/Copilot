@@ -233,6 +233,7 @@ function setEndGame(
 
 			const message: IWSMessagePollRank = {
 				type: "pollRank",
+				poll: poll,
 				players: votes,
 			};
 			broadcast(JSON.stringify(message));
