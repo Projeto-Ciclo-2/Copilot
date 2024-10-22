@@ -15,8 +15,6 @@ import {
 	IWSMessagePollRank,
 } from "../interfaces/IWSMessage";
 import { config } from "../config";
-import { IVoteEntity } from "../entities/VoteEntity";
-import { IPollRank } from "../interfaces/IQuiz";
 import { UserService } from "../services/userService";
 
 const pollService = new PollService();
@@ -47,7 +45,7 @@ wss.on("connection", (ws: WebSocket) => {
 				break;
 			case "postVote":
 				try {
-					const vote = await voteService.createVote(data.body);
+					const vote = await voteService.createVote(data);
 					if (!vote) {
 						return;
 					}
@@ -126,7 +124,6 @@ wss.on("connection", (ws: WebSocket) => {
 						pollID: result.pollID,
 					};
 					broadcast(JSON.stringify(messageServer));
-
 					if (result.newOwner) {
 						sendNewOwner(result.newOwner);
 					}
@@ -204,7 +201,11 @@ function setEndGame(
 			)
 				throw new NotFoundException(Message.NO_QUESTIONS);
 
-			const votes: IPollRank = { players: [] };
+			const votes: Array<{
+				username: string;
+				correctAnswers: number;
+				points: number;
+			}> = [];
 			for (const userID of users) {
 				const user = await userService.getUserById(userID);
 				if (!user) return;
@@ -230,11 +231,12 @@ function setEndGame(
 						console.error("Alerta! um dos votos estava vazio");
 					}
 				}
-				votes.players.push(tempVotesOfThisPlayer);
+				votes.push(tempVotesOfThisPlayer);
 			}
 
 			const message: IWSMessagePollRank = {
 				type: "pollRank",
+				poll: poll,
 				players: votes,
 			};
 			broadcast(JSON.stringify(message));

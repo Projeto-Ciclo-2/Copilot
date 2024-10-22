@@ -11,25 +11,43 @@ import CreateQuiz from "./pages/create-quiz/createQuiz";
 import Lobby from "./pages/Lobby";
 import GlobalRanking from "./pages/globalRanking";
 import RankingQuiz from "./pages/rankingQuiz";
+import { PollsProvider } from "./context/PollsContext";
 
 const AppRouter = () => {
 	return (
 		<main>
 			<UserProvider>
 				<WebSocketProvider>
-					<BrowserRouter>
-						<Switch>
-							<Route element={<AuthPage />} path="/" />
-							<Route element={<Homepage />} path="/home" />
-							<Route element={<Quiz />} path="/quiz" />
-							<Route element={<Statistic />} path="/statistic" />
-							<Route element={<CreateQuiz />} path="/create" />
-							<Route element={<GlobalRanking />} path="/global" />
-							<Route element={<Lobby />} path="/lobby" />
-							<Route element={<GlobalRanking />} path="/global" />
-							<Route element={<RankingQuiz />} path="/ranking" />
-						</Switch>
-					</BrowserRouter>
+					<PollsProvider>
+						<BrowserRouter>
+							<Switch>
+								<Route element={<AuthPage />} path="/" />
+								<Route element={<Homepage />} path="/home" />
+								<Route element={<Quiz />} path="/quiz" />
+								<Route
+									element={<Statistic />}
+									path="/statistic"
+								/>
+								<Route
+									element={<CreateQuiz />}
+									path="/create"
+								/>
+								<Route
+									element={<GlobalRanking />}
+									path="/global"
+								/>
+								<Route element={<Lobby />} path="/lobby" />
+								<Route
+									element={<GlobalRanking />}
+									path="/global"
+								/>
+								<Route
+									element={<RankingQuiz />}
+									path="/ranking"
+								/>
+							</Switch>
+						</BrowserRouter>
+					</PollsProvider>
 				</WebSocketProvider>
 			</UserProvider>
 		</main>
