@@ -1,11 +1,9 @@
-import dotenv from "dotenv";
 import Redis from "ioredis";
-
-dotenv.config();
+import { config } from "../config";
 
 const redisClient = new Redis({
-	port: Number(process.env.REDIS_PORT),
-	host: process.env.DB_HOST,
+	port: config.REDIS_PORT,
+	host: config.REDIS_HOST,
 });
 
 export default redisClient;
