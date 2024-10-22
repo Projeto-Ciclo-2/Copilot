@@ -124,7 +124,6 @@ wss.on("connection", (ws: WebSocket) => {
 						pollID: result.pollID,
 					};
 					broadcast(JSON.stringify(messageServer));
-
 					if (result.newOwner) {
 						sendNewOwner(result.newOwner);
 					}

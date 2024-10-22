@@ -47,11 +47,10 @@
 	background-color: #ddd;
 	color: #333;
 }
-
 .form-container {
 	display: flex;
 	flex-direction: column;
-	min-height: 23rem;
+	min-height: 29rem;
 	justify-content: space-around;
 	align-items: center;
 	border: 1px solid #ccc;
@@ -61,9 +60,12 @@
 	border-radius: 0 0 5px 5px;
 	box-shadow: 4px 4px 20px #391e46;
 }
-.form-container h2{
-	margin-top: 2rem;
+.form-container svg{
+	width: 10.5rem;
+	height: 10.5rem;
+	filter: drop-shadow(0 0 10px rgba(50, 7, 105, 0.5));
 }
+
 .form-container form {
 	display: flex;
 	flex-direction: column;

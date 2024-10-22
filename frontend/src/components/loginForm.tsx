@@ -6,6 +6,7 @@ import usernameValid from "../validations/username";
 import { useNavigate } from "react-router-dom";
 import { UserAPI } from "../api/users";
 import { defaultMessages } from "./notification/defaultMessages";
+import Banner from "./banner";
 
 const LoginForm: React.FC = () => {
 	const [fetching, setFetching] = useState(false);
@@ -65,43 +66,41 @@ const LoginForm: React.FC = () => {
 	};
 	return (
 		<>
-		<div className="form-container">
-					<h2>Enigmus</h2>
-		<form onSubmit={handleSubmit}>
- 
-			<div className="auth-div">
-				<label>Usuário:</label>
-				<Input
-					type="text"
-					value={username}
-					onChange={handleUsernameChange}
-				/>
+			<div className="form-container">
+				<Banner />
+				<form onSubmit={handleSubmit}>
+					<div className="auth-div">
+						<label>Usuário:</label>
+						<Input
+							type="text"
+							value={username}
+							onChange={handleUsernameChange}
+						/>
+					</div>
+					<div className="auth-div">
+						<label>Senha:</label>
+						<Input
+							type="password"
+							value={password}
+							onChange={handlePasswordChange}
+						/>
+					</div>
+					<Btn
+						type="submit"
+						className="auth-btn"
+						text="Entrar"
+						disabled={!username || !password || fetching}
+					/>
+				</form>
 			</div>
-			<div className="auth-div">
-				<label>Senha:</label>
-				<Input
-					type="password"
-					value={password}
-					onChange={handlePasswordChange}
-				/>
+			<div id="notification">
+				{notification && (
+					<Notification
+						message={notification}
+						onClose={handleNotificationCLose}
+					/>
+				)}
 			</div>
-			<Btn
-				type="submit"
-				className="auth-btn"
-				text="Entrar"
-				disabled={!username || !password || fetching}
-			/>
-		</form>
-		</div>
-		<div id="notification">
-
-			{notification && (
-				<Notification
-					message={notification}
-					onClose={handleNotificationCLose}
-				/>
-			)}
-		</div>
 		</>
 	);
 };

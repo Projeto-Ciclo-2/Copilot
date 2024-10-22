@@ -1,5 +1,13 @@
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, {
+	ReactNode,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import { usePolls } from "./PollsContext";
+import { useWebSocket } from "./WebSocketContext";
 
 interface IQuestionCurrentContextType {
 	timeQuestion: number | null;
@@ -37,12 +45,24 @@ export const QuestionCurrentProvider: React.FC<{ children: ReactNode }> = ({
 	>("alternative");
 	const [showPageRanking, setShowPageRanking] = useState(false);
 
+	const [votes, setVotes] = useState<string[] | null>(null);
+
+	// CALCULAR PORCENTAGEM
+	// Vote (state)
+	// receber voto -> setVote()
+	const [percentageQuetions, setPercentageQuestions] = useState<string[]>([
+		"25",
+		"15",
+		"31",
+		"29",
+	]);
+
 	function timeNextQuestion(time: number) {
 		const timeout = setTimeout(() => {
 			// adicionar pergunta
 			if (currentQuestion < numberOfQuestions - 1) {
 				setCurrentQuestion(currentQuestion + 1);
-				setShowAlternative('alternative')
+				setShowAlternative("alternative");
 			}
 			if ((currentQuestion as number) >= numberOfQuestions - 1) {
 				setShowPageRanking(true);
@@ -50,6 +70,20 @@ export const QuestionCurrentProvider: React.FC<{ children: ReactNode }> = ({
 			clearTimeout(timeout);
 		}, time);
 	}
+
+	const { currentPoll } = usePolls();
+	const WebSocketContext = useWebSocket();
+
+	useEffect(() => {
+		WebSocketContext.onReceiveVote((e) => {
+			// Verifica se é o poll atual
+			if (currentPoll?.id === e.pollID) {
+				const votesArray = votes || [];
+				votesArray.push(e.userChoice);
+				setVotes(votesArray);
+			}
+		});
+	}, [WebSocketContext]);
 
 	return (
 		<QuestionCurrentContext.Provider

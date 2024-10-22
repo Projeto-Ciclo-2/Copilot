@@ -32,64 +32,66 @@ const postPollMessage = {
 };
 socket.send(JSON.stringify(postPollMessage));
 
-
-
 const pollID = "cab1ceb9-6fef-42ae-a0f1-f28a3ed5a02f";
-
-
 
 // join quiz
 const joinQuizMessage = {
 	type: "joinQuiz",
-	userID: userID,
-	pollID: pollID,
+	userID: "6e85c7c5-7015-4b95-871b-ac80f3b0ba3e",
+	pollID: "1c9094cd-d01d-4c13-9305-d7d930c653c4",
 };
 socket.send(JSON.stringify(joinQuizMessage));
-
 
 // game init
 const gameInitMessage = {
 	type: "gameInit",
-	pollID: pollID,
-	userID: userID
+	userID: "6e85c7c5-7015-4b95-871b-ac80f3b0ba3e",
+	pollID: "1c9094cd-d01d-4c13-9305-d7d930c653c4",
 };
 socket.send(JSON.stringify(gameInitMessage));
 
-
 // test vote
-socket.send(JSON.stringify({
-	type: "postVote",
-	body: {
-		userID: userID,
-		pollID: pollID,
-		pollQuestionID: 0,
-		userChoice: "1",
-	},
-}));
-socket.send(JSON.stringify({
-	type: "postVote",
-	body: {
-		userID: userID,
-		pollID: pollID,
-		pollQuestionID: 1,
-		userChoice: "0",
-	},
-}));
-socket.send(JSON.stringify({
-	type: "postVote",
-	body: {
-		userID: userID,
-		pollID: pollID,
-		pollQuestionID: 2,
-		userChoice: "1",
-	},
-}));
-socket.send(JSON.stringify({
-	type: "postVote",
-	body: {
-		userID: userID,
-		pollID: pollID,
-		pollQuestionID: 3,
-		userChoice: "1",
-	},
-}));
+socket.send(
+	JSON.stringify({
+		type: "postVote",
+		body: {
+			userID: userID,
+			pollID: pollID,
+			pollQuestionID: 0,
+			userChoice: "1",
+		},
+	})
+);
+socket.send(
+	JSON.stringify({
+		type: "postVote",
+		body: {
+			userID: userID,
+			pollID: pollID,
+			pollQuestionID: 1,
+			userChoice: "0",
+		},
+	})
+);
+socket.send(
+	JSON.stringify({
+		type: "postVote",
+		body: {
+			userID: userID,
+			pollID: pollID,
+			pollQuestionID: 2,
+			userChoice: "1",
+		},
+	})
+);
+socket.send(
+	JSON.stringify({
+		type: "postVote",
+		body: {
+			userID: userID,
+			pollID: pollID,
+			pollQuestionID: 3,
+			userChoice: "1",
+		},
+	})
+);

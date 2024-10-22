@@ -1,5 +1,5 @@
 import redisClient from "../database/redisClient";
-import { IVoteEntity } from "../entities/voteEntity";
+import { IVoteEntity } from "../entities/VoteEntity";
 
 export class VoteRepository {
 	private VOTE_KEY_PREFIX = "vote:";
@@ -49,11 +49,12 @@ export class VoteRepository {
 	}
 
 	async getQuestionVotes(
+		userID: string,
 		pollID: string,
 		pollQuestionID: number
 	): Promise<IVoteEntity | {}> {
 		const voteData = await redisClient.get(
-			`${this.VOTE_KEY_PREFIX}${pollID}:${pollQuestionID}`
+			`${this.VOTE_KEY_PREFIX}${userID}:${pollID}:${pollQuestionID}`
 		);
 		return voteData ? JSON.parse(voteData) : {};
 	}

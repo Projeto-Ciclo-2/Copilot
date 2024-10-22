@@ -1,4 +1,4 @@
-import { IVoteEntity } from "../entities/voteEntity";
+import { IVoteEntity } from "../entities/VoteEntity";
 import PollRepository from "../repositories/pollRepository";
 import UserRepository from "../repositories/userRepository";
 import { VoteRepository } from "../repositories/voteRepository";
@@ -9,11 +9,12 @@ export class VoteService {
 	private voteRepository: VoteRepository;
 	private pollRepository: PollRepository;
 	private userRepository: UserRepository;
-
+	private points: number;
 	constructor() {
 		this.voteRepository = new VoteRepository();
 		this.pollRepository = new PollRepository();
 		this.userRepository = new UserRepository();
+		this.points = 0;
 	}
 
 	async createVote(vote: IVoteEntity): Promise<IVoteEntity | null> {
@@ -38,20 +39,21 @@ export class VoteService {
 			throw new ConflictException(Message.VOTE_ALREDY_DONE);
 		}
 
-		poll.questions.find(async (question) => {
+		for (const question of poll.questions) {
 			if (question.id === vote.pollQuestionID) {
-				this.voteRepository.setQuestionVotes(vote);
-
-				if (question.answer === vote.userChoice) {
-					user.points += 10;
-					await this.userRepository.update(user.id, user);
+				await this.voteRepository.setQuestionVotes(vote);
+				if (Number(question.answer) === Number(vote.userChoice)) {
+					this.points += 10;
 				}
 			}
-		});
+		}
+		user.points += this.points;
+		await this.userRepository.update(user.id, user);
 
 		await this.voteRepository.createVote(vote);
 
 		const votes = await this.voteRepository.getQuestionVotes(
+			vote.userID,
 			vote.pollID,
 			vote.pollQuestionID
 		);
@@ -59,6 +61,8 @@ export class VoteService {
 		if (Object.keys(votes).length === 0) {
 			return null;
 		}
+
+		this.points = 0;
 
 		return votes as IVoteEntity;
 	}
@@ -98,10 +102,12 @@ export class VoteService {
 	}
 
 	async getQuestionVotes(
+		userID: string,
 		pollID: string,
 		pollQuestionID: number
 	): Promise<IVoteEntity | {}> {
 		return await this.voteRepository.getQuestionVotes(
+			userID,
 			pollID,
 			pollQuestionID
 		);
