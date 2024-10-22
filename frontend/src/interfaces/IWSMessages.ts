@@ -46,13 +46,12 @@ export interface IWSMessageSendVote {
 
 export interface IWSMessagePollRank {
 	type: "pollRank";
-	players: [
-		{
-			username: string;
-			correctAnswers: number;
-			points: number;
-		}
-	];
+	poll: IPoll;
+	players: Array<{
+		username: string;
+		correctAnswers: number;
+		points: number;
+	}>;
 }
 
 /**	CLIENT MESSAGES
