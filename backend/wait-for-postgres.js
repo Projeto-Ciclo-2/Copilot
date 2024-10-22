@@ -7,7 +7,7 @@ const client = new Client({
 	host: pConfig.DB_HOST,
 	user: pConfig.DB_USER,
 	password: pConfig.DB_PASSWORD,
-	database: "postgres", // Connect to the default 'postgres' database first
+	database: pConfig.DB_DATABASE_NAME, // Connect to the default 'postgres' database first
 	port: pConfig.DB_PORT,
 });
 

@@ -16,6 +16,7 @@ import { useWebSocket } from "../../context/WebSocketContext";
 import { IWSMessagePostPoll } from "../../interfaces/IWSMessages";
 import { UserContext } from "../../context/UserContext";
 import Banner from "../../components/banner";
+import { usePolls } from "../../context/PollsContext";
 
 type nullNumber = undefined | number;
 
@@ -24,6 +25,7 @@ const CreateQuiz = () => {
 
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
+	const currentPoll = usePolls();
 
 	const [title, setTitle] = React.useState("");
 	const [theme, setTheme] = React.useState("");
@@ -37,20 +39,73 @@ const CreateQuiz = () => {
 	const [wantToLeaveLoading, setWantToLeaveLoading] = React.useState(false);
 	const [nextDisabled, setNextDisabled] = React.useState(true);
 
-
 	const validateInputs = () => {
 		const titleValid = title.trim().length > 0;
 		const themeValid = theme.trim().length > 0;
-		const XQuestionsValid = typeof xQuestions === "number" && xQuestions > 0;
-		const XAlternativesValid = typeof xAlternatives === "number" && xAlternatives > 0;
-		const timeValid = !Number.isNaN(Number.parseInt(time)) && Number.parseInt(time) > 0;
+		const XQuestionsValid =
+			typeof xQuestions === "number" && xQuestions > 0;
+		const XAlternativesValid =
+			typeof xAlternatives === "number" && xAlternatives > 0;
+		const timeValid =
+			!Number.isNaN(Number.parseInt(time)) && Number.parseInt(time) > 0;
 
-		setNextDisabled(!(titleValid && themeValid && XQuestionsValid && XAlternativesValid && timeValid))
-	}
+		setNextDisabled(
+			!(
+				titleValid &&
+				themeValid &&
+				XQuestionsValid &&
+				XAlternativesValid &&
+				timeValid
+			)
+		);
+	};
 	React.useEffect(() => {
 		validateInputs();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [title, theme, xQuestions, xAlternatives, time]);
 
+	React.useEffect(() => {
+		if (userContext && userContext.user) {
+			console.error("user context not available");
+
+			if (loadingContent && !wantToConfirm) {
+				if (
+					typeof title === "string" &&
+					typeof theme === "string" &&
+					typeof xQuestions === "number" &&
+					typeof xAlternatives === "number" &&
+					!Number.isNaN(Number.parseInt(time))
+				) {
+					console.log("os valores estão corretos");
+					const message: IWSMessagePostPoll = {
+						type: "postPoll",
+						body: {
+							title: title,
+							theme: theme,
+							number_of_question: xQuestions as number,
+							number_of_alternatives: xAlternatives as number,
+							duration_in_minutes: Number.parseInt(time),
+							owner: userContext.user.id,
+						},
+					};
+					webSocketContext.sendPoll(message);
+				}
+			}
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loadingContent]);
+
+	React.useEffect(() => {
+		const userID = userContext?.user?.id;
+		if (
+			currentPoll &&
+			currentPoll.currentPoll &&
+			currentPoll.currentPoll.owner === userID
+		) {
+			navigate("/home");
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentPoll]);
 
 	const returnHome = () => {
 		setTimeout(() => {
@@ -60,32 +115,7 @@ const CreateQuiz = () => {
 		return <></>;
 	};
 	const sendPoll = () => {
-		if (!userContext || !userContext.user) {
-			console.error("user context not available");
-			return returnHome();
-		}
-		if (
-			typeof title !== "string" &&
-			typeof theme !== "string" &&
-			typeof xQuestions !== "number" &&
-			typeof xAlternatives !== "number" &&
-			Number.isNaN(Number.parseInt(time))
-		) {
-			console.error("os valores não estão corretos");
-			return returnHome();
-		}
-		const message: IWSMessagePostPoll = {
-			type: "postPoll",
-			body: {
-				title: title,
-				theme: theme,
-				number_of_question: xQuestions as number,
-				number_of_alternatives: xAlternatives as number,
-				duration_in_minutes: Number.parseInt(time),
-				owner: userContext.user.id,
-			},
-		};
-		webSocketContext.sendPoll(message as any);
+		setLoadingContent(true);
 	};
 
 	if (!webSocketContext || !webSocketContext.isConnected) {
@@ -142,7 +172,7 @@ const CreateQuiz = () => {
 		return (
 			<div id="createBody">
 				<header id="createHeader">
-					<Banner/>
+					<Banner />
 					<h2>Enigmus</h2>
 				</header>
 				<main id="createMain">
@@ -165,8 +195,8 @@ const CreateQuiz = () => {
 			/>
 			<div id="createBody">
 				<header id="createHeader">
-				<Banner/>
-				<h2>Enigmus</h2>
+					<Banner />
+					<h2>Enigmus</h2>
 				</header>
 				<main id="createMain">
 					<section id="createMain-section">
@@ -243,7 +273,10 @@ const CreateQuiz = () => {
 						<button onClick={() => setWantToLeave(true)}>
 							Cancelar
 						</button>
-						<button onClick={() => setWantToConfirm(true)}  disabled={nextDisabled}>
+						<button
+							onClick={() => setWantToConfirm(true)}
+							disabled={nextDisabled}
+						>
 							Avançar
 						</button>
 					</div>
