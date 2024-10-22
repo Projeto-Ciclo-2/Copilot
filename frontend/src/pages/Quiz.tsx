@@ -7,6 +7,8 @@ import ConfirmIcon from "../icons/confirm";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
 import GroupIcon from "../icons/group";
 import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../context/WebSocketContext";
+import { usePolls } from "../context/PollsContext";
 
 interface IQuizQuestion {
 	id: number;
@@ -28,7 +30,11 @@ interface IQuiz {
 }
 
 const Quiz = () => {
-	const [quiz, setQuiz] = useState<IQuiz | null>();
+	// const [quiz, setQuiz] = useState<IQuiz | null>();
+
+	const { currentPoll } = usePolls();
+	console.log(currentPoll);
+
 
 	// Acertos
 	const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -91,47 +97,17 @@ const Quiz = () => {
 		setConfirmed(true);
 	}
 
-	// get quiz
-	useEffect(() => {
-		async function getQuiz() {
-			try {
-				const result = await fetch("http://localhost:3003/quiz");
-				const data: IQuiz = await result.json();
-				setQuiz(data);
-				const alternativeCorrect = Number(data.questions[0].answer);
-				setCorrectAlternative(alternativeCorrect);
-				setNumberOfQuestions(data.number_of_question);
-			} catch (error) {
-				console.log("erro ao buscar quiz!");
-			}
-		}
-
-		setTimeout(() => {
-			getQuiz();
-		}, 2000);
-	}, []);
-
-	// Definir tempo para cada questão
-	useEffect(() => {
-		if (quiz) {
-			const timeTotal = quiz.duration_in_minutes * 60;
-			const seconds = timeTotal / quiz.number_of_question;
-			const milliseconds = seconds * 1000;
-			setTimeQuestion(milliseconds);
-		}
-	}, [quiz, setTimeQuestion]);
-
 	// Alterar questão
 	useEffect(() => {
-		if (quiz) {
+		if (currentPoll) {
 			if (
 				currentQuestion !== null &&
-				currentQuestion < quiz.number_of_question
+				currentQuestion < currentPoll.number_of_question
 			) {
 				setMarkedAlternative(null);
 				setWrongAlternative(null);
 				const altCorrect = Number(
-					quiz.questions[currentQuestion].answer
+					currentPoll.questions[currentQuestion].answer
 				);
 
 				setCorrectAlternative(altCorrect);
@@ -140,7 +116,7 @@ const Quiz = () => {
 		}
 	}, [
 		currentQuestion,
-		quiz,
+		currentPoll,
 		setMarkedAlternative,
 		setCorrectAlternative,
 		setConfirmed,
@@ -154,7 +130,7 @@ const Quiz = () => {
 
 	return (
 		<section id="section-quiz">
-			{quiz ? (
+			{currentPoll ? (
 				<>
 					<section id="header-quiz">
 						<Btn
@@ -166,7 +142,7 @@ const Quiz = () => {
 						<div>
 							<p className="current-question">
 								{(currentQuestion as number) + 1}/
-								{quiz.number_of_question}
+								{currentPoll.number_of_question}
 							</p>
 							<p className="correct-questions">
 								{correctAnswers}{" "}
@@ -178,14 +154,14 @@ const Quiz = () => {
 						<LinearProgressComponent />
 
 						{/* Title quiz */}
-						<p className="title-quiz">{quiz.title}</p>
+						<p className="title-quiz">{currentPoll.title}</p>
 
 						{/* Question */}
 						<p className="question-quiz">
 							{(currentQuestion as number) + 1}
 							{". "}
 							{
-								quiz.questions[currentQuestion as number]
+								currentPoll.questions[currentQuestion as number]
 									.statement
 							}{" "}
 						</p>
@@ -195,7 +171,7 @@ const Quiz = () => {
 							{showAlternative === "alternative"
 								? confirmed
 									? // Visualizar porcentagem
-									  quiz.questions[
+									  currentPoll.questions[
 											currentQuestion as number
 									  ].options.map((question, index) => (
 											<div key={index}>
@@ -236,7 +212,7 @@ const Quiz = () => {
 											</div>
 									  ))
 									: // Escolher alternativa
-									  quiz.questions[
+									  currentPoll.questions[
 											currentQuestion as number
 									  ].options.map((question, index) => (
 											<Alternative
@@ -251,7 +227,7 @@ const Quiz = () => {
 												}
 											/>
 									  ))
-								: quiz.questions[
+								: currentPoll.questions[
 										currentQuestion as number
 								  ].options.map((question, index) => (
 										<div key={index}>
