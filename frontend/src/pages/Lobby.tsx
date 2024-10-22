@@ -40,6 +40,10 @@ const Lobby = () => {
 	}
 
 	const owner = userContext?.user?.id === currentPoll?.owner;
+	console.log(`=> owner: ${owner}`);
+	console.log(`=> userid: ${userContext?.user?.id}`);
+	console.log(`=> ownerId: ${currentPoll?.owner}`);
+	console.log(`=> pollId: ${currentPoll?.id}`);
 
 	function initQuiz() {
 		if (userContext?.user?.id === currentPoll?.owner) {

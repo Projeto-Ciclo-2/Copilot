@@ -15,6 +15,7 @@ interface IPollsContextType {
 	setCurrentPoll: (poll: IPoll) => void;
 	players: string[] | null;
 	setPlayers: (players: string[]) => void;
+	currentRank: IWSMessagePollRank | null;
 }
 
 const PollsContext = createContext<IPollsContextType | undefined>(undefined);
@@ -115,6 +116,11 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 			});
 		});
 		WebSocketContext.onReceivePollRank((e) => {
+			console.log(`==> message-[receivePollRank] -> rank ${JSON.stringify(e)}`);
+
+			if (currentPoll?.id) {
+				// todo: excluir quiz
+			}
 			setCurrentRank(e);
 		});
 		WebSocketContext.onReceiveGameInit((e) => {
@@ -139,11 +145,19 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 				}
 			}
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [WebSocketContext]);
 
 	return (
 		<PollsContext.Provider
-			value={{ polls, currentPoll, setCurrentPoll, players, setPlayers }}
+			value={{
+				polls,
+				currentPoll,
+				setCurrentPoll,
+				players,
+				setPlayers,
+				currentRank,
+			}}
 		>
 			{children}
 		</PollsContext.Provider>
