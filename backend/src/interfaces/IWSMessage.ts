@@ -1,5 +1,5 @@
 import { IPollEntity } from "../entities/pollEntity";
-import { IPoll, IPollRank } from "./IQuiz";
+import { IPoll } from "./IQuiz";
 
 /**	SERVER MESSAGES
  * messages that only server will send
@@ -48,7 +48,11 @@ export interface IWSMessageSendVote {
 export interface IWSMessagePollRank {
 	type: "pollRank";
 	poll: IPoll,
-	players: IPollRank;
+	players: Array<{
+		username: string;
+		correctAnswers: number;
+		points: number;
+	}>;
 }
 
 /**	CLIENT MESSAGES
