@@ -14,7 +14,7 @@ interface User {
 	medals: number;
 	played_polls: number;
   }
-  
+
 const GlobalRanking = () => {
     const [rank, setRank] = useState<User[]>([]);
 	const navigate = useNavigate();
@@ -22,8 +22,9 @@ const GlobalRanking = () => {
 	function back() {
 		navigate("/home");
 	}
-	
+
     useEffect(() => {
+		/*  */
 		async function fetchUsers() {
 			try {
 				const response = await userAPI.Ranking();
@@ -34,7 +35,7 @@ const GlobalRanking = () => {
 				const data = response.data;
 				 const sortedUsers = sortUsersByWinsAndPoints(data);
 				 const ranking = sortedUsers.slice(0, 10);
-				 setRank(ranking);			 
+				 setRank(ranking);
 			} catch (error) {
 				console.error("Erro:", error);
 			}
@@ -47,10 +48,10 @@ const GlobalRanking = () => {
 		return users.sort((a: User, b: User) => {
 		  if (a.wins > b.wins) return -1;
 		  if (a.wins < b.wins) return 1;
-	  
+
 		  if (a.points > b.points) return -1;
 		  if (a.points < b.points) return 1;
-	  
+
 		  return 0;
 		});
 	  }
