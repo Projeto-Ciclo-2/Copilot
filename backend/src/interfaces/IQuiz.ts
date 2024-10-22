@@ -29,11 +29,3 @@ export interface IVote {
 	poll_question_id: string;
 	user_choice: string;
 }
-
-export interface IPollRank {
-	players: Array<{
-		username: string;
-		correctAnswers: number;
-		points: number;
-	}>;
-}
