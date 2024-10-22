@@ -79,10 +79,10 @@ const CreateQuiz = () => {
 			body: {
 				title: title,
 				theme: theme,
-				qntd_question: xQuestions as number,
-				qntd_alternatives: xAlternatives as number,
+				number_of_question: xQuestions as number,
+				number_of_alternatives: xAlternatives as number,
 				duration_in_minutes: Number.parseInt(time),
-				owner: userContext.user.name,
+				owner: userContext.user.id,
 			},
 		};
 		webSocketContext.sendPoll(message as any);

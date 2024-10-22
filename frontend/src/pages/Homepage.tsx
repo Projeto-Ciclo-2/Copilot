@@ -28,6 +28,7 @@ const Homepage = () => {
 	const location = useLocation();
 
 	const { polls, setCurrentPoll, players, setPlayers } = usePolls();
+	const { setNumberOfQuestions } = useCurrentQuestion();
 
 	// Navegar pra página de Lobby ao clicar
 	function openQuiz(poll: IPoll) {
@@ -39,7 +40,7 @@ const Homepage = () => {
 		const milliseconds = seconds * 1000;
 		setTimeQuestion(milliseconds);
 		console.log(`TEMPO POR PARTIDA: ${milliseconds}`);
-
+		setNumberOfQuestions(poll.number_of_question);
 		navigate("/lobby");
 	}
 
