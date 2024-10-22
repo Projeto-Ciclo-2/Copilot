@@ -15,7 +15,7 @@ import {
 	IWSMessagePollRank,
 } from "../interfaces/IWSMessage";
 import { config } from "../config";
-import { IVoteEntity } from "../entities/voteEntity";
+import { IVoteEntity } from "../entities/VoteEntity";
 import { IPollRank } from "../interfaces/IQuiz";
 import { UserService } from "../services/userService";
 
