@@ -16,7 +16,6 @@ import { useWebSocket } from "../context/WebSocketContext";
 const userAPI = new UserAPI();
 
 const Homepage = () => {
-	const [started, setStarted] = useState(false);
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
@@ -74,9 +73,6 @@ const Homepage = () => {
 		await userAPI.logout();
 		navigate("/");
 	};
-	const startNow = () => {
-		setStarted(true)
-	}
 	return (
 		<>
 			<div id="burguer-container">
@@ -99,31 +95,8 @@ const Homepage = () => {
 					</div>
 				</label>
 			</div>
-			{!started ? (
-				<>
-			<section id="wellcome">
-				<div id="content-text">
-					<h1>Desafie seus amigos</h1>
-					<h3>
-						Prepare-se para <span>testar seus conhecimentos</span> e{" "}
-						<span>superar seus limites</span>
-					</h3>
-					<Btn
-						type="button"
-						className="quiz-btn"
-						href="#quiz"
-						text="Começar agora"
-						onClick={startNow}
-					/>
-				</div>
-				<div id="icon-vr">
-					<VRIcon />
-				</div>
-			</section>	
-				</>
-			) : (
-				<>
 			<section id="quiz">
+				<h2>Quizzes Ativos</h2>
 				<div id="input-search-quiz">
 					<input type="text" placeholder="Pesquisar quiz" />
 					<Search />
@@ -134,7 +107,7 @@ const Homepage = () => {
 							<CardQuiz key={index} card={card} index={index} />
 						))
 					) : (
-						<p>Sem quiz criado</p>
+						<p>Nenhum quiz encontrado, crie um novo!</p>
 					)}
 				</div>
 				<Btn
@@ -146,8 +119,6 @@ const Homepage = () => {
 					onClick={() => navigate("/create")}
 				/>
 			</section>
-				</>
-			)}
 			<div id="plus-btn">
 				<SpeedDialElement />
 			</div>
