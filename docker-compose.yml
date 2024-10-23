@@ -38,7 +38,7 @@ services:
         ports:
             - "5000:5000"
         command: >
-            sh -c "npm run migrate && node wait-for-postgres.js && npm run dev"
+            sh -c "npm run migrate && npm run dev"
         restart: always
         networks:
             - copilot-network
@@ -51,7 +51,7 @@ services:
             dockerfile: Dockerfile.dev
         depends_on:
             - backend
-        command: npm start
+        command: npm run start
         restart: always
         ports:
             - "3000:3000"

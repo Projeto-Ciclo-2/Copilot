@@ -61,13 +61,11 @@ const CreateQuiz = () => {
 	};
 	React.useEffect(() => {
 		validateInputs();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [title, theme, xQuestions, xAlternatives, time]);
 
 	React.useEffect(() => {
 		if (userContext && userContext.user) {
-			console.error("user context not available");
-
 			if (loadingContent && !wantToConfirm) {
 				if (
 					typeof title === "string" &&
@@ -82,17 +80,19 @@ const CreateQuiz = () => {
 						body: {
 							title: title,
 							theme: theme,
-							qntd_question: xQuestions as number,
-							qntd_alternatives: xAlternatives as number,
+							number_of_question: xQuestions as number,
+							number_of_alternatives: xAlternatives as number,
 							duration_in_minutes: Number.parseInt(time),
-							owner: userContext.user.name,
+							owner: userContext.user.id,
 						},
 					};
-					webSocketContext.sendPoll(message as any);
+					webSocketContext.sendPoll(message);
 				}
 			}
+		} else {
+			console.error("user context not available");
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [loadingContent]);
 
 	React.useEffect(() => {
@@ -104,7 +104,7 @@ const CreateQuiz = () => {
 		) {
 			navigate("/home");
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPoll]);
 
 	const returnHome = () => {

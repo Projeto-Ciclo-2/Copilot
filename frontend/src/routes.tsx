@@ -12,6 +12,7 @@ import Lobby from "./pages/Lobby";
 import GlobalRanking from "./pages/globalRanking";
 import RankingQuiz from "./pages/rankingQuiz";
 import { PollsProvider } from "./context/PollsContext";
+import { QuestionCurrentProvider } from "./context/questionCurrentContext";
 
 const AppRouter = () => {
 	return (
@@ -19,34 +20,39 @@ const AppRouter = () => {
 			<UserProvider>
 				<WebSocketProvider>
 					<PollsProvider>
-						<BrowserRouter>
-							<Switch>
-								<Route element={<AuthPage />} path="/" />
-								<Route element={<Homepage />} path="/home" />
-								<Route element={<Quiz />} path="/quiz" />
-								<Route
-									element={<Statistic />}
-									path="/statistic"
-								/>
-								<Route
-									element={<CreateQuiz />}
-									path="/create"
-								/>
-								<Route
-									element={<GlobalRanking />}
-									path="/global"
-								/>
-								<Route element={<Lobby />} path="/lobby" />
-								<Route
-									element={<GlobalRanking />}
-									path="/global"
-								/>
-								<Route
-									element={<RankingQuiz />}
-									path="/ranking"
-								/>
-							</Switch>
-						</BrowserRouter>
+						<QuestionCurrentProvider>
+							<BrowserRouter>
+								<Switch>
+									<Route element={<AuthPage />} path="/" />
+									<Route
+										element={<Homepage />}
+										path="/home"
+									/>
+									<Route element={<Quiz />} path="/quiz" />
+									<Route
+										element={<Statistic />}
+										path="/statistic"
+									/>
+									<Route
+										element={<CreateQuiz />}
+										path="/create"
+									/>
+									<Route
+										element={<GlobalRanking />}
+										path="/global"
+									/>
+									<Route element={<Lobby />} path="/lobby" />
+									<Route
+										element={<GlobalRanking />}
+										path="/global"
+									/>
+									<Route
+										element={<RankingQuiz />}
+										path="/ranking"
+									/>
+								</Switch>
+							</BrowserRouter>
+						</QuestionCurrentProvider>
 					</PollsProvider>
 				</WebSocketProvider>
 			</UserProvider>

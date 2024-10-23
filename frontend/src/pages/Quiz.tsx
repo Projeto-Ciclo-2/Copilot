@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Btn from "../components/button";
 import LinearProgressComponent from "../components/linearProgress";
 import Alternative from "../components/alternatives/alternatives";
@@ -9,9 +9,14 @@ import GroupIcon from "../icons/group";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../context/WebSocketContext";
 import { usePolls } from "../context/PollsContext";
+import {
+	IWSMessagePostVote,
+	IWSMessageSendVote,
+} from "../interfaces/IWSMessages";
+import { UserContext } from "../context/UserContext";
 
 interface IQuizQuestion {
-	id: number;
+	id: string;
 	statement: string;
 	options: string[];
 	answer: string;
@@ -33,8 +38,8 @@ const Quiz = () => {
 	// const [quiz, setQuiz] = useState<IQuiz | null>();
 
 	const { currentPoll } = usePolls();
-	console.log(currentPoll);
-
+	const userContext = useContext(UserContext);
+	const WebSocketContext = useWebSocket();
 
 	// Acertos
 	const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -90,12 +95,32 @@ const Quiz = () => {
 
 	// Confirmar alternativa
 	function confirmedQuestion() {
+		console.log("==> usuário clicou em confirmar!");
 		if (markedAlternative === correctAlternative) {
 			const total = correctAnswers + 1;
 			setCorrectAnswers(total);
 		}
 		setConfirmed(true);
 	}
+
+	useEffect(() => {
+		if (currentQuestion && confirmed) {
+			const message: IWSMessagePostVote = {
+				type: "postVote",
+				pollID: currentPoll?.id as string,
+				userChoice: `${markedAlternative}`,
+				userID: userContext?.user?.id as string,
+				pollQuestionID: currentQuestion.toString(),
+				timestamp: Date.now().toString(),
+			};
+			WebSocketContext.sendVote(message);
+			console.log(message);
+			console.log(
+				`message-[sendVote] -> Usuário ${userContext?.user?.name} votou na alternativa ${markedAlternative}`
+			);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [confirmed]);
 
 	// Alterar questão
 	useEffect(() => {

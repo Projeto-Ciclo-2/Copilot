@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./css/globalRanking.css";
 import Btn from "../components/button";
 import Ranking from "../icons/ranking";
@@ -6,6 +6,7 @@ import UserRanking from "../components/userRanking";
 import ExitIcon from "../icons/exit";
 import { useNavigate } from "react-router-dom";
 import WaitRanking from "../components/waitRanking/waitRanking";
+import { usePolls } from "../context/PollsContext";
 
 export interface IPlayer {
 	username: string;
@@ -19,8 +20,23 @@ export interface IPlayerWithRank extends IPlayer {
 }
 
 const RankingQuiz = () => {
-	const [players, setPlayers] = useState<IPlayerWithRank[] | null>(null);
+	const { currentRank } = usePolls();
+	const players = useMemo(() => {
+		if (currentRank) {
+			const tempPlayers = orderPlayers(currentRank.players);
+			if (tempPlayers) {
+				return tempPlayers;
+			}
+		}
+		return null;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentRank]);
+
 	const navigate = useNavigate();
+
+	if (currentRank) {
+		console.log(currentRank.players);
+	}
 
 	function back() {
 		navigate("/home");
@@ -31,7 +47,7 @@ const RankingQuiz = () => {
 			const sortedPlayers = [...players].sort(
 				(a, b) => b.points - a.points
 			);
-			setPlayers(assignRanks(sortedPlayers));
+			return assignRanks(sortedPlayers);
 		}
 	}
 
@@ -59,17 +75,14 @@ const RankingQuiz = () => {
 		return newRankings; // Retorna a lista com as classificações
 	}
 
-	useEffect(() => {
-		async function getRank() {
-			const result = await fetch("http://localhost:3003/poll-rank");
-			const data = await result.json();
-			orderPlayers(data.players);
+	if (currentRank) {
+		if (
+			!Array.isArray(currentRank.players) ||
+			currentRank.players.length <= 0
+		) {
+			return <>não tem votos</>;
 		}
-
-		setTimeout(() => {
-			getRank();
-		}, 2000);
-	}, []);
+	}
 
 	return players ? (
 		<section id="ranking-quiz">
