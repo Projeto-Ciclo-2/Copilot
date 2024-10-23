@@ -66,8 +66,6 @@ const CreateQuiz = () => {
 
 	React.useEffect(() => {
 		if (userContext && userContext.user) {
-			console.error("user context not available");
-
 			if (loadingContent && !wantToConfirm) {
 				if (
 					typeof title === "string" &&
@@ -90,6 +88,9 @@ const CreateQuiz = () => {
 					};
 					webSocketContext.sendPoll(message);
 				}
+			}
+			else {
+				console.error("user context not available");
 			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
