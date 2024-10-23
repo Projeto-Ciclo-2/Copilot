@@ -35,13 +35,13 @@ Ensure you have the following installed:
 2. **Start the services**
    Once the build completes, start the services with:
    ```bash
-   docker-compose -f docker-compose.prod.yml up
+   docker-compose -f docker-compose.prod.yml up -d
    ```
 
 3. **Generate SSL certificates**
    Run the following command to configure SSL with Certbot (replace `alpha06.alphaedtech.org.br` with your domain):
    ```bash
-   docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d alpha06.alphaedtech.org.br
+   docker-compose -f docker-compose.prod.yml run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d alpha06.alphaedtech.org.br
    ```
 
 After setup, the following services will be available:
