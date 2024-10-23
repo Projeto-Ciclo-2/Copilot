@@ -84,6 +84,7 @@ services:
 
 volumes:
     postgres_data:
+    nginx_certbot_data:
 
 networks:
     copilot-network:
