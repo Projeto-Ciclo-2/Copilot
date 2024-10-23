@@ -4,10 +4,11 @@ services:
         image: postgres:latest
         ports:
             - "5432:5432"
+        restart: always
         environment:
+            POSTGRES_DB: copilot
             POSTGRES_USER: copilot
             POSTGRES_PASSWORD: copilotPass123
-            POSTGRES_DB: copilot
         networks:
             - copilot-network
         healthcheck:
@@ -19,6 +20,7 @@ services:
         image: redis:latest
         ports:
             - "6379:6379"
+        restart: always
         networks:
             - copilot-network
         healthcheck:
@@ -49,7 +51,7 @@ services:
             dockerfile: Dockerfile.dev
         depends_on:
             - backend
-        command: npm start
+        command: npm run start
         restart: always
         ports:
             - "3000:3000"

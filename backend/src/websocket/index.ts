@@ -56,6 +56,7 @@ wss.on("connection", (ws: WebSocket) => {
 						pollQuestionID: vote.pollQuestionID,
 						userChoice: vote.userChoice,
 					};
+					console.log('enviando voto');
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
 					if (error instanceof Error) return sendErr(ws, error);

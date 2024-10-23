@@ -61,8 +61,8 @@ export interface IWSMessagePostPoll {
 	type: "postPoll";
 	body: {
 		title: string;
-		qntd_question: number;
-		qntd_alternatives: number;
+		number_of_question: number;
+		number_of_alternatives: number;
 		theme: string;
 		duration_in_minutes: number;
 		owner: string;
