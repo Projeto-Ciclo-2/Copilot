@@ -20,7 +20,8 @@ export default function InputIcon(props: {
 				</option>
 			));
 		}
-	}, [props.selectInput, props.selectOptions]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.selectInput, props.selectOptions, props.value]);
 
 	const validateInput = (e: React.FormEvent<HTMLInputElement>) => {
 		if (e.target instanceof HTMLInputElement && props.setValue) {

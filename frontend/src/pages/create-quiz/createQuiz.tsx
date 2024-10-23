@@ -66,7 +66,7 @@ const CreateQuiz = () => {
 
 	React.useEffect(() => {
 		if (userContext && userContext.user) {
-			if (loadingContent && !wantToConfirm) {
+			if (loadingContent) {
 				if (
 					typeof title === "string" &&
 					typeof theme === "string" &&
@@ -88,6 +88,8 @@ const CreateQuiz = () => {
 					};
 					webSocketContext.sendPoll(message);
 				}
+			} else {
+				console.log("loadingContent is false or wantToConfirm is true");
 			}
 		} else {
 			console.error("user context not available");
@@ -97,12 +99,23 @@ const CreateQuiz = () => {
 
 	React.useEffect(() => {
 		const userID = userContext?.user?.id;
-		if (
-			currentPoll &&
-			currentPoll.currentPoll &&
-			currentPoll.currentPoll.owner === userID
-		) {
-			navigate("/home");
+		console.log("currentPoll changed");
+		console.log(currentPoll);
+		console.log(userID);
+
+		if (loadingContent && currentPoll && currentPoll.polls) {
+			const poll = currentPoll.polls.find((p) => {
+				if (p.owner === userID) return p;
+				return false;
+			});
+			if (poll) {
+				// HERE
+				//  TODO => REDIRECT TO LOBBY INSTEAD
+				//    BUT THE FUNCTION REDIRECT IS TO COMPLEX TO REDO INSIDE THIS COMPONENT
+				navigate("/home");
+			} else {
+				console.log("there is no poll register for this user.");
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPoll]);
