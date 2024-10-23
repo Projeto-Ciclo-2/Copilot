@@ -16,6 +16,8 @@ import { usePolls } from "../context/PollsContext";
 import { IPoll } from "../interfaces/IQuiz";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
 import Loader from "../components/load/Loader";
+import Statistic from "../icons/statistic";
+import Global from "../icons/global";
 
 const userAPI = new UserAPI();
 
@@ -29,6 +31,7 @@ const Homepage = () => {
 
 	const [started, setStarted] = useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
+	const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -99,28 +102,57 @@ const Homepage = () => {
 		await userAPI.logout();
 		navigate("/");
 	};
+	const profile = () => {
+		navigate("/statistic")
+	}
+	const ranking = () => {
+		navigate("/global")
+	}
+	const toggleMenu = () => {
+		setMenuOpen(!menuOpen);
+	};
 	return (
 		<div id="home">
 			<Loader alive={isLoading} />
-			<div id="burguer-container">
-				<label id="burguer">
-					<input type="checkbox" />
-					<div id="burger-checkmark">
-						<span></span>
-						<span></span>
-						<span></span>
-					</div>
-					<div id="dropdown-menu">
-						<Btn
-							type="button"
-							id="logout"
-							text="Sair"
-							icon={Logout}
-							iconPosition="left"
-							onClick={logout}
-						/>
-					</div>
-				</label>
+			<div className="hamburguer">
+				<button className="hamburger-lines" onClick={toggleMenu}>
+					<span
+						className={`line line1 ${menuOpen ? "rotate1" : ""}`}
+					></span>
+					<span
+						className={`line line2 ${menuOpen ? "scaleY" : ""}`}
+					></span>
+					<span
+						className={`line line3 ${menuOpen ? "rotate3" : ""}`}
+					></span>
+				</button>
+				<div className={`dropdown ${menuOpen ? "open" : ""}`}>
+					<Btn
+						type="button"
+						className="drop-btn"
+						text={null}
+						icon={Statistic}
+						iconPosition="left"
+						onClick={profile}
+					/>
+					<Btn
+						type="button"
+						className="drop-btn"
+						text={null}
+						icon={Global}
+						iconPosition="left"
+						onClick={ranking}
+					/>
+					<Btn
+						type="button"
+						className="drop-btn"
+						id="logout"
+						text={null}
+						icon={Logout}
+						iconPosition="left"
+						onClick={logout}
+					/>
+				</div>
 			</div>
 			<section id="quiz">
 				<h2>Quizzes Ativos</h2>
@@ -146,9 +178,6 @@ const Homepage = () => {
 					onClick={() => navigate("/create")}
 				/>
 			</section>
-			<div id="plus-btn">
-				<SpeedDialElement />
-			</div>
 		</div>
 	);
 };
