@@ -4,10 +4,11 @@ services:
         image: postgres:latest
         ports:
             - "5432:5432"
+        restart: always
         environment:
+            POSTGRES_DB: copilot
             POSTGRES_USER: copilot
             POSTGRES_PASSWORD: copilotPass123
-            POSTGRES_DB: copilotDB
         networks:
             - copilot-network
         healthcheck:
@@ -19,6 +20,7 @@ services:
         image: redis:latest
         ports:
             - "6379:6379"
+        restart: always
         networks:
             - copilot-network
         healthcheck:
@@ -36,7 +38,7 @@ services:
         ports:
             - "5000:5000"
         command: >
-            sh -c "node wait-for-postgres.js && npm run migrate && npm run dev"
+            sh -c "npm run migrate && node wait-for-postgres.js && npm run dev"
         restart: always
         networks:
             - copilot-network
