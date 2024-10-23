@@ -19,16 +19,19 @@
 	color: var(--bkg_1);
 }
 #createHeader svg{
-	width: 5rem;
-    height: 5rem;
+	width: 3.5rem;
+    height: 3.5rem;
     margin-left: 1rem;
 }
 #createHeader h2{
 	font-family: var(--title);
+	line-height: 80px;
+	margin-left: 5px;
 }
 #createMain {
 	display: flex;
 	margin-top: 1rem;
+	margin-bottom: 3rem;
 	flex-direction: column;
 	width: 90%;
 	height: calc(80% - 1rem);
