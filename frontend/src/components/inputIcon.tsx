@@ -12,6 +12,16 @@ export default function InputIcon(props: {
 	selectOptions?: number[] | string[];
 }) {
 	const [err, setErr] = React.useState("");
+	const selectOptions = React.useMemo(() => {
+		if (props.selectInput && props.selectOptions) {
+			return props.selectOptions.map((opt) => (
+				<option value={opt} key={window.crypto.randomUUID()}>
+					{opt}
+				</option>
+			));
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.selectInput, props.selectOptions, props.value]);
 
 	const validateInput = (e: React.FormEvent<HTMLInputElement>) => {
 		if (e.target instanceof HTMLInputElement && props.setValue) {
@@ -76,14 +86,7 @@ export default function InputIcon(props: {
 			<option value={props.placeholder} disabled>
 				{props.placeholder}
 			</option>
-			{props.selectOptions?.map((opt, index) => (
-				<option
-					value={opt}
-					id={opt.toString() + window.crypto.randomUUID()}
-				>
-					{opt}
-				</option>
-			))}
+			{selectOptions}
 		</select>
 	);
 	return (

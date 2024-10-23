@@ -61,12 +61,12 @@ const CreateQuiz = () => {
 	};
 	React.useEffect(() => {
 		validateInputs();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [title, theme, xQuestions, xAlternatives, time]);
 
 	React.useEffect(() => {
 		if (userContext && userContext.user) {
-			if (loadingContent && !wantToConfirm) {
+			if (loadingContent) {
 				if (
 					typeof title === "string" &&
 					typeof theme === "string" &&
@@ -88,24 +88,36 @@ const CreateQuiz = () => {
 					};
 					webSocketContext.sendPoll(message);
 				}
+			} else {
+				console.log("loadingContent is false or wantToConfirm is true");
 			}
-			else {
-				console.error("user context not available");
-			}
+		} else {
+			console.error("user context not available");
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [loadingContent]);
 
 	React.useEffect(() => {
 		const userID = userContext?.user?.id;
-		if (
-			currentPoll &&
-			currentPoll.currentPoll &&
-			currentPoll.currentPoll.owner === userID
-		) {
-			navigate("/home");
+		console.log("currentPoll changed");
+		console.log(currentPoll);
+		console.log(userID);
+
+		if (loadingContent && currentPoll && currentPoll.polls) {
+			const poll = currentPoll.polls.find((p) => {
+				if (p.owner === userID) return p;
+				return false;
+			});
+			if (poll) {
+				// HERE
+				//  TODO => REDIRECT TO LOBBY INSTEAD
+				//    BUT THE FUNCTION REDIRECT IS TO COMPLEX TO REDO INSIDE THIS COMPONENT
+				navigate("/home");
+			} else {
+				console.log("there is no poll register for this user.");
+			}
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPoll]);
 
 	const returnHome = () => {
@@ -246,7 +258,7 @@ const CreateQuiz = () => {
 							label="Quantidade de alternativas por pergunta"
 							selectInput={true}
 							type="number"
-							selectOptions={[2, 3, 4, 5, 6]}
+							selectOptions={[2, 3, 4, 5]}
 							placeholder="Selecione um valor"
 							value={xAlternatives}
 							setValue={setXAlternatives}
