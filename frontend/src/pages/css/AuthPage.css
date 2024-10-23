@@ -1,6 +1,5 @@
 .page {
 	display: flex;
-	height: 100vh;
 	flex-direction: column;
 	justify-content: center;
 	background-position: center;
@@ -8,6 +7,9 @@
 	background-size: cover;
 	align-items: center;
 	font-size: small;
+}
+#header{
+	padding-top: 3rem;
 }
 .auth-container {
 	width: 90%;
@@ -176,5 +178,10 @@ form h2 {
 @media (min-width: 2300px) {
 	.auth-container {
 		width: 12%;
+	}
+}
+@media(min-height: 660px){
+	.page{
+		height: 100vh;
 	}
 }

@@ -14,6 +14,8 @@ import Wait from "../icons/wait";
 import Game from "../icons/game";
 import Ranking2 from "../icons/rankingDark";
 import Person from "../icons/person";
+import Github from "../icons/github";
+
 
 const LandingPage = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -57,6 +59,7 @@ const LandingPage = () => {
 							<h1>Enigmus</h1>
 						</div>
 						<div className={`menu-items ${menuOpen ? "open" : ""}`}>
+							<div id="menu">
 							<li>
 								<Link to="/auth" onClick={closeMenu}>
 									Começar Agora
@@ -77,6 +80,10 @@ const LandingPage = () => {
 									Nossa Equipe
 								</a>
 							</li>
+							</div>
+							<div id="repositorio">
+							<Btn type="button" text="Visite nosso Repositório" id="github-btn" icon={Github} href="https://github.com/Projeto-Ciclo-2/Copilot"/>
+							</div>
 						</div>
 					</div>
 				</div>
