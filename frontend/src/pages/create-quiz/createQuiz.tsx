@@ -245,7 +245,7 @@ const CreateQuiz = () => {
 							label="Quantidade de alternativas por pergunta"
 							selectInput={true}
 							type="number"
-							selectOptions={[2, 3, 4, 5, 6]}
+							selectOptions={[2, 3, 4, 5]}
 							placeholder="Selecione um valor"
 							value={xAlternatives}
 							setValue={setXAlternatives}
