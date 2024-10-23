@@ -10,13 +10,11 @@ export class VoteService {
 	private pollRepository: PollRepository;
 	private userRepository: UserRepository;
 	private points: number;
-	private correctAwsers: number;
 	constructor() {
 		this.voteRepository = new VoteRepository();
 		this.pollRepository = new PollRepository();
 		this.userRepository = new UserRepository();
 		this.points = 0;
-		this.correctAwsers = 0;
 	}
 
 	async createVote(vote: IVoteEntity): Promise<IVoteEntity | null> {
@@ -46,19 +44,14 @@ export class VoteService {
 				await this.voteRepository.setQuestionVotes(vote);
 				if (Number(question.answer) === Number(vote.userChoice)) {
 					this.points += 10;
-					this.correctAwsers++;
 				}
 			}
 		}
 
-		if (this.correctAwsers === poll.number_of_alternatives) {
-			user.medals += 1;
-		}
+		await this.voteRepository.createVote(vote);
 
 		user.points += this.points;
 		await this.userRepository.update(user.id, user);
-
-		await this.voteRepository.createVote(vote);
 
 		const votes = await this.voteRepository.getQuestionVotes(
 			vote.userID,
@@ -71,8 +64,6 @@ export class VoteService {
 		}
 
 		this.points = 0;
-		this.correctAwsers = 0;
-
 		return votes as IVoteEntity;
 	}
 

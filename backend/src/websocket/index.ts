@@ -56,7 +56,7 @@ wss.on("connection", (ws: WebSocket) => {
 						pollQuestionID: vote.pollQuestionID,
 						userChoice: vote.userChoice,
 					};
-					console.log('enviando voto');
+					console.log("enviando voto");
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
 					if (error instanceof Error) return sendErr(ws, error);
@@ -206,6 +206,7 @@ function setEndGame(
 				username: string;
 				correctAnswers: number;
 				points: number;
+				userID: string;
 			}> = [];
 			for (const userID of users) {
 				const user = await userService.getUserById(userID);
@@ -215,6 +216,7 @@ function setEndGame(
 					username: user.name,
 					correctAnswers: 0,
 					points: 0,
+					userID: user.id,
 				};
 
 				for (const question of poll.questions) {
@@ -233,6 +235,26 @@ function setEndGame(
 					}
 				}
 				votes.push(tempVotesOfThisPlayer);
+
+				const maxCorrectAnswers = Math.max(
+					...votes.map((v) => v.correctAnswers)
+				);
+				const winners = votes.filter(
+					(v) => v.correctAnswers === maxCorrectAnswers
+				);
+
+				for (const winner of winners) {
+					const winnerUser = await userService.getUserById(
+						winner.userID
+					);
+					if (winnerUser) {
+						winnerUser.wins = winnerUser.wins + 1;
+						if (winner.correctAnswers === poll.number_of_question) {
+							winnerUser.medals += 1;
+						}
+						await userService.update(winnerUser.id, winnerUser);
+					}
+				}
 			}
 
 			const message: IWSMessagePollRank = {
