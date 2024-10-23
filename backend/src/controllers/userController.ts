@@ -32,6 +32,14 @@ export default class UserController {
 		try {
 			const { name, password } = req.body;
 
+			if (name.length < 4) {
+				throw new BadRequestException(Message.INVALID_NAME);
+			}
+
+			if (password.length < 8) {
+				throw new BadRequestException(Message.INVALID_PASSWORD);
+			}
+
 			if (!name || !password) {
 				throw new BadRequestException(
 					Message.USERNAME_OR_PASSWORD_INCORRECT

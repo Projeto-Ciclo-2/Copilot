@@ -7,7 +7,7 @@ services:
         environment:
             POSTGRES_USER: copilot
             POSTGRES_PASSWORD: copilotPass123
-            POSTGRES_DB: copilotDB
+            POSTGRES_DB: copilot
         networks:
             - copilot-network
         healthcheck:
@@ -36,7 +36,7 @@ services:
         ports:
             - "5000:5000"
         command: >
-            sh -c "node wait-for-postgres.js && npm run migrate && npm run dev"
+            sh -c "npm run migrate && npm run dev"
         restart: always
         networks:
             - copilot-network

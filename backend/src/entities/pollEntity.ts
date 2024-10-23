@@ -1,4 +1,4 @@
-import { IPollQuestionEntity } from "./PollQuestionEntity";
+import { IPollQuestionEntity } from "./pollQuestionEntity";
 
 export interface IPollEntity {
 	id: string;
