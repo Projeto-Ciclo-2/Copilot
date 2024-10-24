@@ -41,7 +41,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 	}
 
 	for (const user of users) {
-		if(user.username === username) {
+		if (user.username === username) {
 			ws.close(1000, "user already connected");
 			return;
 		}
@@ -296,21 +296,21 @@ function setEndGame(
 			console.log("game ended", JSON.stringify(message));
 			console.log("deleting everything related in redis");
 			// deleting everything
-			//pollService.deleteRedis(poll.id);
-			// for (const userID of users) {
-			// 	for (const question of poll.questions) {
-			// 		console.log(
-			// 			userID.toString() +
-			// 				poll.id.toString() +
-			// 				question.id.toString()
-			// 		);
-			// 		// voteService.deleteVote(
-			// 		// 	userID,
-			// 		// 	poll.id,
-			// 		// 	question.id.toString()
-			// 		// );
-			// 	}
-			// }
+			pollService.deleteRedis(poll.id);
+			for (const userID of users) {
+				for (const question of poll.questions) {
+					console.log(
+						userID.toString() +
+							poll.id.toString() +
+							question.id.toString()
+					);
+					voteService.deleteVote(
+						userID,
+						poll.id,
+						question.id.toString()
+					);
+				}
+			}
 			console.log("done. ");
 			console.log(
 				"Function executed in " + (Date.now() - fnStarted) + "ms."
