@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ImagesCards from "../icons/imagesCards";
 import ArrowUp from "../icons/arrowUp";
 import { IPoll } from "../interfaces/IQuiz";
@@ -48,8 +48,33 @@ const CardQuiz: React.FC<CardProps> = ({ poll, index, onClick }) => {
 							: " Minutos"}
 					</p>
 				</div>
+				{poll.started && (
+					<>
+						{index % 2 === 0 ? (
+							<div
+								className="started"
+								style={{
+									border: "1px solid var(--accent)",
+									borderRadius: "5px",
+								}}
+							>
+								<p style={{ color: "#aa57aa" }}>iniciado</p>
+							</div>
+						) : (
+							<div
+								className="started"
+								style={{
+									border: "1px solid var(--accent)",
+									borderRadius: "5px",
+								}}
+							>
+								<p style={{ color: "#4A464A" }}>iniciado</p>
+							</div>
+						)}
+					</>
+				)}
 				{/* Quiz iniciado? */}
-				{poll.started && index % 2 === 0 ? (
+				{/* {poll.started === true && index % 2 === 0 ? (
 					<div
 						className="started"
 						style={{
@@ -63,13 +88,13 @@ const CardQuiz: React.FC<CardProps> = ({ poll, index, onClick }) => {
 					<div
 						className="started"
 						style={{
-							border: "1px solid var(--red)",
+							border: "1px solid var(--accent)",
 							borderRadius: "5px",
 						}}
 					>
 						<p style={{ color: "#4A464A" }}>iniciado</p>
 					</div>
-				)}
+				)} */}
 			</div>
 			<div className="card-players">
 				<span className="number-players">

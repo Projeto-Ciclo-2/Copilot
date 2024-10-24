@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
@@ -16,6 +16,7 @@ import { usePolls } from "../context/PollsContext";
 import { IPoll } from "../interfaces/IQuiz";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
 import Loader from "../components/load/Loader";
+import { Box, Modal } from "@mui/material";
 
 const userAPI = new UserAPI();
 
@@ -25,57 +26,97 @@ const Homepage = () => {
 
 	const { setTimeQuestion } = useCurrentQuestion();
 	const { polls, setCurrentPoll, setPlayers } = usePolls();
-	const { setNumberOfQuestions } = useCurrentQuestion();
 
 	const [started, setStarted] = useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
 
+	const [searchTerm, setSearchTerm] = useState<string>(""); // Estado da busca
+
+	const [open, setOpen] = React.useState(false);
+
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const {
+		currentPoll,
+		setShowPageQuiz,
+		setCurrentRank,
+	} = usePolls();
+	const { setNumberOfQuestions, setCurrentQuestion } = useCurrentQuestion();
+
+	const filteredPolls = useMemo(() => {
+		if (!polls) return [];
+
+		// Se o termo de busca estiver vazio, retorna todos os quizzes
+		if (!searchTerm) return polls;
+
+		// Filtra os quizzes com base no termo de busca
+		return polls.filter((poll) =>
+			poll.title.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+	}, [polls, searchTerm]); // Atualiza a lista filtrada sempre que polls ou searchTerm mudar
+
+	setShowPageQuiz(false);
+
 	// Navegar pra página de Lobby ao clicar
 	function openQuiz(poll: IPoll) {
-		setCurrentPoll(poll);
-		setPlayers(poll.playing_users);
-		// Definir tempo para cada questão
-		const timeTotal = poll.duration_in_minutes * 60;
-		const seconds = timeTotal / poll.number_of_question;
-		const milliseconds = seconds * 1000;
-		setTimeQuestion(milliseconds);
-		console.log(`TEMPO POR PARTIDA: ${milliseconds}`);
-		setNumberOfQuestions(poll.number_of_question);
-		navigate("/lobby");
+		if (poll.started) {
+			setOpen(true);
+		}
+
+		if (!poll.started) {
+			setCurrentPoll(poll);
+			setPlayers(poll.playing_users);
+			setCurrentRank(null);
+			setCurrentQuestion(0);
+
+			// Definir tempo para cada questão
+			const timeTotal = poll.duration_in_minutes * 60;
+			const seconds = timeTotal / poll.number_of_question;
+			const milliseconds = seconds * 1000;
+			setTimeQuestion(milliseconds); // Tempo de cada questão = (Milisegundos de cada questão) - (Tempo extra de cada questão)
+			console.log(
+				`%c tempo por questão = ${milliseconds}}`,
+				"color: #f05a73"
+			);
+
+			// Numero de questões
+			setNumberOfQuestions(poll.number_of_question);
+
+			// Navegar para página de lobby
+			navigate("/lobby");
+		}
 	}
 
 	function validate() {
-		async function validateSession() {
-			if (!userContext) return;
-			if (userContext.user) return;
+        async function validateSession() {
+            if (!userContext) return;
+            if (userContext.user) return;
 
-			setIsLoading(true);
+            setIsLoading(true);
 
-			const res = await userAPI.getMyUser();
-			if (!res || res.error || !res.data) {
-				console.log("Sessão não válida");
-				return navigate("/");
-			}
-			const user = res.data as IUser;
+            const res = await userAPI.getMyUser();
+            if (!res || res.error || !res.data) {
+                console.log("Sessão não válida");
+                return navigate("/");
+            }
+            const user = res.data as IUser;
 
-			userContext.setUser(user);
-		}
+            userContext.setUser(user);
+        }
 
-		validateSession().then(() => {
-			if (!webSocketContext.isConnected.current) {
-				if (!isLoading) {
-					setIsLoading(true);
-				}
-			} else {
-				if (isLoading) {
-					setIsLoading(false);
-				}
-			}
-		});
-	}
+        validateSession().then(() => {
+            if (!webSocketContext.isConnected.current) {
+                if (!isLoading) {
+                    setIsLoading(true);
+                }
+            } else {
+                if (isLoading) {
+                    setIsLoading(false);
+                }
+            }
+        });
+    }
 
 	React.useEffect(
 		validate,
@@ -86,6 +127,7 @@ const Homepage = () => {
 			location,
 			webSocketContext,
 			webSocketContext.isConnected.current,
+			polls
 		]
 	);
 
@@ -103,9 +145,49 @@ const Homepage = () => {
 		setStarted(true);
 	};
 
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const owner = userContext?.user?.name === "admin";
+
 	return (
 		<div id="home">
 			<Loader alive={isLoading} />
+			<Modal
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="parent-modal-title"
+				aria-describedby="parent-modal-description"
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						flexDirection: "column",
+						background: "var(--bkg_1)",
+						padding: "1rem",
+						borderRadius: "5px",
+					}}
+				>
+					<h2 id="parent-modal-title">Ops...</h2>
+					<p
+						id="parent-modal-description"
+						style={{ paddingTop: "2rem" }}
+					>
+						O quiz já começou e você chegou atrasado :/
+					</p>
+				</Box>
+			</Modal>
 			<div id="burguer-container">
 				<label id="burguer">
 					<input type="checkbox" />
@@ -153,12 +235,16 @@ const Homepage = () => {
 				<>
 					<section id="quiz">
 						<div id="input-search-quiz">
-							<input type="text" placeholder="Pesquisar quiz" />
+							<input
+								type="text"
+								placeholder="Pesquisar quiz"
+								onChange={(e) => setSearchTerm(e.target.value)}
+							/>
 							<Search />
 						</div>
 						<div id="cards">
 							{polls ? (
-								polls.map((poll, index) => (
+								filteredPolls.map((poll, index) => (
 									<CardQuiz
 										key={index}
 										poll={poll}
@@ -167,17 +253,19 @@ const Homepage = () => {
 									/>
 								))
 							) : (
-								<p>Sem quiz criado</p>
+								<p>Sem quiz</p>
 							)}
 						</div>
-						<Btn
-							type="button"
-							id="btn-add-quiz"
-							icon={MoreIcon}
-							text="Adicionar Quiz"
-							iconPosition="right"
-							onClick={() => navigate("/create")}
-						/>
+						{owner && (
+							<Btn
+								type="button"
+								id="btn-add-quiz"
+								icon={MoreIcon}
+								text="Adicionar Quiz"
+								iconPosition="right"
+								onClick={() => navigate("/create")}
+							/>
+						)}
 					</section>
 				</>
 			)}

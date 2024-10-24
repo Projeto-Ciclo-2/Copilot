@@ -1,29 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./css/Lobby.css";
 import Btn from "../components/button";
 import { useNavigate } from "react-router-dom";
 import { usePolls } from "../context/PollsContext";
 import { useWebSocket } from "../context/WebSocketContext";
-import UserProvider, { UserContext } from "../context/UserContext";
+import{ UserContext } from "../context/UserContext";
 import {
 	IWSMessageGameInit,
 	IWSMessageJoinQuiz,
-	IWSMessageLeftQuiz,
 	IWSMessagePostLeftQuiz,
 } from "../interfaces/IWSMessages";
 
 const Lobby = () => {
-	const { currentPoll, players } = usePolls();
+	const { currentPoll, players, showPageQuiz } = usePolls();
 	const WebSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
 
-	useEffect(() => {
-		if (currentPoll?.started) {
-			navigate("/quiz");
-		}
-	}, [currentPoll]);
-
 	const navigate = useNavigate();
+
+	if (currentPoll?.started || currentPoll?.started_at) {
+		console.log('%c Opa, quiz já inciado. Retornando para /home', 'color: #ffffff; background: #b60202;');
+		navigate('/home')
+	}
+
+	useEffect(() => {
+		if (showPageQuiz) {
+			const time = new Date(Date.now())
+			console.log(`Usuário ${userContext?.user?.name} entrou no quiz às ${time}`);
+
+			navigate('/quiz')
+		}
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [showPageQuiz])
+
 
 	function exitPage() {
 		// Sair do quiz
@@ -39,11 +49,11 @@ const Lobby = () => {
 		navigate("/home");
 	}
 
-	const owner = userContext?.user?.id === currentPoll?.owner;
-	console.log(`=> owner: ${owner}`);
+	const owner = userContext?.user?.name === 'admin';
+	/* console.log(`=> owner: ${owner}`);
 	console.log(`=> userid: ${userContext?.user?.id}`);
 	console.log(`=> ownerId: ${currentPoll?.owner}`);
-	console.log(`=> pollId: ${currentPoll?.id}`);
+	console.log(`=> pollId: ${currentPoll?.id}`); */
 
 	function initQuiz() {
 		if (userContext?.user?.id === currentPoll?.owner) {
@@ -55,24 +65,17 @@ const Lobby = () => {
 			};
 			WebSocketContext.sendGameInit(message);
 		}
-		navigate("/quiz");
 	}
 
-	if (currentPoll) {
+	if (showPageQuiz) {
 		// Começou
-		if (currentPoll.started) {
-			setTimeout(() => {
-				navigate("/quiz");
-			}, 100);
-
-			return <></>;
-		}
+		console.log('Começando quiz...', 'color: #6982bb');
+		navigate("/quiz");
 	}
 
 	console.log(
 		`message-[joinQuiz] -> usuário ${userContext?.user?.name} entrou no quiz!`
 	);
-	// Se não for o owner não informa ao back que
 	const message: IWSMessageJoinQuiz = {
 		type: "joinQuiz",
 		pollID: currentPoll?.id as string,
