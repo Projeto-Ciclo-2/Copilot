@@ -102,6 +102,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 						type: "sendPlayerJoin",
 						pollID: result.pollID,
 						username: result.username,
+						poll: result.completePoll,
 					};
 					broadcast(JSON.stringify(message));
 					if (result.newOwner) {
@@ -147,6 +148,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 						type: "leftQuiz",
 						username: result.username,
 						pollID: result.pollID,
+						poll: result.poll,
 					};
 					broadcast(JSON.stringify(messageServer));
 					if (result.newOwner) {
@@ -233,7 +235,7 @@ function setEndGame(
 				userID: string;
 			}> = [];
 			for (const userID of users) {
-				const user = await userService.getUserById(userID);
+				const user = await userService.getUserById(userID.userID);
 				const userPoints = user?.points;
 				if (!user) return;
 
@@ -246,7 +248,7 @@ function setEndGame(
 
 				for (const question of poll.questions) {
 					const vote = await voteService.getVote(
-						userID,
+						userID.userID,
 						poll.id,
 						question.id
 					);
@@ -305,7 +307,7 @@ function setEndGame(
 							question.id.toString()
 					);
 					voteService.deleteVote(
-						userID,
+						userID.userID,
 						poll.id,
 						question.id.toString()
 					);

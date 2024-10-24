@@ -24,7 +24,12 @@ export class VoteService {
 			throw new NotFoundException(Message.POLL_NOT_FOUND);
 		}
 
-		if (!user || !poll.playing_users.includes(vote.userID)) {
+		if (!user) {
+			throw new NotFoundException(Message.USER_NOT_FOUND);
+		}
+
+		const foundUser = poll.playing_users.find(u => u.userID === user.id);
+		if(!foundUser) {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
 

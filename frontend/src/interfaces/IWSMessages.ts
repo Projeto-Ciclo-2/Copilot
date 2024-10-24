@@ -17,12 +17,14 @@ export interface IWSMessagePlayerJoin {
 	type: "sendPlayerJoin";
 	pollID: string;
 	username: string;
+	poll: IPoll;
 }
 
 export interface IWSMessageLeftQuiz {
 	type: "leftQuiz";
 	username: string;
 	pollID: string;
+	poll: IPoll;
 }
 
 export interface IWSMessageOwnerChange {
