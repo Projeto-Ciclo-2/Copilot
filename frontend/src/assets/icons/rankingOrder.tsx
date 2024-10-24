@@ -162,7 +162,7 @@ function RankIcon({index}: RankingMap) {
 								<stop
 									offset="1"
 									stopColor="#fa8547"
-									stop-opacity="0"
+									stopOpacity="0"
 								/>
 							</linearGradient>
 							<linearGradient
@@ -259,7 +259,7 @@ function RankIcon({index}: RankingMap) {
 								<stop
 									offset=".879"
 									stopColor="#d2801f"
-									stop-opacity="0"
+									stopOpacity="0"
 								/>
 								<stop offset=".983" stopColor="#d2801f" />
 							</radialGradient>
@@ -269,11 +269,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -342,11 +342,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -415,11 +415,11 @@ function RankIcon({index}: RankingMap) {
 								height="9"
 								x="13.779"
 								y="15.8"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -659,11 +659,11 @@ function RankIcon({index}: RankingMap) {
 								gradientTransform="rotate(-123.321 9.745 2.387)scale(4.60352 17.1923)"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3669d9" />
+								<stop stopColor="#3669d9" />
 								<stop
 									offset="1"
-									stop-color="#3669d9"
-									stop-opacity="0"
+									stopColor="#3669d9"
+									stopOpacity="0"
 								/>
 							</radialGradient>
 							<radialGradient
@@ -674,11 +674,11 @@ function RankIcon({index}: RankingMap) {
 								gradientTransform="rotate(-57.265 20.217 -11.245)scale(3.0487 6.68733)"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3669d9" />
+								<stop stopColor="#3669d9" />
 								<stop
 									offset="1"
-									stop-color="#3669d9"
-									stop-opacity="0"
+									stopColor="#3669d9"
+									stopOpacity="0"
 								/>
 							</radialGradient>
 							<radialGradient
@@ -691,10 +691,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".837"
-									stop-color="#f6ecfe"
-									stop-opacity="0"
+									stopColor="#f6ecfe"
+									stopOpacity="0"
 								/>
-								<stop offset="1" stop-color="#f6ecfe" />
+								<stop offset="1" stopColor="#f6ecfe" />
 							</radialGradient>
 							<radialGradient
 								id="f1ida"
@@ -706,10 +706,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".91"
-									stop-color="#b396cf"
-									stop-opacity="0"
+									stopColor="#b396cf"
+									stopOpacity="0"
 								/>
-								<stop offset=".992" stop-color="#b796d5" />
+								<stop offset=".992" stopColor="#b796d5" />
 							</radialGradient>
 							<radialGradient
 								id="f1idb"
@@ -721,10 +721,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".926"
-									stop-color="#ab9cbb"
-									stop-opacity="0"
+									stopColor="#ab9cbb"
+									stopOpacity="0"
 								/>
-								<stop offset="1" stop-color="#ab9cbb" />
+								<stop offset="1" stopColor="#ab9cbb" />
 							</radialGradient>
 							<filter
 								id="f1idc"
@@ -732,11 +732,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -805,11 +805,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -878,11 +878,11 @@ function RankIcon({index}: RankingMap) {
 								height="9.38"
 								x="12.757"
 								y="15.492"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1029,11 +1029,11 @@ function RankIcon({index}: RankingMap) {
 								y2="6.493"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3d89ec" />
+								<stop stopColor="#3d89ec" />
 								<stop
 									offset="1"
-									stop-color="#3d89ec"
-									stop-opacity="0"
+									stopColor="#3d89ec"
+									stopOpacity="0"
 								/>
 							</linearGradient>
 							<linearGradient
@@ -1044,11 +1044,11 @@ function RankIcon({index}: RankingMap) {
 								y2="6.493"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3d89ec" />
+								<stop stopColor="#3d89ec" />
 								<stop
 									offset="1"
-									stop-color="#3d89ec"
-									stop-opacity="0"
+									stopColor="#3d89ec"
+									stopOpacity="0"
 								/>
 							</linearGradient>
 							<linearGradient
@@ -1059,11 +1059,11 @@ function RankIcon({index}: RankingMap) {
 								y2="7.25"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#1a6dd8" />
+								<stop stopColor="#1a6dd8" />
 								<stop
 									offset="1"
-									stop-color="#1a6dd8"
-									stop-opacity="0"
+									stopColor="#1a6dd8"
+									stopOpacity="0"
 								/>
 							</linearGradient>
 							<linearGradient
@@ -1074,8 +1074,8 @@ function RankIcon({index}: RankingMap) {
 								y2="23.484"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#f6bc7f" />
-								<stop offset="1" stop-color="#a76740" />
+								<stop stopColor="#f6bc7f" />
+								<stop offset="1" stopColor="#a76740" />
 							</linearGradient>
 							<linearGradient
 								id="f2id4"
@@ -1085,11 +1085,11 @@ function RankIcon({index}: RankingMap) {
 								y2="17.527"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#b05b5b" />
+								<stop stopColor="#b05b5b" />
 								<stop
 									offset="1"
-									stop-color="#b05b5b"
-									stop-opacity="0"
+									stopColor="#b05b5b"
+									stopOpacity="0"
 								/>
 							</linearGradient>
 							<linearGradient
@@ -1100,8 +1100,8 @@ function RankIcon({index}: RankingMap) {
 								y2="18.613"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#cd8858" />
-								<stop offset="1" stop-color="#d28d59" />
+								<stop stopColor="#cd8858" />
+								<stop offset="1" stopColor="#d28d59" />
 							</linearGradient>
 							<linearGradient
 								id="f2id6"
@@ -1111,8 +1111,8 @@ function RankIcon({index}: RankingMap) {
 								y2="18.283"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#d38e5f" />
-								<stop offset="1" stop-color="#be794e" />
+								<stop stopColor="#d38e5f" />
+								<stop offset="1" stopColor="#be794e" />
 							</linearGradient>
 							<radialGradient
 								id="f2id7"
@@ -1122,11 +1122,11 @@ function RankIcon({index}: RankingMap) {
 								gradientTransform="rotate(-123.321 9.745 2.387)scale(4.60352 17.1923)"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3669d9" />
+								<stop stopColor="#3669d9" />
 								<stop
 									offset="1"
-									stop-color="#3669d9"
-									stop-opacity="0"
+									stopColor="#3669d9"
+									stopOpacity="0"
 								/>
 							</radialGradient>
 							<radialGradient
@@ -1137,11 +1137,11 @@ function RankIcon({index}: RankingMap) {
 								gradientTransform="rotate(-57.265 20.217 -11.245)scale(3.0487 6.68733)"
 								gradientUnits="userSpaceOnUse"
 							>
-								<stop stop-color="#3669d9" />
+								<stop stopColor="#3669d9" />
 								<stop
 									offset="1"
-									stop-color="#3669d9"
-									stop-opacity="0"
+									stopColor="#3669d9"
+									stopOpacity="0"
 								/>
 							</radialGradient>
 							<radialGradient
@@ -1154,10 +1154,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".837"
-									stop-color="#e5ac75"
-									stop-opacity="0"
+									stopColor="#e5ac75"
+									stopOpacity="0"
 								/>
-								<stop offset="1" stop-color="#e5ac75" />
+								<stop offset="1" stopColor="#e5ac75" />
 							</radialGradient>
 							<radialGradient
 								id="f2ida"
@@ -1169,10 +1169,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".91"
-									stop-color="#b36441"
-									stop-opacity="0"
+									stopColor="#b36441"
+									stopOpacity="0"
 								/>
-								<stop offset="1" stop-color="#b36441" />
+								<stop offset="1" stopColor="#b36441" />
 							</radialGradient>
 							<radialGradient
 								id="f2idb"
@@ -1184,10 +1184,10 @@ function RankIcon({index}: RankingMap) {
 							>
 								<stop
 									offset=".926"
-									stop-color="#ab662b"
-									stop-opacity="0"
+									stopColor="#ab662b"
+									stopOpacity="0"
 								/>
-								<stop offset="1" stop-color="#ab662b" />
+								<stop offset="1" stopColor="#ab662b" />
 							</radialGradient>
 							<filter
 								id="f2idc"
@@ -1195,11 +1195,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1268,11 +1268,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1341,11 +1341,11 @@ function RankIcon({index}: RankingMap) {
 								height="9.5"
 								x="12.759"
 								y="15.2"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1412,7 +1412,7 @@ function RankIcon({index}: RankingMap) {
 					</g>
 				</svg>
 			);
-		case 3: 
+		case 3:
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 20V5L7 16h10"></path></svg>
             );
@@ -1420,7 +1420,7 @@ function RankIcon({index}: RankingMap) {
             return(
                 <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 20h4a4 4 0 1 0 0-8H8V4h8"></path></svg>
             )
-        case 5: 
+        case 5:
         return(
             <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M8 16a4 4 0 1 0 8 0v-1a4 4 0 1 0-8 0"></path><path d="M16 8a4 4 0 1 0-8 0v8"></path></g></svg>
         );
@@ -1428,7 +1428,7 @@ function RankIcon({index}: RankingMap) {
             return(
                 <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 4h8l-4 16"></path></svg>
             )
-        case 7: 
+        case 7:
         return (
             <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M8 8a4 4 0 1 0 8 0a4 4 0 1 0-8 0"></path><path d="M8 16a4 4 0 1 0 8 0a4 4 0 1 0-8 0"></path></g></svg>
         );
@@ -1436,7 +1436,7 @@ function RankIcon({index}: RankingMap) {
             return(
                 <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path d="M16 8a4 4 0 1 0-8 0v1a4 4 0 1 0 8 0"></path><path d="M8 16a4 4 0 1 0 8 0V8"></path></g></svg>
             );
-        case 9: 
+        case 9:
         return (
             <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><path fill="none" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 20V4L3 9m13 11a4 4 0 0 0 4-4V8a4 4 0 1 0-8 0v8a4 4 0 0 0 4 4"></path></svg>
         )

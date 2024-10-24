@@ -9,7 +9,7 @@ const ImgWaitRankIcon = () => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_354_152)">
+			<g clipPath="url(#clip0_354_152)">
 				<rect width="294" height="172" fill="none" />
 				<path d="M294 0H0V172H294V0Z" fill="none" />
 				<path
