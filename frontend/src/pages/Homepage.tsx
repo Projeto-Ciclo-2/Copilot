@@ -47,7 +47,9 @@ const Homepage = () => {
 		navigate("/lobby");
 	}
 
-	React.useEffect(() => {
+	function validate() {
+		console.log("validate called");
+
 		async function validateSession() {
 			if (!userContext) return;
 			if (userContext.user) return;
@@ -83,14 +85,23 @@ const Homepage = () => {
 				}
 			}
 		});
+	}
+
+	React.useEffect(
+		validate,
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		userContext,
-		navigate,
-		location,
-		webSocketContext,
-		webSocketContext.isConnected.current,
-	]);
+		[
+			userContext,
+			navigate,
+			location,
+			webSocketContext,
+			webSocketContext.isConnected.current,
+		]
+	);
+
+	if(!isLoading) {
+		validate();
+	}
 
 	if (!userContext) return <h1>Eita!</h1>;
 

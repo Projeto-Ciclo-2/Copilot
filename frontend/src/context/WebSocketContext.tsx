@@ -251,9 +251,9 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 
 		return () => {
 			DebugConsole("ws effect dismounting context.");
-			// tryingToConnect = false;
-			// setIsConnected(false);
-			// socket.close();
+			tryingToConnect.current = false;
+			isConnected.current = false;
+			socket.close();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
