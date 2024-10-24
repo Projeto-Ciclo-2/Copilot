@@ -12,5 +12,5 @@ export interface IPollEntity {
 	created_at?: number; //timestamp
 	started_at?: number | null; //timestamp
 	questions: IPollQuestionEntity[];
-	playing_users: string[]; //array com ids dos usuários
+	playing_users: Array<{ userID: string; username: string }>;
 }

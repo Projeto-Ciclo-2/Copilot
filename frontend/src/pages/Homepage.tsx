@@ -66,7 +66,16 @@ const Homepage = () => {
 
 		if (!poll.started) {
 			setCurrentPoll(poll);
-			setPlayers(poll.playing_users);
+			const users = poll.playing_users.map((u) => u.username);
+		  if (
+			  userContext &&
+			  userContext.user &&
+			  userContext.user.name &&
+			  !users.includes(userContext.user.name)
+		  ) {
+			    users.push(userContext.user.name);
+		  }
+		  setPlayers(users);
 			setCurrentRank(null);
 			setCurrentQuestion(0);
 
@@ -86,6 +95,7 @@ const Homepage = () => {
 			// Navegar para página de lobby
 			navigate("/lobby");
 		}
+
 	}
 
 	function validate() {
@@ -131,7 +141,7 @@ const Homepage = () => {
 		]
 	);
 
-	if(!isLoading) {
+	if (!isLoading) {
 		validate();
 	}
 

@@ -9,12 +9,11 @@ export class VoteService {
 	private voteRepository: VoteRepository;
 	private pollRepository: PollRepository;
 	private userRepository: UserRepository;
-	private points: number;
+
 	constructor() {
 		this.voteRepository = new VoteRepository();
 		this.pollRepository = new PollRepository();
 		this.userRepository = new UserRepository();
-		this.points = 0;
 	}
 
 	async createVote(vote: IVoteEntity): Promise<IVoteEntity | null> {
@@ -25,7 +24,12 @@ export class VoteService {
 			throw new NotFoundException(Message.POLL_NOT_FOUND);
 		}
 
-		if (!user || !poll.playing_users.includes(vote.userID)) {
+		if (!user) {
+			throw new NotFoundException(Message.USER_NOT_FOUND);
+		}
+
+		const foundUser = poll.playing_users.find(u => u.userID === user.id);
+		if(!foundUser) {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
 
@@ -42,13 +46,8 @@ export class VoteService {
 		for (const question of poll.questions) {
 			if (question.id === vote.pollQuestionID) {
 				await this.voteRepository.setQuestionVotes(vote);
-				if (Number(question.answer) === Number(vote.userChoice)) {
-					this.points += 10;
-				}
 			}
 		}
-		user.points += this.points;
-		await this.userRepository.update(user.id, user);
 
 		await this.voteRepository.createVote(vote);
 
@@ -61,8 +60,6 @@ export class VoteService {
 		if (Object.keys(votes).length === 0) {
 			return null;
 		}
-
-		this.points = 0;
 
 		return votes as IVoteEntity;
 	}

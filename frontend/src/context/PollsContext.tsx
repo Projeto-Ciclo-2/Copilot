@@ -88,40 +88,40 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 		});
 		// Entrar no quiz
 		WebSocketContext.onReceivePlayerJoin((e) => {
-			console.log(`receive-[playerJoin] -> ${e.username}`);
-
-			let playersArray = players || [];
-			if (e.pollID === currentPoll?.id) {
-				// Verificar se o play já está adicionado
-				const exist = playersArray.some((p) => p === e.username);
-
-				if (!exist) {
-					console.log("novo player adicionado");
-
-					playersArray.push(e.username);
+			// console.log(`receive-[playerJoin] -> ${e.username}`);
+			console.log(e);
+			if (e.poll && e.pollID === currentPoll?.id) {
+				const users = e.poll.playing_users.map((u) => u.username);
+				setPlayers(users);
+			} else {
+				const tempPolls = polls?.map((p) => {
+					if (p.id === e.poll.id) {
+						return e.poll;
+					}
+					return p;
+				});
+				if (tempPolls) {
+					setPolls(tempPolls);
 				}
 			}
-			console.log(playersArray);
-			if (currentPoll) {
-				currentPoll.playing_users = playersArray;
-			}
-			setPlayers(playersArray);
 		});
 		// Sair do quiz
 		WebSocketContext.onReceivePlayerLeft((e) => {
-			console.log(
-				`message-[playerLeft] -> usuário ${e.username} saiu do quiz!}`
-			);
-
-			let playersArray = players || [];
-			if (e.pollID === currentPoll?.id) {
-				// Remover o player se ele estiver na lista
-				playersArray = playersArray.filter((p) => p !== e.username);
+			console.log(e);
+			if (e.poll && e.pollID === currentPoll?.id) {
+				const users = e.poll.playing_users.map((u) => u.username);
+				setPlayers(users);
+			} else {
+				const tempPolls = polls?.map((p) => {
+					if (p.id === e.poll.id) {
+						return e.poll;
+					}
+					return p;
+				});
+				if (tempPolls) {
+					setPolls(tempPolls);
+				}
 			}
-			if (currentPoll) {
-				currentPoll.playing_users = playersArray;
-			}
-			setPlayers(playersArray);
 		});
 		WebSocketContext.onReceiveGameInit((e) => {
 			console.log("onReceiveGameInit -> Quiz inciado!");
@@ -163,10 +163,10 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 			console.log(
 				`==> message-[receivePollRank] -> rank ${JSON.stringify(e)}`
 			);
-
 			const newPolls = polls?.filter((p) => e.poll.id !== p.id) || [];
 			setPolls(newPolls)
 			console.log('polls atualizados');
+
 
 			setCurrentRank(e);
 		});
