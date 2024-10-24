@@ -18,5 +18,7 @@ export const Message = {
 	USER_NOT_FOUND_OR_NOT_OWNER: "Usuario não encontrado ou não é dono do quiz",
 	USER_ALREADY_IN_GAME: "O usuário já está na partida.",
 	NO_USERS: "O quiz não possuí nenhum jogador registrado.",
-	NO_QUESTIONS: "O quiz não possuí nenhuma questão."
+	NO_QUESTIONS: "O quiz não possuí nenhuma questão.",
+	INVALID_NAME: "Nome inválido",
+	INVALID_PASSWORD: "A senha deve conter pelo menos 8 caracteres",
 } as const;

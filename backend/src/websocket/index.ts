@@ -41,7 +41,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 	}
 
 	for (const user of users) {
-		if(user.username === username) {
+		if (user.username === username) {
 			ws.close(1000, "user already connected");
 			return;
 		}
@@ -102,7 +102,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 						type: "sendPlayerJoin",
 						pollID: result.pollID,
 						username: result.username,
-						poll: result.completePoll
+						poll: result.completePoll,
 					};
 					broadcast(JSON.stringify(message));
 					if (result.newOwner) {
@@ -148,7 +148,7 @@ wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 						type: "leftQuiz",
 						username: result.username,
 						pollID: result.pollID,
-						poll: result.poll
+						poll: result.poll,
 					};
 					broadcast(JSON.stringify(messageServer));
 					if (result.newOwner) {
@@ -232,15 +232,18 @@ function setEndGame(
 				username: string;
 				correctAnswers: number;
 				points: number;
+				userID: string;
 			}> = [];
 			for (const userID of users) {
 				const user = await userService.getUserById(userID.userID);
+				const userPoints = user?.points;
 				if (!user) return;
 
 				const tempVotesOfThisPlayer = {
 					username: user.name,
 					correctAnswers: 0,
 					points: 0,
+					userID: user.id,
 				};
 
 				for (const question of poll.questions) {
@@ -259,6 +262,31 @@ function setEndGame(
 					}
 				}
 				votes.push(tempVotesOfThisPlayer);
+
+				user.points += tempVotesOfThisPlayer.points;
+
+				user.played_polls += 1;
+				await userService.update(user.id, user);
+
+				const maxCorrectAnswers = Math.max(
+					...votes.map((v) => v.correctAnswers)
+				);
+				const winners = votes.filter(
+					(v) => v.correctAnswers === maxCorrectAnswers
+				);
+
+				for (const winner of winners) {
+					const winnerUser = await userService.getUserById(
+						winner.userID
+					);
+					if (winnerUser) {
+						winnerUser.wins += 1;
+						if (winner.correctAnswers === poll.number_of_question) {
+							winnerUser.medals += 1;
+						}
+						await userService.update(winnerUser.id, winnerUser);
+					}
+				}
 			}
 
 			const message: IWSMessagePollRank = {
