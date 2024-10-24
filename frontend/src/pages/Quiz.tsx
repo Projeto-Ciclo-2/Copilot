@@ -37,7 +37,12 @@ interface IQuiz {
 const Quiz = () => {
 	// const [quiz, setQuiz] = useState<IQuiz | null>();
 
-	const { currentPoll } = usePolls();
+	const {
+		currentPoll,
+		timestampQuestions,
+		setTimestampQuestions,
+		quizEndTimestamp,
+	} = usePolls();
 	const userContext = useContext(UserContext);
 	const WebSocketContext = useWebSocket();
 
@@ -63,14 +68,14 @@ const Quiz = () => {
 
 	const {
 		currentQuestion,
-		setTimeQuestion,
 		confirmed,
 		setConfirmed,
-		setNumberOfQuestions,
 		markedAlternative,
 		setMarkedAlternative,
 		showAlternative,
 		showPageRanking,
+		timeQuestion,
+		initialRender
 	} = useCurrentQuestion();
 
 	const navigate = useNavigate();
@@ -78,6 +83,123 @@ const Quiz = () => {
 	function exitQuiz() {
 		navigate("/home");
 	}
+
+	if (currentPoll) {
+	}
+	const [initRenderAlternative, setInitRenderAlternative] =
+		useState<boolean>(false);
+	const [initRenderResponse, setInitRenderResponse] =
+		useState<boolean>(false);
+
+	// Lógica para renderizar barra de tempo
+	/* if (initialRender) {
+		if (currentPoll) {
+			// Primeira renderização do quiz
+			const timeOnPageQuiz = Date.now(); // Timestamp do momento em que o usuário acessou a página de quiz
+
+			// Quiz inciado
+			console.log(`%c currentPoll = ${currentPoll}`, "color: #5b5bb7");
+			console.log(
+				`%c currentPoll.started_at = ${currentPoll?.started_at}`,
+				"color: #5b5bb7"
+			);
+			console.log(`%c timeQuestion = ${timeQuestion}`, "color: #5b5bb7");
+			console.log("&c Entrou no quiz inciado!", "color: #fdfd24");
+
+			if (currentPoll.started_at && timeQuestion) {
+				// Array de timestamp de cada questão
+
+				if (currentPoll && currentPoll.started_at) {
+					// Só armazena se o quiz tiver iniciado
+					let arrayTimestampQuestions: number[] = [];
+					for (
+						let index = 0;
+						index < currentPoll.questions.length;
+						index++
+					) {
+						let time = 0;
+						for (let i = 0; i < index; i++) {
+							time += timeQuestion;
+						}
+						arrayTimestampQuestions.push(
+							currentPoll.started_at + time + 10000
+						);
+						// 1° -> 20000 -> 0
+						// 2° -> 22000 -> 2000
+						// 3° -> 24000 -> 2000 + 2000
+						// 4° -> 26000
+					}
+					// Armazenar valores do tempo de cada questão
+					setTimestampQuestions(arrayTimestampQuestions);
+
+					// Quiz encerrado: Navegar para página home
+					if (quizEndTimestamp && timeOnPageQuiz >= quizEndTimestamp) {
+						console.log(
+							"O quiz já foi encerrado! voltando pra páginda home..."
+						);
+						navigate("/home");
+					}
+
+					// Quiz em andamento: Verificar qual a questão atual
+					if (quizEndTimestamp && timeOnPageQuiz < quizEndTimestamp) {
+						if (currentPoll?.started) {
+							arrayTimestampQuestions.forEach(
+								(timestampQuestion, index) => {
+									const timestampProxQuestion =
+										arrayTimestampQuestions[index + 1]; // Timestamp de quando a póroxima questão é iniciada
+									const indexLastNumberQuestion =
+										currentPoll.questions.length - 1; // Index da última questão
+									// Não é a última questão
+									if (
+										index < indexLastNumberQuestion &&
+										timeOnPageQuiz >= timestampQuestion &&
+										timeOnPageQuiz < timestampProxQuestion
+									) {
+										setCurrentQuestion(index);
+									}
+									// Última questão
+									if (index >= indexLastNumberQuestion) {
+										setCurrentQuestion(
+											indexLastNumberQuestion
+										);
+									}
+								}
+							);
+						}
+					}
+				}
+			}
+
+
+			// const timeDisplayingResponse = 10000; // Tempo exibindo respostas
+			if (currentPoll && timestampQuestions && currentQuestion) {
+				// const timestampCurrentQuestion = timestampQuestions[currentQuestion]; // Timestap da questão atual
+				const timestampNextQuestiion =
+					timestampQuestions[currentQuestion + 1]; // Timestamp da próxima questão
+				// const milissecondsShowAlternative = timeQuestion;
+				const milissecondsShowResponse = 10000;
+
+				// cenario 1: usuário entrou durante exibição das ALTERNATIVAS
+				if (
+					timeOnPageQuiz <
+					timestampNextQuestiion - milissecondsShowResponse
+				) {
+					// (- 10 segundos), pois o tempo extra de cada questão exibe as respostas
+					console.log("Usuário entrou (alternativas)!");
+					setInitRenderAlternative(true);
+				}
+
+				// cenario 2: usuário entrou durante exibição da RESPOSTA
+				if (
+					timeOnPageQuiz >
+					timestampNextQuestiion - milissecondsShowResponse
+				) {
+					setShowAlternative("response");
+					setInitRenderResponse(true);
+				}
+			}
+		}
+	} */
 
 	// Escolher alternativa
 	function responseQuestion(item: number) {
@@ -134,7 +256,6 @@ const Quiz = () => {
 				const altCorrect = Number(
 					currentPoll.questions[currentQuestion].answer
 				);
-
 				setCorrectAlternative(altCorrect);
 				setConfirmed(false);
 			}
@@ -176,7 +297,9 @@ const Quiz = () => {
 						</div>
 					</section>
 					<section id="content-quiz">
-						<LinearProgressComponent />
+						{timeQuestion && <LinearProgressComponent
+							initialRender={initialRender}
+						/>}
 
 						{/* Title quiz */}
 						<p className="title-quiz">{currentPoll.title}</p>
@@ -192,7 +315,6 @@ const Quiz = () => {
 						</p>
 
 						<div className="alternatives-quiz">
-							{/* Alternativas */}
 							{showAlternative === "alternative"
 								? confirmed
 									? // Visualizar porcentagem

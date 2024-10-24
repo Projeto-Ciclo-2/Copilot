@@ -8,14 +8,23 @@ import React, {
 import { IPoll } from "../interfaces/IQuiz";
 import { useWebSocket } from "./WebSocketContext";
 import { IWSMessagePollRank } from "../interfaces/IWSMessages";
+import { useCurrentQuestion } from "./questionCurrentContext";
 
 interface IPollsContextType {
 	polls: IPoll[] | null;
+	setPolls: (polls: IPoll[] | null) => void;
 	currentPoll: IPoll | null;
 	setCurrentPoll: (poll: IPoll) => void;
 	players: string[] | null;
 	setPlayers: (players: string[]) => void;
 	currentRank: IWSMessagePollRank | null;
+	setCurrentRank: (rank: IWSMessagePollRank | null) => void;
+	showPageQuiz: boolean;
+	setShowPageQuiz: (showPage: boolean) => void;
+	timestampQuestions: number[] | null;
+	setTimestampQuestions: (timestampQuestions: number[] | null) => void;
+	quizEndTimestamp: number | null;
+	setQuizEndTimestamp: (timestampQuestions: number | null) => void;
 }
 
 const PollsContext = createContext<IPollsContextType | undefined>(undefined);
@@ -27,6 +36,16 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 	const [currentPoll, setCurrentPoll] = useState<IPoll | null>(null);
 	const [players, setPlayers] = useState<string[] | null>(null);
 	const [currentRank, setCurrentRank] = useState<IWSMessagePollRank | null>(
+		null
+	);
+	const [showPageQuiz, setShowPageQuiz] = useState(false);
+	// Timestamp de cada questão
+	const [timestampQuestions, setTimestampQuestions] = useState<
+		number[] | null
+	>(null);
+
+	// Timestamp em que o quiz é encerrado
+	const [quizEndTimestamp, setQuizEndTimestamp] = useState<number | null>(
 		null
 	);
 
@@ -108,44 +127,48 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 			console.log("onReceiveGameInit -> Quiz inciado!");
 			const timeout = Date.now();
 			// percorrer polls e alterar 'started' e 'started_at
-			polls?.forEach((poll) => {
-				if (poll.id === currentPoll?.id) {
+			const arrayPolss = polls?.map((poll) => {
+				if (poll.id === e.pollID) {
 					poll.started_at = timeout;
 					poll.started = true;
 				}
+				return poll
 			});
+			if (arrayPolss) {
+				console.log(arrayPolss);
+				setPolls(arrayPolss)
+			}
+			if (currentPoll?.id === e.pollID) {
+				// Calcular tempo de encerramento do quiz
+				const numberOfQuestions = currentPoll.number_of_question
+				const timeQuestion = ((currentPoll.duration_in_minutes * 60) * 1000) / numberOfQuestions;
+				const totalTime = (timeQuestion + 10000) * currentPoll.number_of_question;
+				const quiz_end_at = e.started_at + totalTime;
+				setQuizEndTimestamp(quiz_end_at);
+				console.log(`%c Quiz começou às ${new Date(e.started_at)} e encerra às ${new Date(quiz_end_at)}`, 'color: #f36715');
+				const minutesD = (quiz_end_at - e.started_at) / 1000 / 60;
+				console.log(`%c Minutos total = ${minutesD} }`, 'color: white; background: #424292');
+
+				// Atualizar poll atual
+				const pollAddStartedAt = currentPoll;
+				pollAddStartedAt.started = true;
+				pollAddStartedAt.started_at = e.started_at;
+				setCurrentPoll(pollAddStartedAt);
+
+				// Mostrar página de quiz
+				setShowPageQuiz(true)
+			}
 		});
 		WebSocketContext.onReceivePollRank((e) => {
 			console.log(
 				`==> message-[receivePollRank] -> rank ${JSON.stringify(e)}`
 			);
+			const newPolls = polls?.filter((p) => e.poll.id !== p.id) || [];
+			setPolls(newPolls)
+			console.log('polls atualizados');
 
-			if (currentPoll?.id) {
-				// todo: excluir quiz
-			}
+
 			setCurrentRank(e);
-		});
-		WebSocketContext.onReceiveGameInit((e) => {
-			if (currentPoll?.id === e.pollID) {
-				const pollObj = currentPoll;
-				pollObj.started = true;
-				pollObj.started_at = e.started_at;
-				setCurrentPoll(pollObj);
-			} else {
-				if (polls) {
-					const pollsArray = polls?.map((p) => {
-						if (p.id === e.pollID) {
-							const tempPoll = p;
-							tempPoll.started_at = e.started_at;
-							tempPoll.started = true;
-							return tempPoll;
-						}
-
-						return p;
-					});
-					setPolls(pollsArray);
-				}
-			}
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [WebSocketContext]);
@@ -159,6 +182,14 @@ export const PollsProvider: React.FC<{ children: ReactNode }> = ({
 				players,
 				setPlayers,
 				currentRank,
+				setCurrentRank,
+				showPageQuiz,
+				setShowPageQuiz,
+				setPolls,
+				timestampQuestions,
+				setTimestampQuestions,
+				quizEndTimestamp,
+				setQuizEndTimestamp
 			}}
 		>
 			{children}

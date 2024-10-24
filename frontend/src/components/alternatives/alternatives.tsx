@@ -54,12 +54,12 @@ const Alternative: React.FC<alternativeProps> = ({
 			</div>
 
 			{/* Exibir porcentagem */}
-			{render === 'response' && (
+			{/* {render === 'response' && (
 				<div className="div-percentage">
 					{icon}
 					<p>{percentage} %</p>
 				</div>
-			)}
+			)} */}
 		</div>
 	);
 };

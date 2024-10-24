@@ -1,4 +1,4 @@
-import { IVoteEntity } from "../entities/voteEntity";
+import { IVoteEntity } from "../entities/VoteEntity";
 import PollRepository from "../repositories/pollRepository";
 import UserRepository from "../repositories/userRepository";
 import { VoteRepository } from "../repositories/voteRepository";

@@ -1,5 +1,5 @@
 import redisClient from "../database/redisClient";
-import { IVoteEntity } from "../entities/voteEntity";
+import { IVoteEntity } from "../entities/VoteEntity";
 
 export class VoteRepository {
 	private VOTE_KEY_PREFIX = "vote:";
