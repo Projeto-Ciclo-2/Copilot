@@ -36,7 +36,17 @@ const Homepage = () => {
 	// Navegar pra página de Lobby ao clicar
 	function openQuiz(poll: IPoll) {
 		setCurrentPoll(poll);
-		setPlayers(poll.playing_users);
+		const users = poll.playing_users.map((u) => u.username);
+		if (
+			userContext &&
+			userContext.user &&
+			userContext.user.name &&
+			!users.includes(userContext.user.name)
+		) {
+			users.push(userContext.user.name);
+		}
+		setPlayers(users);
+
 		// Definir tempo para cada questão
 		const timeTotal = poll.duration_in_minutes * 60;
 		const seconds = timeTotal / poll.number_of_question;
@@ -89,7 +99,7 @@ const Homepage = () => {
 		]
 	);
 
-	if(!isLoading) {
+	if (!isLoading) {
 		validate();
 	}
 

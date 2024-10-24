@@ -27,9 +27,9 @@ const Lobby = () => {
 
 	function exitPage() {
 		// Sair do quiz
-		console.log(
-			`send-[joinQuiz] -> usuário ${userContext?.user?.name} SAIU do quiz!`
-		);
+		// console.log(
+		// 	`send-[joinQuiz] -> usuário ${userContext?.user?.name} SAIU do quiz!`
+		// );
 		const message: IWSMessagePostLeftQuiz = {
 			type: "leftQuiz",
 			userID: userContext?.user?.id as string,
@@ -40,10 +40,10 @@ const Lobby = () => {
 	}
 
 	const owner = userContext?.user?.id === currentPoll?.owner;
-	console.log(`=> owner: ${owner}`);
-	console.log(`=> userid: ${userContext?.user?.id}`);
-	console.log(`=> ownerId: ${currentPoll?.owner}`);
-	console.log(`=> pollId: ${currentPoll?.id}`);
+	// console.log(`=> owner: ${owner}`);
+	// console.log(`=> userid: ${userContext?.user?.id}`);
+	// console.log(`=> ownerId: ${currentPoll?.owner}`);
+	// console.log(`=> pollId: ${currentPoll?.id}`);
 
 	function initQuiz() {
 		if (userContext?.user?.id === currentPoll?.owner) {
@@ -69,9 +69,8 @@ const Lobby = () => {
 		}
 	}
 
-	console.log(
-		`message-[joinQuiz] -> usuário ${userContext?.user?.name} entrou no quiz!`
-	);
+	console.log(players);
+
 	// Se não for o owner não informa ao back que
 	const message: IWSMessageJoinQuiz = {
 		type: "joinQuiz",
