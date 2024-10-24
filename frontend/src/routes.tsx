@@ -13,6 +13,7 @@ import GlobalRanking from "./pages/globalRanking";
 import RankingQuiz from "./pages/rankingQuiz";
 import { PollsProvider } from "./context/PollsContext";
 import { QuestionCurrentProvider } from "./context/questionCurrentContext";
+import LandingPage from "./pages/landingPage";
 
 const AppRouter = () => {
 	return (
@@ -23,7 +24,11 @@ const AppRouter = () => {
 						<QuestionCurrentProvider>
 							<BrowserRouter>
 								<Switch>
-									<Route element={<AuthPage />} path="/" />
+									<Route element={<LandingPage />} path="/" />
+									<Route
+										element={<AuthPage />}
+										path="/auth"
+									/>
 									<Route
 										element={<Homepage />}
 										path="/home"
