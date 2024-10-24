@@ -15,20 +15,23 @@ import { useWebSocket } from "../context/WebSocketContext";
 import { usePolls } from "../context/PollsContext";
 import { IPoll } from "../interfaces/IQuiz";
 import { useCurrentQuestion } from "../context/questionCurrentContext";
+import Loader from "../components/load/Loader";
 
 const userAPI = new UserAPI();
 
 const Homepage = () => {
-	const [started, setStarted] = useState(false);
 	const webSocketContext = useWebSocket();
 	const userContext = React.useContext(UserContext);
+
 	const { setTimeQuestion } = useCurrentQuestion();
+	const { polls, setCurrentPoll, setPlayers } = usePolls();
+	const { setNumberOfQuestions } = useCurrentQuestion();
+
+	const [started, setStarted] = useState(false);
+	const [isLoading, setIsLoading] = React.useState(false);
 
 	const navigate = useNavigate();
 	const location = useLocation();
-
-	const { polls, setCurrentPoll, players, setPlayers } = usePolls();
-	const { setNumberOfQuestions } = useCurrentQuestion();
 
 	// Navegar pra página de Lobby ao clicar
 	function openQuiz(poll: IPoll) {
@@ -49,6 +52,8 @@ const Homepage = () => {
 			if (!userContext) return;
 			if (userContext.user) return;
 
+			setIsLoading(true);
+
 			const res = await userAPI.getMyUser();
 			if (!res || res.error || !res.data) {
 				console.log("Sessão não válida");
@@ -60,17 +65,32 @@ const Homepage = () => {
 		}
 
 		validateSession().then(() => {
-			if (!webSocketContext.isConnected) {
+			if (!webSocketContext.isConnected.current) {
 				console.log(
 					"ws not connected in home page. setting canConnect"
 				);
+				webSocketContext.canConnect.current = false;
+				webSocketContext.canConnect.current = true;
 
-				webSocketContext.setCanConnect(false);
-				webSocketContext.setCanConnect(true);
+				if (!isLoading) {
+					console.log("homepage.tsx isLoading true");
+					setIsLoading(true);
+				}
+			} else {
+				if (isLoading) {
+					console.log("homepage.tsx isLoading false");
+					setIsLoading(false);
+				}
 			}
 		});
-		// fetchCards();
-	}, [userContext, navigate, location, webSocketContext]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		userContext,
+		navigate,
+		location,
+		webSocketContext,
+		webSocketContext.isConnected.current,
+	]);
 
 	if (!userContext) return <h1>Eita!</h1>;
 
@@ -81,8 +101,10 @@ const Homepage = () => {
 	const startNow = () => {
 		setStarted(true);
 	};
+
 	return (
 		<div id="home">
+			<Loader alive={isLoading} />
 			<div id="burguer-container">
 				<label id="burguer">
 					<input type="checkbox" />
