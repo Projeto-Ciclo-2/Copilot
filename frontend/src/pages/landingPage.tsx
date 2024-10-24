@@ -8,13 +8,8 @@ import Banner from "../components/banner";
 import { useState } from "react";
 import AiIcon from "../icons/Ai";
 import EditAi from "../icons/editAI";
-import Quote from "../icons/quote";
-import Brain from "../icons/brain";
-import Wait from "../icons/wait";
-import Game from "../icons/game";
-import Ranking2 from "../icons/rankingDark";
-import Person from "../icons/person";
 import Github from "../icons/github";
+import NoRepeat from "../icons/noRepeat";
 
 
 const LandingPage = () => {
@@ -71,11 +66,6 @@ const LandingPage = () => {
 								</a>
 							</li>
 							<li>
-								<a href="#how" onClick={closeMenu}>
-									Como funciona?
-								</a>
-							</li>
-							<li>
 								<a href="#team" onClick={closeMenu}>
 									Nossa Equipe
 								</a>
@@ -97,12 +87,12 @@ const LandingPage = () => {
 							uma
 							<span> inteligência artificial!</span> e economize
 							tempo criando quizzes personalizados
-							<span>em segundos!</span>
+							<span> em segundos!</span>
 						</h3>
 						<h3>
 							Prepare-se para
-							<span>testar seus conhecimentos</span> e
-							<span>superar seus limites!</span>
+							<span> testar seus conhecimentos</span> e
+							<span> superar seus limites!</span>
 						</h3>
 						<Btn
 							type="button"
@@ -118,65 +108,45 @@ const LandingPage = () => {
 				<section id="functions">
 					<h1>O que fazemos melhor</h1>
                     <div id="fc">
-					<div id="function-content1">
+					<div className="function-content" id="f1">
 						<h3>
 							Nossa IA gera perguntas com base em qualquer tema ou
 							tópico que você escolher
 						</h3>
                         <AiIcon/>
 					</div>
-					<div id="function-content2">
+					<div className="function-content" id="f2">
 						<h3>
 							Edite, personalize e ajuste os quizzes conforme suas
 							preferências.
 						</h3>
                         <EditAi/>
 					</div>
-                    </div>
-				</section>
-				<section id="how">
-					<h1>Como Funciona?</h1>
-                    <div id="guide">
-					<ul>
-						<li>
-                        <Quote/>Passo 1: "Escolha o título e o tema do seu quiz". 
-						</li>
-						<li>
-							<Brain/> Passo 2: "Personalize o seu quiz, escolhendo o
-							número de perguntas, numero de alternativas e tempo
-							de duração do quiz."
-						</li>
-						<li>
-                            <Wait/> Passo 3: "Aguarde enquanto a IA cria seu quiz."</li>
-						<li>
-							<Game/> Passo 4: "Aguarde novos jogadores ou inicie a
-							partida."
-						</li>
-						<li><Ranking2/> Passo 5: "Cheque a sua pontuação final."</li>
-					</ul>
+					<div className="function-content" id="f3">
+						<h3>
+							No Enigmus todas as perguntas são únicas, você não verá a mesma pergunta duas vezes!
+						</h3>
+                        <NoRepeat/>
+					</div>
                     </div>
 				</section>
 				<section id="team">
 					<h1>Nossa Equipe</h1>
 					<div id="cards">
 						<div className="card">
-							<div className="card-border-top"></div>
-							<div className="img"><Person/></div>
+							<div className="img" id="img1"></div>
 							<span> Carlos Eduardo</span>
 						</div>
 						<div className="card">
-							<div className="card-border-top"></div>
-							<div className="img"><Person/></div>
+							<div className="img" id="img2"></div>
 							<span> Lígia Maria</span>
 						</div>
 						<div className="card">
-							<div className="card-border-top"></div>
-							<div className="img"><Person/></div>
+							<div className="img" id="img3"></div>
 							<span>Murilo Russo</span>
 						</div>
 						<div className="card">
-							<div className="card-border-top"></div>
-							<div className="img"><Person/></div>
+							<div className="img" id="img4"></div>
 							<span> Pedro Sávio</span>
 						</div>
 					</div>
