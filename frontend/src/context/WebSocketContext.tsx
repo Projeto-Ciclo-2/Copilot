@@ -17,6 +17,7 @@ import {
 	IWSMessageSendVote,
 } from "../interfaces/IWSMessages";
 import DebugConsole from "../log/DebugConsole";
+import { UserContext } from "./UserContext";
 
 /**
  * WebSocket context interface that defines the structure and behavior of the WebSocket provider.
@@ -25,7 +26,7 @@ interface WebSocketContextType {
 	/**
 	 * The active WebSocket instance or null if not connected.
 	 */
-	socket: WebSocket | null;
+	socket: WebSocket | undefined;
 
 	/**
 	 * The latest message received from the WebSocket, stored as a string.
@@ -35,18 +36,7 @@ interface WebSocketContextType {
 	/**
 	 * Indicates whether the WebSocket is currently connected.
 	 */
-	isConnected: boolean;
-
-	/**
-	 * Indicates whether a connection to the WebSocket server is allowed.
-	 */
-	canConnect: boolean;
-
-	/**
-	 * Sets whether the WebSocket connection can be established.
-	 * @param {boolean} can - If true, allows the connection; otherwise, blocks it.
-	 */
-	setCanConnect: (can: boolean) => void;
+	isConnected: React.MutableRefObject<boolean>;
 
 	/**
 	 * Registers a callback to handle receiving all polls from the server.
@@ -142,7 +132,6 @@ interface WebSocketProviderProps {
 	children: React.ReactNode;
 }
 
-let tryingToConnect = false;
 type serverActions =
 	| "allPolls"
 	| "sendPoll"
@@ -176,27 +165,62 @@ const fnMapping: Record<serverActions, (e: any) => void> = {
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	children,
 }) => {
-	const [isConnected, setIsConnected] = React.useState(false);
+	const userContext = React.useContext(UserContext);
+
+	const isConnected = React.useRef(false);
+	const [canConnect, setCanConnect] = React.useState(false);
+	const tryingToConnect = React.useRef(false);
+	const timeInterval = React.useRef<NodeJS.Timer | undefined>(undefined);
+
 	const [latestMessage, setLatestMessage] = React.useState<string | null>(
 		null
 	);
-	const socketRef = React.useRef<WebSocket | null>(null);
-	const [canConnect, setCanConnect] = React.useState(false);
+
+	const socketRef = React.useRef<undefined | WebSocket>(undefined);
+	const socket = React.useMemo<undefined | WebSocket>(() => {
+		DebugConsole("ws memo called");
+		if (socketRef.current) return socketRef.current as WebSocket;
+
+		const currentPath = window.location.pathname;
+		const pathAuth = currentPath === "/home";
+		const allowed = canConnect || !isConnected.current;
+		const userCorrect =
+			userContext && userContext.user && userContext.user.name;
+		const can = userCorrect && pathAuth;
+
+		if (!allowed || tryingToConnect.current || !can) {
+			DebugConsole("-ws blocked-");
+			return undefined;
+		}
+		DebugConsole("!ws allowed to connect. Trying to connect!");
+
+		tryingToConnect.current = true;
+
+		const wsURL = config.WS_URL + "?username=" + userContext.user!.name;
+		const tempWS = new WebSocket(wsURL);
+
+		socketRef.current = tempWS;
+		return tempWS;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [canConnect, isConnected.current, tryingToConnect.current, userContext]);
+
+	if (!timeInterval.current) {
+		timeInterval.current = setInterval(() => {
+			if (isConnected.current) return;
+
+			const currentPath = window.location.pathname;
+			setCanConnect(currentPath === "/home");
+			DebugConsole("is not connected, canConnect: " + canConnect);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, 1000);
+	}
 
 	React.useEffect(() => {
-		if (!canConnect || isConnected || tryingToConnect) {
-			DebugConsole("ws blocked from create a new connection, returning.");
-			return;
-		}
-		DebugConsole("ws allowed to connect. Trying to connect!");
-
-		tryingToConnect = true;
-		const socket = new WebSocket(config.WS_URL);
-		socketRef.current = socket;
+		if (!socket) return;
 
 		socket.onopen = () => {
-			tryingToConnect = false;
-			setIsConnected(true);
+			tryingToConnect.current = false;
+			isConnected.current = true;
 			DebugConsole("WebSocket connection established");
 		};
 
@@ -230,31 +254,39 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 			DebugConsole(event.data);
 		};
 
-		socket.onclose = () => {
-			tryingToConnect = false;
-			setIsConnected(false);
+		socket.onclose = (e) => {
+			tryingToConnect.current = false;
+			isConnected.current = false;
 			DebugConsole("WebSocket connection closed");
+			if (e.code === 1000) {
+				alert(
+					"Usuário já está logado em nossa plataforma através de outro navegador."
+				);
+			}
+			DebugConsole(e);
 		};
 
 		socket.onerror = (error) => {
-			tryingToConnect = false;
-			setIsConnected(false);
+			tryingToConnect.current = false;
+			isConnected.current = false;
 			console.error("WebSocket error:", error);
 		};
 
 		return () => {
-			DebugConsole("ws being close.");
-			tryingToConnect = false;
-			setIsConnected(false);
+			DebugConsole("ws effect dismounting context.");
+			tryingToConnect.current = false;
+			isConnected.current = false;
 			socket.close();
+			clearInterval(timeInterval.current);
+			timeInterval.current = undefined;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [canConnect]);
+	}, [socket]);
 
 	const sendMessage = (message: string) => {
-		if (socketRef.current?.readyState === WebSocket.OPEN) {
+		if (socket?.readyState === WebSocket.OPEN) {
 			DebugConsole("ws sending message to backend");
-			socketRef.current.send(message);
+			socket.send(message);
 		} else {
 			console.error("WebSocket is not open");
 		}
@@ -270,11 +302,9 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	return (
 		<WebSocketContext.Provider
 			value={{
-				socket: socketRef.current,
+				socket: socket,
 				latestMessage,
 				isConnected,
-				canConnect,
-				setCanConnect,
 
 				onReceiveAllPolls: (cbFn) =>
 					setCallback<IWSMessagePolls>("allPolls", cbFn),
