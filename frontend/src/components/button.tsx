@@ -24,7 +24,7 @@ const Btn: React.FC<ButtonProps> = ({
 	iconPosition = "left",
 	href,
 }) => {
-	return href ? (
+	return (
 		<a href={href}>
 			<button
 				type={type}
@@ -48,28 +48,6 @@ const Btn: React.FC<ButtonProps> = ({
 				)}
 			</button>
 		</a>
-	):(
-		<button
-				type={type}
-				id={id}
-				className={className}
-				onClick={onClick}
-				disabled={disabled}
-				style={{
-					cursor: disabled ? "not-allowed" : "pointer",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-				}}
-			>
-				{Icon && iconPosition === "left" && (
-					<Icon style={{ marginRight: "0.5rem" }} />
-				)}
-				{text}
-				{Icon && iconPosition === "right" && (
-					<Icon style={{ marginLeft: "0.5rem" }} />
-				)}
-			</button>
 	);
 };
 

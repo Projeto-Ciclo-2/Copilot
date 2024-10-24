@@ -1,86 +1,48 @@
-
-.hamburguer {
-	display: block;
-	width: 100%;
-	height: 4.5rem;
-	margin: auto;
-}
-.hamburguer .hamburger-lines {
-	display: block;
-	height: 26px;
-	width: 32px;
-	position: absolute;
-	top: 17px;
-	right: 20px;
-	z-index: 2;
+#wellcome {
+	height: 93vh;
 	display: flex;
+	justify-content: center;
 	flex-direction: column;
 	justify-content: space-between;
-	background: none;
-	border: none;
-}
+	background: var(--bkg_1);
+	padding: 0 2rem;
 
-.hamburguer .hamburger-lines .line {
-	display: block;
-	height: 4px;
-	width: 100%;
-	border-radius: 10px;
-	background: var(--primary);
-}
-.hamburguer .hamburger-lines .line1 {
-	transform-origin: 0% 0%;
-	transition: transform 0.4s ease-in-out;
-}
+	& #content-text {
+		display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-top: 3rem;
 
-.hamburguer .hamburger-lines .line2 {
-	transition: transform 0.2s ease-in-out;
-}
+		& h1 {
+			font-family: var(--title);
+			font-size: 3.5rem;
+			font-weight: bold;
+			width: 80%;
+		}
 
-.hamburguer .hamburger-lines .line3 {
-	transform-origin: 0% 100%;
-	transition: transform 0.4s ease-in-out;
-}
-.menu-items.open {
-	transform: translateX(0);
-}
+		& h3 {
+			font-family: var(--text);
+			font-size: 1.5rem;
+			font-weight: normal;
 
-.hamburger-lines .rotate1 {
-	transform: rotate(45deg);
-}
+			& span {
+				color: var(--primary);
+			}
+		}
+	}
 
-.hamburger-lines .scaleY {
-	transform: scaleY(0);
-}
+	& #icon-vr {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
 
-.hamburger-lines .rotate3 {
-	transform: rotate(-45deg);
-}
-.dropdown{
-	padding-top: 120px;
-	height: 10rem;
-	transform: translateY(-20rem);
-	display: flex;
-	flex-direction: column;
-	right: 1rem;
-	margin-top: -40px;
-	padding-top: 50px;
-	transition: transform 0.5s ease-in-out;
-	text-align: center;
-	position: absolute;
-}
-.dropdown.open{
-	transform: translateY(4rem);
-}
-.drop-btn{
-	border-radius: 50%;
-	background: var(--primary);
-	border: none;
-	padding: .8rem;
-	margin: .3rem 0;
-}
-#logout{
-	background-color: #FC5C56;
-
+		& svg {
+			width: 100%;
+			max-width: 600px;
+			height: 100%;
+		}
+	}
 }
 
 #quiz {
@@ -303,6 +265,95 @@
 		}
 	}
 }
+#burguer-container{
+	display: flex;
+	justify-content: flex-end;
+	position: fixed;
+	right: 1rem;
+	top: 1rem;
+}
+#burguer input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+#burguer {
+	display: block;
+	position: relative;
+	cursor: pointer;
+	font-size: 2rem;
+	user-select: none;
+}
+
+#burger-checkmark {
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 1.3rem;
+	width: 1.3rem;
+}
+
+#burger-checkmark span {
+	width: 2rem;
+	height: .2rem;
+	background-color: var(--primary);
+	position: absolute;
+	transition: all 0.3s ease-in-out;
+}
+
+#burger-checkmark span:nth-child(1) {
+	top: 10%;
+}
+
+#burger-checkmark  span:nth-child(2) {
+	top: 50%;
+}
+
+#burger-checkmark  span:nth-child(3) {
+	top: 90%;
+}
+
+#burguer input:checked + #burger-checkmark  span:nth-child(1) {
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+#burguer input:checked + #burger-checkmark  span:nth-child(2) {
+	top: 50%;
+	transform: translateY(-50%) rotate(-45deg);
+}
+
+#burguer input:checked + #burger-checkmark span:nth-child(3) {
+	transform: translateX(-50px);
+	opacity: 0;
+}
+#dropdown-menu{
+	position: absolute;
+	right: -.5rem;
+	top: -100px;
+	transition: 300ms;
+	background-color: transparent;
+	border-radius: 5px;
+	display: block;
+}
+#logout{
+	background-color: var(--red);
+	color: white;
+	font-weight: bold;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	border-radius: 20px;
+	display: flex;
+	gap: 10px;
+}
+#burguer input:checked ~ #dropdown-menu{
+	display: block;
+	top: 2.5rem;
+}
 
 
 #user-div {
@@ -322,7 +373,30 @@
 a{
 	text-decoration: none;
 }
-
+.quiz-btn {
+	font-family: var(--text);
+	margin: 0;
+	font-weight: bold;
+	padding: 1rem 1.5rem;
+	border-radius: 5px;
+	border: none;
+	font-size: 1.3rem;
+	cursor: pointer;
+	background: var(--gradient);
+	box-shadow: 0px 0.01em 0.01em rgb(45 35 66 / 40%),
+		0px 0.3em 0.7em -0.01em rgb(45 35 66 / 30%),
+		inset 0px -0.01em 0px rgb(58 65 111 / 50%);
+	color: white;
+}
+.quiz-btn:hover {
+	box-shadow: 0px 0.1em 0.2em rgb(45 35 66 / 40%),
+		0px 0.4em 0.7em -0.1em rgb(45 35 66 / 30%), inset 0px -0.1em 0px #a544e6;
+	transform: translateY(-0.1em);
+}
+.quiz-btn:active {
+	box-shadow: inset 0px 0.1em 0.6em #a544e6;
+	transform: translateY(0em);
+}
 #icon-vr {
 	display: flex;
 	justify-content: center;
