@@ -121,7 +121,9 @@ export default class PollService {
 			}
 
 			const owner = poll.playing_users.find(
-				(id) => id === pollInit.userID && poll.owner === id
+				(user) =>
+					user.userID === pollInit.userID &&
+					poll.owner === user.userID
 			);
 
 			if (!owner) {
@@ -150,7 +152,12 @@ export default class PollService {
 	public async joinGame(
 		userID: string,
 		pollID: string
-	): Promise<{ username: string; pollID: string; newOwner: null | string }> {
+	): Promise<{
+		username: string;
+		pollID: string;
+		newOwner: null | string;
+		completePoll: IPollEntity;
+	}> {
 		const user = await this.userRepository.getUserById(userID);
 		const poll = await this.pollRepository.read(pollID);
 		let ownerChange = false;
@@ -162,28 +169,37 @@ export default class PollService {
 		if (
 			poll.playing_users &&
 			Array.isArray(poll.playing_users) &&
-			poll.playing_users.length > 0 &&
-			poll.playing_users.includes(user.id)
-		)
-			throw new ConflictException(Message.USER_ALREADY_IN_GAME);
+			poll.playing_users.length > 0
+		) {
+			for (const tempUser of poll.playing_users) {
+				if (tempUser.userID === user.id) {
+					throw new ConflictException(Message.USER_ALREADY_IN_GAME);
+				}
+			}
+		}
 
 		if (!poll.playing_users || !Array.isArray(poll.playing_users)) {
 			poll.playing_users = [];
 		}
-		poll.playing_users.push(user.id);
+		poll.playing_users.push({ userID: user.id, username: user.name });
 
 		if (!poll.owner) {
-			poll.owner = user.id;
-			ownerChange = true;
+			// poll.owner = user.id;
+			// ownerChange = true;
 		}
 
 		await this.pollRepository.updateRedis(poll.id, poll);
 
 		if (ownerChange) {
-			return { pollID, username: user.name, newOwner: user.id };
+			// return { pollID, username: user.name, newOwner: user.id };
 		}
 
-		return { pollID, username: user.name, newOwner: null };
+		return {
+			pollID,
+			username: user.name,
+			newOwner: null,
+			completePoll: poll,
+		};
 	}
 
 	public async leftPoll(
@@ -194,6 +210,7 @@ export default class PollService {
 		userID: string;
 		username: string;
 		newOwner: string | null;
+		poll: IPollEntity;
 	}> {
 		if (!pollID || !userID) {
 			throw new BadRequestException(Message.MISSING_FIELDS);
@@ -211,22 +228,24 @@ export default class PollService {
 			throw new NotFoundException(Message.USER_NOT_FOUND);
 		}
 
-		poll.playing_users = poll.playing_users.filter((id) => id !== user.id);
+		poll.playing_users = poll.playing_users.filter(
+			(u) => u.userID !== user.id
+		);
 
 		if (poll.owner === user.id) {
-			poll.owner = poll.playing_users[0] || "";
-			ownerChange = true;
+			// poll.owner = poll.playing_users[0].userID || "";
+			// ownerChange = true;
 		}
 
 		await this.pollRepository.updateRedis(poll.id, poll);
 
 		if (ownerChange) {
-			return {
-				pollID: poll.id,
-				userID: user.id,
-				username: user.name,
-				newOwner: user.id,
-			};
+			// return {
+			// 	pollID: poll.id,
+			// 	userID: user.id,
+			// 	username: user.name,
+			// 	newOwner: user.id,
+			// };
 		}
 
 		return {
@@ -234,6 +253,7 @@ export default class PollService {
 			userID: user.id,
 			username: user.name,
 			newOwner: null,
+			poll: poll,
 		};
 	}
 }

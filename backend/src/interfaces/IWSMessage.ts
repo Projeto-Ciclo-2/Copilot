@@ -6,7 +6,7 @@ import { IPoll } from "./IQuiz";
  */
 export interface IWSMessagePolls {
 	type: "allPolls";
-	polls: IPoll[];
+	polls: IPollEntity[];
 }
 
 export interface IWSMessageSendPoll {
@@ -18,12 +18,14 @@ export interface IWSMessagePlayerJoin {
 	type: "sendPlayerJoin";
 	pollID: string;
 	username: string;
+	poll: IPollEntity
 }
 
 export interface IWSMessageLeftQuiz {
 	type: "leftQuiz";
 	username: string;
 	pollID: string;
+	poll: IPollEntity
 }
 
 export interface IWSMessageOwnerChange {
@@ -47,7 +49,7 @@ export interface IWSMessageSendVote {
 
 export interface IWSMessagePollRank {
 	type: "pollRank";
-	poll: IPoll,
+	poll: IPollEntity,
 	players: Array<{
 		username: string;
 		correctAnswers: number;
