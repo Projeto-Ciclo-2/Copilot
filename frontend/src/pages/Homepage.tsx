@@ -3,8 +3,7 @@ import "./css/HomePage.css";
 import VRIcon from "../icons/vr";
 import MoreIcon from "../icons/moreIcon";
 import Search from "../icons/search";
-import CardQuiz from "../components/cardQuiz";
-import SpeedDialElement from "../components/speedDial";
+import CardQuiz, { card } from "../components/cardQuiz";
 import Logout from "../icons/logout";
 import { useLocation, useNavigate } from "react-router-dom";
 import Btn from "../components/button";
@@ -156,6 +155,7 @@ const Homepage = () => {
 			</div>
 			<section id="quiz">
 				<h2>Quizzes Ativos</h2>
+				<h2>Quizzes Ativos</h2>
 				<div id="input-search-quiz">
 					<input type="text" placeholder="Pesquisar quiz" />
 					<Search />
@@ -166,7 +166,7 @@ const Homepage = () => {
 							<CardQuiz key={index} poll={poll} index={index} onClick={() => openQuiz(poll)}/>
 						))
 					) : (
-						<p>Sem quiz criado</p>
+						<p>Nenhum quiz encontrado, crie um novo!</p>
 					)}
 				</div>
 				<Btn
