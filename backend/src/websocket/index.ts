@@ -34,7 +34,6 @@ export const wss = new WebSocket.Server({ noServer: true });
 wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
 	const queryParams = url.parse(req.url!, true).query;
 	const username = queryParams["username"] as string;
-	console.log(username);
 
 	if (!username) {
 		ws.close(1008, "Missing username");
