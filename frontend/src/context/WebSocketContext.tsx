@@ -25,7 +25,7 @@ interface WebSocketContextType {
 	/**
 	 * The active WebSocket instance or null if not connected.
 	 */
-	socket: WebSocket | null;
+	socket: WebSocket | undefined;
 
 	/**
 	 * The latest message received from the WebSocket, stored as a string.
@@ -35,18 +35,12 @@ interface WebSocketContextType {
 	/**
 	 * Indicates whether the WebSocket is currently connected.
 	 */
-	isConnected: boolean;
+	isConnected: React.MutableRefObject<boolean>;
 
 	/**
 	 * Indicates whether a connection to the WebSocket server is allowed.
 	 */
-	canConnect: boolean;
-
-	/**
-	 * Sets whether the WebSocket connection can be established.
-	 * @param {boolean} can - If true, allows the connection; otherwise, blocks it.
-	 */
-	setCanConnect: (can: boolean) => void;
+	canConnect: React.MutableRefObject<boolean>;
 
 	/**
 	 * Registers a callback to handle receiving all polls from the server.
@@ -142,7 +136,6 @@ interface WebSocketProviderProps {
 	children: React.ReactNode;
 }
 
-let tryingToConnect = false;
 type serverActions =
 	| "allPolls"
 	| "sendPoll"
@@ -176,27 +169,41 @@ const fnMapping: Record<serverActions, (e: any) => void> = {
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	children,
 }) => {
-	const [isConnected, setIsConnected] = React.useState(false);
+	const isConnected = React.useRef(false);
+	const canConnect = React.useRef(false);
+	const tryingToConnect = React.useRef(false);
 	const [latestMessage, setLatestMessage] = React.useState<string | null>(
 		null
 	);
-	const socketRef = React.useRef<WebSocket | null>(null);
-	const [canConnect, setCanConnect] = React.useState(false);
+	const socketRef = React.useRef<undefined | WebSocket>(undefined);
+	const socket = React.useMemo<undefined | WebSocket>(() => {
+		const allowed = canConnect.current || !isConnected.current;
+		console.log(
+			"allowed " +
+				allowed +
+				" | tryingToConnect " +
+				tryingToConnect.current
+		);
+
+		if (!allowed || tryingToConnect.current) {
+			DebugConsole("-ws blocked-");
+			return socketRef.current;
+		}
+		DebugConsole("!ws allowed to connect. Trying to connect!");
+
+		tryingToConnect.current = true;
+		const tempWS = new WebSocket(config.WS_URL);
+		socketRef.current = tempWS;
+		return tempWS;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [canConnect.current, isConnected.current, tryingToConnect.current]);
 
 	React.useEffect(() => {
-		if (!canConnect || isConnected || tryingToConnect) {
-			DebugConsole("ws blocked from create a new connection, returning.");
-			return;
-		}
-		DebugConsole("ws allowed to connect. Trying to connect!");
-
-		tryingToConnect = true;
-		const socket = new WebSocket(config.WS_URL);
-		socketRef.current = socket;
+		if (!socket) return;
 
 		socket.onopen = () => {
-			tryingToConnect = false;
-			setIsConnected(true);
+			tryingToConnect.current = false;
+			isConnected.current = true;
 			DebugConsole("WebSocket connection established");
 		};
 
@@ -231,30 +238,30 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 		};
 
 		socket.onclose = () => {
-			tryingToConnect = false;
-			setIsConnected(false);
+			tryingToConnect.current = false;
+			isConnected.current = false;
 			DebugConsole("WebSocket connection closed");
 		};
 
 		socket.onerror = (error) => {
-			tryingToConnect = false;
-			setIsConnected(false);
+			tryingToConnect.current = false;
+			isConnected.current = false;
 			console.error("WebSocket error:", error);
 		};
 
 		return () => {
-			DebugConsole("ws being close.");
-			tryingToConnect = false;
-			setIsConnected(false);
-			socket.close();
+			DebugConsole("ws effect dismounting context.");
+			// tryingToConnect = false;
+			// setIsConnected(false);
+			// socket.close();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [canConnect]);
+	}, []);
 
 	const sendMessage = (message: string) => {
-		if (socketRef.current?.readyState === WebSocket.OPEN) {
+		if (socket?.readyState === WebSocket.OPEN) {
 			DebugConsole("ws sending message to backend");
-			socketRef.current.send(message);
+			socket.send(message);
 		} else {
 			console.error("WebSocket is not open");
 		}
@@ -270,11 +277,10 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	return (
 		<WebSocketContext.Provider
 			value={{
-				socket: socketRef.current,
+				socket: socket,
 				latestMessage,
 				isConnected,
 				canConnect,
-				setCanConnect,
 
 				onReceiveAllPolls: (cbFn) =>
 					setCallback<IWSMessagePolls>("allPolls", cbFn),
