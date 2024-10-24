@@ -11,7 +11,6 @@ export default function InputIcon(props: {
 	selectInput?: boolean;
 	selectOptions?: number[] | string[];
 }) {
-	console.log("propsValue: " + props.value + " [" + props.label + "]")
 	const [err, setErr] = React.useState("");
 	const selectOptions = React.useMemo(() => {
 		if (props.selectInput && props.selectOptions) {
@@ -70,8 +69,6 @@ export default function InputIcon(props: {
 			);
 			return;
 		}
-		console.log("setValue:" +value);
-
 		props.setValue(value);
 	};
 
