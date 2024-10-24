@@ -210,6 +210,7 @@ function setEndGame(
 			}> = [];
 			for (const userID of users) {
 				const user = await userService.getUserById(userID);
+				const userPoints = user?.points;
 				if (!user) return;
 
 				const tempVotesOfThisPlayer = {
@@ -236,6 +237,11 @@ function setEndGame(
 				}
 				votes.push(tempVotesOfThisPlayer);
 
+				user.points += tempVotesOfThisPlayer.points;
+
+				user.played_polls += 1;
+				await userService.update(user.id, user);
+
 				const maxCorrectAnswers = Math.max(
 					...votes.map((v) => v.correctAnswers)
 				);
@@ -248,7 +254,7 @@ function setEndGame(
 						winner.userID
 					);
 					if (winnerUser) {
-						winnerUser.wins = winnerUser.wins + 1;
+						winnerUser.wins += 1;
 						if (winner.correctAnswers === poll.number_of_question) {
 							winnerUser.medals += 1;
 						}
@@ -266,21 +272,21 @@ function setEndGame(
 			console.log("game ended", JSON.stringify(message));
 			console.log("deleting everything related in redis");
 			// deleting everything
-			pollService.deleteRedis(poll.id);
-			for (const userID of users) {
-				for (const question of poll.questions) {
-					console.log(
-						userID.toString() +
-							poll.id.toString() +
-							question.id.toString()
-					);
-					voteService.deleteVote(
-						userID,
-						poll.id,
-						question.id.toString()
-					);
-				}
-			}
+			//pollService.deleteRedis(poll.id);
+			// for (const userID of users) {
+			// 	for (const question of poll.questions) {
+			// 		console.log(
+			// 			userID.toString() +
+			// 				poll.id.toString() +
+			// 				question.id.toString()
+			// 		);
+			// 		// voteService.deleteVote(
+			// 		// 	userID,
+			// 		// 	poll.id,
+			// 		// 	question.id.toString()
+			// 		// );
+			// 	}
+			// }
 			console.log("done. ");
 			console.log(
 				"Function executed in " + (Date.now() - fnStarted) + "ms."
