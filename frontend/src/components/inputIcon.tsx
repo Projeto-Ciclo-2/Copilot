@@ -11,6 +11,7 @@ export default function InputIcon(props: {
 	selectInput?: boolean;
 	selectOptions?: number[] | string[];
 }) {
+	console.log("propsValue: " + props.value + " [" + props.label + "]")
 	const [err, setErr] = React.useState("");
 	const selectOptions = React.useMemo(() => {
 		if (props.selectInput && props.selectOptions) {
@@ -20,7 +21,7 @@ export default function InputIcon(props: {
 				</option>
 			));
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.selectInput, props.selectOptions, props.value]);
 
 	const validateInput = (e: React.FormEvent<HTMLInputElement>) => {
@@ -53,12 +54,24 @@ export default function InputIcon(props: {
 				? (Number.parseInt(e.target.value) as never)
 				: (e.target.value as never);
 
+		// if (typeof value === "number") {
+		// 	for (const opt of props.selectOptions) {
+		// 		const nOpt =
+		// 			typeof opt === "number" ? opt : Number.parseInt(opt);
+		// 		if (!Number.isNaN(nOpt) && nOpt === value) {
+
+		// 		}
+		// 	}
+		// }
+
 		if (!props.selectOptions.includes(value)) {
 			setErr(
 				"você selecionou algo inválido, parabéns, nada irá acontecer."
 			);
 			return;
 		}
+		console.log("setValue:" +value);
+
 		props.setValue(value);
 	};
 
@@ -78,9 +91,7 @@ export default function InputIcon(props: {
 	const select = (
 		<select
 			style={{ borderColor: err && `var(--red)` }}
-			defaultValue={
-				typeof props.value == "number" ? props.value : props.placeholder
-			}
+			value={props.value}
 			onChange={selectThis}
 		>
 			<option value={props.placeholder} disabled>
