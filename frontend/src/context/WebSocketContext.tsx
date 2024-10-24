@@ -38,11 +38,6 @@ interface WebSocketContextType {
 	isConnected: React.MutableRefObject<boolean>;
 
 	/**
-	 * Indicates whether a connection to the WebSocket server is allowed.
-	 */
-	canConnect: React.MutableRefObject<boolean>;
-
-	/**
 	 * Registers a callback to handle receiving all polls from the server.
 	 * @param {(e: IWSMessagePolls) => any} cbFn - The callback function that handles the received poll data.
 	 */
@@ -170,24 +165,26 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	children,
 }) => {
 	const isConnected = React.useRef(false);
-	const canConnect = React.useRef(false);
+	const [canConnect, setCanConnect] = React.useState(false);
 	const tryingToConnect = React.useRef(false);
+	const timeInterval = React.useRef<NodeJS.Timer | undefined>(undefined);
+
 	const [latestMessage, setLatestMessage] = React.useState<string | null>(
 		null
 	);
+
 	const socketRef = React.useRef<undefined | WebSocket>(undefined);
 	const socket = React.useMemo<undefined | WebSocket>(() => {
-		const allowed = canConnect.current || !isConnected.current;
-		console.log(
-			"allowed " +
-				allowed +
-				" | tryingToConnect " +
-				tryingToConnect.current
-		);
+		DebugConsole("ws memo called");
+		if (socketRef.current) return socketRef.current as WebSocket;
 
-		if (!allowed || tryingToConnect.current) {
+		const currentPath = window.location.pathname;
+		const pathAuth = currentPath === "/home";
+		const allowed = canConnect || !isConnected.current;
+
+		if (!allowed || tryingToConnect.current || !pathAuth) {
 			DebugConsole("-ws blocked-");
-			return socketRef.current;
+			return undefined;
 		}
 		DebugConsole("!ws allowed to connect. Trying to connect!");
 
@@ -196,7 +193,24 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 		socketRef.current = tempWS;
 		return tempWS;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [canConnect.current, isConnected.current, tryingToConnect.current]);
+	}, [
+		canConnect,
+		isConnected.current,
+		tryingToConnect.current,
+	]);
+
+	DebugConsole("renderizando webSocketContext");
+
+	if (!timeInterval.current) {
+		timeInterval.current = setInterval(() => {
+			if (isConnected.current) return;
+
+			const currentPath = window.location.pathname;
+			setCanConnect(currentPath === "/home");
+			DebugConsole("is not connected, canConnect: " + canConnect);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, 1000);
+	}
 
 	React.useEffect(() => {
 		if (!socket) return;
@@ -254,9 +268,11 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 			tryingToConnect.current = false;
 			isConnected.current = false;
 			socket.close();
+			clearInterval(timeInterval.current);
+			timeInterval.current = undefined;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [socket]);
 
 	const sendMessage = (message: string) => {
 		if (socket?.readyState === WebSocket.OPEN) {
@@ -280,7 +296,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 				socket: socket,
 				latestMessage,
 				isConnected,
-				canConnect,
 
 				onReceiveAllPolls: (cbFn) =>
 					setCallback<IWSMessagePolls>("allPolls", cbFn),

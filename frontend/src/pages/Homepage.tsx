@@ -48,8 +48,6 @@ const Homepage = () => {
 	}
 
 	function validate() {
-		console.log("validate called");
-
 		async function validateSession() {
 			if (!userContext) return;
 			if (userContext.user) return;
@@ -68,19 +66,11 @@ const Homepage = () => {
 
 		validateSession().then(() => {
 			if (!webSocketContext.isConnected.current) {
-				console.log(
-					"ws not connected in home page. setting canConnect"
-				);
-				webSocketContext.canConnect.current = false;
-				webSocketContext.canConnect.current = true;
-
 				if (!isLoading) {
-					console.log("homepage.tsx isLoading true");
 					setIsLoading(true);
 				}
 			} else {
 				if (isLoading) {
-					console.log("homepage.tsx isLoading false");
 					setIsLoading(false);
 				}
 			}
