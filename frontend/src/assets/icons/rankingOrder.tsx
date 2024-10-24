@@ -269,11 +269,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -342,11 +342,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -415,11 +415,11 @@ function RankIcon({index}: RankingMap) {
 								height="9"
 								x="13.779"
 								y="15.8"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -732,11 +732,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -805,11 +805,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -878,11 +878,11 @@ function RankIcon({index}: RankingMap) {
 								height="9.38"
 								x="12.757"
 								y="15.492"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1195,11 +1195,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="3.61"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1268,11 +1268,11 @@ function RankIcon({index}: RankingMap) {
 								height="10.434"
 								x="13.298"
 								y="2.362"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
@@ -1341,11 +1341,11 @@ function RankIcon({index}: RankingMap) {
 								height="9.5"
 								x="12.759"
 								y="15.2"
-								color-interpolation-filters="sRGB"
+								colorInterpolationFilters="sRGB"
 								filterUnits="userSpaceOnUse"
 							>
 								<feFlood
-									flood-opacity="0"
+									floodOpacity="0"
 									result="BackgroundImageFix"
 								/>
 								<feBlend
