@@ -17,6 +17,7 @@ import {
 	IWSMessageSendVote,
 } from "../interfaces/IWSMessages";
 import DebugConsole from "../log/DebugConsole";
+import { UserContext } from "./UserContext";
 
 /**
  * WebSocket context interface that defines the structure and behavior of the WebSocket provider.
@@ -164,6 +165,8 @@ const fnMapping: Record<serverActions, (e: any) => void> = {
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	children,
 }) => {
+	const userContext = React.useContext(UserContext);
+
 	const isConnected = React.useRef(false);
 	const [canConnect, setCanConnect] = React.useState(false);
 	const tryingToConnect = React.useRef(false);
@@ -181,25 +184,25 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 		const currentPath = window.location.pathname;
 		const pathAuth = currentPath === "/home";
 		const allowed = canConnect || !isConnected.current;
+		const userCorrect =
+			userContext && userContext.user && userContext.user.name;
+		const can = userCorrect && pathAuth;
 
-		if (!allowed || tryingToConnect.current || !pathAuth) {
+		if (!allowed || tryingToConnect.current || !can) {
 			DebugConsole("-ws blocked-");
 			return undefined;
 		}
 		DebugConsole("!ws allowed to connect. Trying to connect!");
 
 		tryingToConnect.current = true;
-		const tempWS = new WebSocket(config.WS_URL);
+
+		const wsURL = config.WS_URL + "?username=" + userContext.user!.name;
+		const tempWS = new WebSocket(wsURL);
+
 		socketRef.current = tempWS;
 		return tempWS;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		canConnect,
-		isConnected.current,
-		tryingToConnect.current,
-	]);
-
-	DebugConsole("renderizando webSocketContext");
+	}, [canConnect, isConnected.current, tryingToConnect.current, userContext]);
 
 	if (!timeInterval.current) {
 		timeInterval.current = setInterval(() => {
@@ -251,10 +254,16 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 			DebugConsole(event.data);
 		};
 
-		socket.onclose = () => {
+		socket.onclose = (e) => {
 			tryingToConnect.current = false;
 			isConnected.current = false;
 			DebugConsole("WebSocket connection closed");
+			if (e.code === 1000) {
+				alert(
+					"Usuário já está logado em nossa plataforma através de outro navegador."
+				);
+			}
+			DebugConsole(e);
 		};
 
 		socket.onerror = (error) => {

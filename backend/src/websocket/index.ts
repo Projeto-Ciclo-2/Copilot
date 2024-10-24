@@ -16,16 +16,41 @@ import {
 } from "../interfaces/IWSMessage";
 import { config } from "../config";
 import { UserService } from "../services/userService";
+import { IncomingMessage } from "http";
+import url from "url";
 
 const pollService = new PollService();
 const voteService = new VoteService();
 const userService = new UserService();
-const users = new Set<WebSocket>();
+const users = new Set<WsUser>();
+
+interface WsUser {
+	username: string;
+	ws: WebSocket;
+}
 
 export const wss = new WebSocket.Server({ noServer: true });
 
-wss.on("connection", (ws: WebSocket) => {
-	users.add(ws);
+wss.on("connection", (ws: WebSocket, req: IncomingMessage) => {
+	const queryParams = url.parse(req.url!, true).query;
+	const username = queryParams["username"] as string;
+	console.log(username);
+
+	if (!username) {
+		ws.close(1008, "Missing username");
+		return;
+	}
+
+	for (const user of users) {
+		if(user.username === username) {
+			ws.close(1000, "user already connected");
+			return;
+		}
+	}
+
+	const thisUser = { username: username, ws: ws };
+
+	users.add(thisUser);
 	sendAllPolls(ws);
 
 	ws.on("message", async (message) => {
@@ -56,7 +81,7 @@ wss.on("connection", (ws: WebSocket) => {
 						pollQuestionID: vote.pollQuestionID,
 						userChoice: vote.userChoice,
 					};
-					console.log('enviando voto');
+					console.log("enviando voto");
 					broadcast(JSON.stringify(messageServer));
 				} catch (error: any) {
 					if (error instanceof Error) return sendErr(ws, error);
@@ -137,7 +162,7 @@ wss.on("connection", (ws: WebSocket) => {
 		}
 	});
 	ws.on("close", () => {
-		users.delete(ws);
+		users.delete(thisUser);
 	});
 });
 
@@ -151,7 +176,7 @@ function sendErr(ws: WebSocket, error?: Error) {
 
 function broadcast(data: string): void {
 	for (const user of users) {
-		user.send(data);
+		user.ws.send(data);
 	}
 }
 
