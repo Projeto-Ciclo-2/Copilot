@@ -37,11 +37,7 @@ const Homepage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {
-		currentPoll,
-		setShowPageQuiz,
-		setCurrentRank,
-	} = usePolls();
+	const { currentPoll, setShowPageQuiz, setCurrentRank } = usePolls();
 	const { setNumberOfQuestions, setCurrentQuestion } = useCurrentQuestion();
 
 	const filteredPolls = useMemo(() => {
@@ -67,15 +63,15 @@ const Homepage = () => {
 		if (!poll.started) {
 			setCurrentPoll(poll);
 			const users = poll.playing_users.map((u) => u.username);
-		  if (
-			  userContext &&
-			  userContext.user &&
-			  userContext.user.name &&
-			  !users.includes(userContext.user.name)
-		  ) {
-			    users.push(userContext.user.name);
-		  }
-		  setPlayers(users);
+			if (
+				userContext &&
+				userContext.user &&
+				userContext.user.name &&
+				!users.includes(userContext.user.name)
+			) {
+				users.push(userContext.user.name);
+			}
+			setPlayers(users);
 			setCurrentRank(null);
 			setCurrentQuestion(0);
 
@@ -95,38 +91,32 @@ const Homepage = () => {
 			// Navegar para página de lobby
 			navigate("/lobby");
 		}
-
 	}
 
 	function validate() {
-        async function validateSession() {
-            if (!userContext) return;
-            if (userContext.user) return;
+		async function validateSession() {
+			if (!userContext) return;
+			if (userContext.user) return;
 
-            setIsLoading(true);
+			setIsLoading(true);
 
-            const res = await userAPI.getMyUser();
-            if (!res || res.error || !res.data) {
-                console.log("Sessão não válida");
-                return navigate("/");
-            }
-            const user = res.data as IUser;
+			const res = await userAPI.getMyUser();
+			if (!res || res.error || !res.data) {
+				console.log("Sessão não válida");
+				return navigate("/");
+			}
+			const user = res.data as IUser;
 
-            userContext.setUser(user);
-        }
+			userContext.setUser(user);
+		}
 
-        validateSession().then(() => {
-            if (!webSocketContext.isConnected.current) {
-                if (!isLoading) {
-                    setIsLoading(true);
-                }
-            } else {
-                if (isLoading) {
-                    setIsLoading(false);
-                }
-            }
-        });
-    }
+		validateSession().then(() => {
+			setIsLoading(true);
+			if (webSocketContext.isConnected.current) {
+				setIsLoading(false);
+			}
+		});
+	}
 
 	React.useEffect(
 		validate,
@@ -137,7 +127,7 @@ const Homepage = () => {
 			location,
 			webSocketContext,
 			webSocketContext.isConnected.current,
-			polls
+			polls,
 		]
 	);
 
@@ -266,16 +256,15 @@ const Homepage = () => {
 								<p>Sem quiz</p>
 							)}
 						</div>
-						{owner && (
-							<Btn
-								type="button"
-								id="btn-add-quiz"
-								icon={MoreIcon}
-								text="Adicionar Quiz"
-								iconPosition="right"
-								onClick={() => navigate("/create")}
-							/>
-						)}
+						{/* {owner && ( */}
+						<Btn
+							type="button"
+							id="btn-add-quiz"
+							icon={MoreIcon}
+							text="Adicionar Quiz"
+							iconPosition="right"
+							onClick={() => navigate("/create")}
+						/>
 					</section>
 				</>
 			)}
