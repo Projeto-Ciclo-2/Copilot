@@ -27,7 +27,7 @@ const Homepage = () => {
 	const { setTimeQuestion } = useCurrentQuestion();
 	const { polls, setCurrentPoll, setPlayers } = usePolls();
 
-	const [started, setStarted] = useState(false);
+	const [started, setStarted] = useState(true);
 	const [isLoading, setIsLoading] = React.useState(false);
 
 	const [searchTerm, setSearchTerm] = useState<string>(""); // Estado da busca
@@ -98,7 +98,7 @@ const Homepage = () => {
 			if (!userContext) return;
 			if (userContext.user) return;
 
-			setIsLoading(true);
+			// setIsLoading(true);
 
 			const res = await userAPI.getMyUser();
 			if (!res || res.error || !res.data) {
@@ -111,9 +111,9 @@ const Homepage = () => {
 		}
 
 		validateSession().then(() => {
-			setIsLoading(true);
+			// setIsLoading(true);
 			if (webSocketContext.isConnected.current) {
-				setIsLoading(false);
+				// setIsLoading(false);
 			}
 		});
 	}
